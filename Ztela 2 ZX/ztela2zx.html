@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ztela 2 ZX</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
+:root{--blue:#0D3B8C;--blue2:#1a56c4;--accent:#e63946;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280;--success:#16a34a;--warn:#d97706}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;cursor:pointer}
+#splash canvas{position:absolute;inset:0;opacity:.25}
+.zx-logo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
+.zx-text{font-size:96px;font-weight:900;color:#1a56c4;letter-spacing:-4px;animation:zxpulse 2s ease-in-out infinite}
+.zx-sub{font-size:22px;color:#fff;letter-spacing:6px;font-weight:300;opacity:.8}
+.zx-enter{margin-top:24px;font-size:13px;color:#666;letter-spacing:2px;animation:blink 1.5s infinite}
+@keyframes zxpulse{0%,100%{text-shadow:0 0 20px #1a56c466;transform:scale(1)}50%{text-shadow:0 0 60px #1a56c4aa;transform:scale(1.04)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* SHELL */
+#app{display:none;flex-direction:column;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:0 2px 8px #0003}
+.logo-h{font-size:20px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:8px}
+.logo-h span{color:#5b9bf8}
+nav{display:flex;gap:4px}
+nav button{background:transparent;border:none;color:#ffffffaa;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;transition:.2s}
+nav button.active,nav button:hover{background:#ffffff1a;color:#fff}
+main{flex:1;padding:24px;max-width:1200px;width:100%;margin:0 auto}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.card-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--blue)}
+
+/* TABS machines */
+.mach-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.mach-tab{padding:7px 18px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px;font-weight:500;transition:.15s}
+.mach-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;color:var(--muted);font-weight:500}
+.field input,.field select,.field textarea{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--card);color:var(--text);transition:.15s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--blue2);box-shadow:0 0 0 3px #1a56c420}
+.field input[readonly],.field input.auto{background:#f8f9fb;color:var(--muted)}
+.field textarea{resize:vertical;min-height:60px}
+
+.btn{padding:9px 18px;border-radius:7px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:13px;font-weight:500;transition:.15s;color:var(--text)}
+.btn:hover{background:var(--bg)}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:var(--blue2)}
+.btn-danger{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+.btn-success{background:#dcfce7;color:#15803d;border-color:#86efac}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+.sep{height:1px;background:var(--border);margin:16px 0}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:#f8f9fb;padding:9px 12px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);font-size:12px}
+td{padding:9px 12px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8f9fb}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-ok{background:#dcfce7;color:#15803d}
+.badge-pend{background:#fef9c3;color:#854d0e}
+.badge-fin{background:#dbeafe;color:#1e40af}
+
+/* ALERT */
+.alert{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none}
+.alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
+.alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
+.alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
+
+/* PRINT LABEL */
+@media print{
+  body *{visibility:hidden}
+  #label-print,#label-print *{visibility:visible}
+  #label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}
+}
+.label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
+.label-wrap .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
+.label-wrap .lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}
+.label-wrap .lh .mach{font-size:16px;font-weight:700}
+.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}
+.label-grid .lf{display:flex;flex-direction:column}
+.label-grid .lf span:first-child{font-size:10px;color:#888}
+.label-grid .lf span:last-child{font-weight:600;font-size:13px}
+.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:#0007;z-index:100;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{font-size:16px;font-weight:600;margin-bottom:16px;color:var(--blue)}
+.modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
+
+/* DASHBOARD */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
+.stat .sv{font-size:28px;font-weight:700;color:var(--blue)}
+.stat .sl{font-size:12px;color:var(--muted);margin-top:2px}
+
+.sec-tabs{display:flex;gap:6px;margin-bottom:16px}
+.sec-tab{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px}
+.sec-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash" onclick="enterApp()">
+  <canvas id="circuit"></canvas>
+  <div class="zx-logo">
+    <div class="zx-text">ZX</div>
+    <div class="zx-sub">ZTELA 2</div>
+    <div class="zx-enter">toca para entrar</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="logo-h">ZX <span>Ztela 2</span></div>
+    <nav>
+      <button class="active" onclick="showView('operador',this)">Operador</button>
+      <button onclick="showView('admin',this)">Administrador</button>
+    </nav>
+  </header>
+  <main>
+
+    <!-- OPERADOR -->
+    <div id="view-operador">
+      <div class="mach-tabs" id="mach-tabs"></div>
+      <div class="card">
+        <div class="card-title">📋 Registro de producción — <span id="mach-label">EXT001</span></div>
+
+        <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo para continuar.</div>
+        <div id="alert-metro" class="alert alert-err">🚫 Regla de oro: los metros no pueden exceder 3,000 m. Por favor corrija el valor.</div>
+        <div id="alert-med" class="alert alert-warn">⚠ Debe guardar las 5 mediciones antes de imprimir la etiqueta.</div>
+        <div id="alert-save" class="alert alert-ok">✅ Bobina guardada correctamente.</div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Operario</label>
+            <select id="sel-op" onchange="checkForm()">
+              <option value="">— Seleccione —</option>
+              <option>Juan Quiroz Segovia</option>
+              <option>Roberto Martínez Salazar</option>
+              <option>José Alfonso Ochoa Leija</option>
+              <option>Erik Rodrigo Presas Jasso</option>
+              <option>Israel Rodríguez Herrera</option>
+              <option>Francisco Abelardo Garza Hernández</option>
+              <option>Fabián de León Mejía</option>
+              <option>Erick González Palomo</option>
+              <option>Gerardo Martínez Alvarado</option>
+              <option>Josué Rodolfo Gaytán Rodríguez</option>
+              <option>Luis Angel Ochoa Leija</option>
+              <option>Luis Antonio Mendez Martinez</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Orden de trabajo</label>
+            <select id="sel-ot" onchange="loadOT()">
+              <option value="">— Seleccione —</option>
+              <option data-prod="20-710901-14085-01" data-desc="NX300606-GEN-S/I-CLO-13" data-med="13" data-col="CLARO" data-rem="26050179" data-sig="IMPRESIÓN">26050163</option>
+              <option data-prod="20-500901-17512-01NT250606" data-desc="NT250606-GEN-S/I-CLO-390MM" data-med="390MM" data-col="CLARO" data-rem="26050224" data-sig="CONVERSIÓN">26050162</option>
+              <option data-prod="20-300901-14196-01F1710" data-desc="F1710-GEN-S/I-BCO-160MM" data-med="160MM" data-col="BLANCO" data-rem="26050226" data-sig="BARNIZADO">20040026</option>
+              <option data-prod="20-230901-17468-01" data-desc="B501518RT-GEN-S/I-CLO-14" data-med="14" data-col="CLARO" data-rem="26050179" data-sig="">20040032</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-top:12px">
+          <div class="field"><label>Descripción</label><input id="f-desc" readonly class="auto" placeholder="—"/></div>
+          <div class="field"><label>Producto</label><input id="f-prod" readonly class="auto" placeholder="—"/></div>
+          <div class="field"><label>Medida</label><input id="f-med" readonly class="auto" placeholder="—"/></div>
+          <div class="field"><label>Color</label><input id="f-col" readonly class="auto" placeholder="—"/></div>
+          <div class="field"><label>Siguiente proceso</label><input id="f-sig" readonly class="auto" placeholder="—"/></div>
+          <div class="field"><label>Remisión</label><input id="f-rem" readonly class="auto" placeholder="—"/></div>
+        </div>
+
+        <div class="sep"></div>
+        <div class="card-title">🧵 Bobina actual</div>
+        <div class="form-grid">
+          <div class="field"><label>ID de bobina</label><input id="f-id" readonly class="auto" placeholder="Auto"/></div>
+          <div class="field"><label>Número de bobina</label><input id="f-num" readonly class="auto" placeholder="Auto"/></div>
+          <div class="field"><label>Fecha</label><input id="f-fecha" readonly class="auto"/></div>
+          <div class="field"><label>Hora</label><input id="f-hora" readonly class="auto"/></div>
+          <div class="field"><label>Lote</label><input id="f-lote" readonly class="auto"/></div>
+          <div class="field">
+            <label>Metros totales ⚠ máx 3,000</label>
+            <input id="f-metros" type="number" min="0" max="3000" placeholder="0" oninput="validarMetros(this)"/>
+          </div>
+          <div class="field"><label>Peso (Kg)</label><input id="f-peso" type="number" placeholder="0.0" step="0.01"/></div>
+          <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Opcional..."></textarea></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
+          <button class="btn btn-danger" onclick="cancelarBobina()">Cancelar bobina</button>
+          <button class="btn" onclick="openModal('modal-list')">Lista de bobinas</button>
+          <button class="btn btn-success" onclick="guardarBobina()">Guardar bobina</button>
+        </div>
+
+        <div class="sep"></div>
+        <div class="card-title">📐 Parámetros de proceso</div>
+        <div class="form-grid">
+          <div class="field"><label>Medidas</label><input id="p-med" type="number" placeholder="—"/></div>
+          <div class="field"><label>Ancho plano</label><input id="p-ancho" type="number" placeholder="—"/></div>
+          <div class="field"><label>Encogimiento horizontal</label><input id="p-eh" type="number" placeholder="—"/></div>
+          <div class="field"><label>Calibre frente</label><input id="p-cf" type="number" placeholder="—"/></div>
+          <div class="field"><label>Encogimiento vertical</label><input id="p-ev" type="number" placeholder="—"/></div>
+          <div class="field"><label>Calibre reverso</label><input id="p-cr" type="number" placeholder="—"/></div>
+          <div class="field"><label>Enc. Dir. Máquina</label><input id="p-edm" type="number" placeholder="—"/></div>
+          <div class="field">
+            <label>Deslamine</label>
+            <select id="p-des"><option value="">— Seleccione —</option><option>Sí</option><option>No</option></select>
+          </div>
+          <div class="field"><label>Temperatura de túnel</label><input id="p-temp" type="number" placeholder="—"/></div>
+        </div>
+        <div id="mediciones-guardadas" style="margin-top:8px;font-size:12px;color:var(--muted)">Mediciones guardadas: <strong id="med-count">0</strong> / 5</div>
+
+        <div class="btn-row" style="margin-top:16px">
+          <button class="btn" onclick="revCoord()">Revisión por coordinador</button>
+          <button class="btn btn-primary" onclick="guardarParams()">Guardar parámetros</button>
+          <button class="btn btn-success" onclick="finalizarProceso()">Finalizar proceso</button>
+          <button class="btn" onclick="revCalidad()">Revisión de calidad</button>
+          <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir etiqueta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="view-admin" style="display:none">
+      <div class="stat-grid" id="stats-grid"></div>
+      <div class="sec-tabs">
+        <button class="sec-tab active" onclick="adminTab('maq',this)">Por máquina</button>
+        <button class="sec-tab" onclick="adminTab('ot',this)">Por orden de trabajo</button>
+        <button class="sec-tab" onclick="adminTab('bob',this)">Bobinas</button>
+      </div>
+      <div class="card" id="admin-content"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL LISTA BOBINAS -->
+<div class="modal-bg" id="modal-list">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-list')">×</button>
+    <h3>Lista de bobinas — <span id="ml-ot">—</span></h3>
+    <div id="ml-body"></div>
+  </div>
+</div>
+
+<!-- LABEL PRINT -->
+<div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
+  <div class="label-wrap" id="label-content"></div>
+  <div style="margin-top:16px;display:flex;gap:10px">
+    <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
+  </div>
+</div>
+
+<script>
+// ─── CIRCUIT ANIMATION ───
+const canvas=document.getElementById('circuit'),ctx=canvas.getContext('2d');
+let nodes=[],W,H;
+function resizeCanvas(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resizeCanvas();
+window.addEventListener('resize',resizeCanvas);
+for(let i=0;i<60;i++)nodes.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
+function drawCircuit(){
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='#1a56c4';ctx.lineWidth=.8;
+  for(let i=0;i<nodes.length;i++){
+    nodes[i].x+=nodes[i].vx;nodes[i].y+=nodes[i].vy;
+    if(nodes[i].x<0||nodes[i].x>W)nodes[i].vx*=-1;
+    if(nodes[i].y<0||nodes[i].y>H)nodes[i].vy*=-1;
+    for(let j=i+1;j<nodes.length;j++){
+      const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<180){
+        ctx.globalAlpha=(1-d/180)*.6;
+        ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);
+        // right-angle circuit lines
+        ctx.lineTo(nodes[j].x,nodes[i].y);
+        ctx.lineTo(nodes[j].x,nodes[j].y);
+        ctx.stroke();
+      }
+    }
+    ctx.globalAlpha=.8;ctx.fillStyle='#1a56c4';
+    ctx.beginPath();ctx.arc(nodes[i].x,nodes[i].y,2,0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  requestAnimationFrame(drawCircuit);
+}
+drawCircuit();
+
+function enterApp(){
+  document.getElementById('splash').style.opacity='0';
+  document.getElementById('splash').style.transition='opacity .6s';
+  setTimeout(()=>{
+    document.getElementById('splash').style.display='none';
+    document.getElementById('app').style.display='flex';
+    initApp();
+  },600);
+}
+
+// ─── STATE ───
+const MACHINES=['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'];
+let curMach='EXT001', formActive=false, medCount=0;
+let bobinas=[], lastSavedBobina=null;
+let bobID=500440, bobNum=1;
+const TODAY=new Date();
+const fmtDate=d=>`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
+const fmtLote=d=>`${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getFullYear()).slice(2)}`;
+const nowTime=()=>{const n=new Date();return`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`};
+
+// sample admin data
+const adminData={
+  EXT001:{ots:[{ot:'26050163',prod:'20-710901-14085-01',desc:'NX300606-GEN-S/I-CLO-13',bobinas:9,metros:4500,status:'Iniciado'},
+               {ot:'20040026',prod:'20-300901-14196-01',desc:'F1710-GEN-S/I-BCO-160MM',bobinas:3,metros:1500,status:'Finalizado'}]},
+  EXT002:{ots:[{ot:'26050162',prod:'20-500901-17512-01',desc:'NT250606-GEN-S/I-CLO-390MM',bobinas:5,metros:2500,status:'En espera'}]},
+  EXT003:{ots:[]},EXT004:{ots:[]},EXT005:{ots:[{ot:'20040032',prod:'20-230901-17468-01',desc:'B501518RT-GEN-S/I-CLO-14',bobinas:31,metros:15500,status:'Finalizado'}]},EXT006:{ots:[]}
+};
+
+function initApp(){
+  // machine tabs
+  const mt=document.getElementById('mach-tabs');
+  MACHINES.forEach(m=>{
+    const b=document.createElement('button');
+    b.className='mach-tab'+(m==='EXT001'?' active':'');
+    b.textContent=m;b.onclick=()=>selectMach(m,b);
+    mt.appendChild(b);
+  });
+  initBobina();
+  renderAdmin();
+}
+
+function selectMach(m,btn){
+  curMach=m;
+  document.querySelectorAll('.mach-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mach-label').textContent=m;
+  resetForm();
+}
+
+function showView(v,btn){
+  document.getElementById('view-operador').style.display=v==='operador'?'block':'none';
+  document.getElementById('view-admin').style.display=v==='admin'?'block':'none';
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ─── FORM ───
+function resetForm(){
+  ['sel-op','sel-ot'].forEach(id=>document.getElementById(id).value='');
+  ['f-desc','f-prod','f-med','f-col','f-sig','f-rem'].forEach(id=>document.getElementById(id).value='');
+  formActive=false; medCount=0; updateMedCount();
+  hideAlerts(); initBobina();
+}
+
+function checkForm(){
+  const op=document.getElementById('sel-op').value;
+  const ot=document.getElementById('sel-ot').value;
+  const al=document.getElementById('alert-sel');
+  if(!op||!ot){al.style.display='block';formActive=false;}
+  else{al.style.display='none';formActive=true;}
+}
+
+function loadOT(){
+  checkForm();
+  const sel=document.getElementById('sel-ot');
+  const opt=sel.options[sel.selectedIndex];
+  if(!opt.value)return;
+  document.getElementById('f-desc').value=opt.dataset.desc||'';
+  document.getElementById('f-prod').value=opt.dataset.prod||'';
+  document.getElementById('f-med').value=opt.dataset.med||'';
+  document.getElementById('f-col').value=opt.dataset.col||'';
+  document.getElementById('f-sig').value=opt.dataset.sig||'';
+  document.getElementById('f-rem').value=opt.dataset.rem||'';
+  bobNum=1; initBobina();
+}
+
+function initBobina(){
+  bobID++;
+  document.getElementById('f-id').value=bobID;
+  document.getElementById('f-num').value=bobNum;
+  document.getElementById('f-fecha').value=fmtDate(TODAY);
+  document.getElementById('f-hora').value=nowTime();
+  document.getElementById('f-lote').value=fmtLote(TODAY);
+  document.getElementById('f-metros').value='';
+  document.getElementById('f-peso').value='';
+  document.getElementById('f-obs').value='';
+}
+
+function validarMetros(inp){
+  const v=parseFloat(inp.value);
+  const al=document.getElementById('alert-metro');
+  if(v>3000){al.style.display='block';inp.style.borderColor='#e63946';}
+  else{al.style.display='none';inp.style.borderColor='';}
+}
+
+function nuevaBobina(){
+  if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
+  bobNum++; initBobina(); medCount=0; updateMedCount();
+}
+
+function cancelarBobina(){initBobina(); medCount=0; updateMedCount(); hideAlerts();}
+
+function guardarBobina(){
+  if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
+  const metros=parseFloat(document.getElementById('f-metros').value);
+  if(metros>3000){document.getElementById('alert-metro').style.display='block';return;}
+  const b={
+    id:document.getElementById('f-id').value,
+    num:document.getElementById('f-num').value,
+    ot:document.getElementById('sel-ot').value,
+    operario:document.getElementById('sel-op').value,
+    mach:curMach,
+    fecha:document.getElementById('f-fecha').value,
+    hora:document.getElementById('f-hora').value,
+    lote:document.getElementById('f-lote').value,
+    metros:metros||0,
+    peso:document.getElementById('f-peso').value,
+    obs:document.getElementById('f-obs').value,
+    prod:document.getElementById('f-prod').value,
+    desc:document.getElementById('f-desc').value,
+    med:document.getElementById('f-med').value,
+    col:document.getElementById('f-col').value,
+    rem:document.getElementById('f-rem').value
+  };
+  bobinas.push(b); lastSavedBobina=b;
+  const al=document.getElementById('alert-save');al.style.display='block';
+  setTimeout(()=>al.style.display='none',2500);
+}
+
+function guardarParams(){
+  medCount=Math.min(medCount+1,5); updateMedCount();
+  if(medCount===5){
+    const al=document.getElementById('alert-med');al.style.display='none';
+  }
+}
+
+function updateMedCount(){document.getElementById('med-count').textContent=medCount;}
+function hideAlerts(){['alert-sel','alert-metro','alert-med','alert-save'].forEach(id=>document.getElementById(id).style.display='none');}
+
+function imprimirEtiqueta(){
+  if(medCount<5){document.getElementById('alert-med').style.display='block';return;}
+  if(!lastSavedBobina){alert('Primero guarde una bobina.');return;}
+  renderLabel(lastSavedBobina);
+}
+
+function revCoord(){alert('Revisión por coordinador registrada.');}
+function revCalidad(){alert('Revisión de calidad registrada.');}
+function finalizarProceso(){
+  if(confirm('¿Finalizar el proceso para esta orden de trabajo?')){
+    alert('Proceso finalizado correctamente.');resetForm();
+  }
+}
+
+// ─── LABEL ───
+function renderLabel(b){
+  const lp=document.getElementById('label-print');
+  const lc=document.getElementById('label-content');
+  lc.innerHTML=`
+    <div class="lh">
+      <div class="brand">z<span style="color:#e63946">∪</span>bex</div>
+      <div class="mach">${b.mach}</div>
+    </div>
+    <div class="label-grid">
+      <div class="lf"><span>ID bobina</span><span>${b.id}</span></div>
+      <div class="lf"><span>Remisión</span><span>${b.rem}</span></div>
+      <div class="lf"><span>Num bobina</span><span>${b.num}</span></div>
+      <div class="lf"><span>Fecha</span><span>${b.fecha}</span></div>
+      <div class="lf"><span>Lote</span><span>${b.lote}</span></div>
+      <div class="lf"><span>Medida</span><span>${b.med}</span></div>
+      <div class="lf"><span>Peso</span><span>${b.peso} Kg</span></div>
+      <div class="lf"><span>Calibre frente</span><span>${document.getElementById('p-cf').value||'—'}</span></div>
+      <div class="lf"><span>Color</span><span>${b.col}</span></div>
+      <div class="lf"><span>Calibre reverso</span><span>${document.getElementById('p-cr').value||'—'}</span></div>
+      <div class="lf"><span>Enc. ancho plano</span><span>${document.getElementById('p-ancho').value||'—'}</span></div>
+      <div class="lf"><span>Enc. Dir. Maq.</span><span>${document.getElementById('p-edm').value||'—'}</span></div>
+      <div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>${b.desc}</span></div>
+      <div class="lf"><span>Turno</span><span>${b.hora}</span></div>
+      <div class="lf"><span>Cod. prod.</span><span>${b.prod}</span></div>
+      <div class="lf"><span>Metros</span><span>${b.metros} m</span></div>
+      <div class="lf" style="grid-column:1/-1"><span>Operario</span><span>${b.operario}</span></div>
+      <div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>${b.obs||'—'}</span></div>
+    </div>
+    <div class="label-bar">
+      <svg id="barcode-svg"></svg>
+      <div style="font-size:11px;margin-top:4px;letter-spacing:2px">${b.id}</div>
+    </div>`;
+  lp.style.display='flex';
+  try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
+}
+
+// ─── MODAL ───
+function openModal(id){
+  const ot=document.getElementById('sel-ot').value||'—';
+  document.getElementById('ml-ot').textContent=ot;
+  const bobs=bobinas.filter(b=>b.ot===ot&&b.mach===curMach);
+  const body=document.getElementById('ml-body');
+  if(!bobs.length){body.innerHTML='<p style="color:var(--muted);font-size:13px">No hay bobinas registradas para esta orden.</p>';
+  }else{
+    body.innerHTML=`<table><thead><tr><th>ID</th><th>#</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead><tbody>${
+      bobs.map(b=>`<tr><td>${b.id}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.hora}</td><td>${b.metros} m</td><td>${b.peso} Kg</td></tr>`).join('')
+    }</tbody></table>`;
+  }
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// ─── ADMIN ───
+function renderAdmin(){
+  // stats
+  let totBob=0,totMet=0,totOT=0;
+  Object.values(adminData).forEach(d=>{d.ots.forEach(o=>{totBob+=o.bobinas;totMet+=o.metros;totOT++;});});
+  document.getElementById('stats-grid').innerHTML=`
+    <div class="stat"><div class="sv">${MACHINES.length}</div><div class="sl">Máquinas</div></div>
+    <div class="stat"><div class="sv">${totOT}</div><div class="sl">Órdenes registradas</div></div>
+    <div class="stat"><div class="sv">${totBob}</div><div class="sl">Bobinas totales</div></div>
+    <div class="stat"><div class="sv">${(totMet/1000).toFixed(1)}k</div><div class="sl">Metros producidos</div></div>`;
+  adminTab('maq',document.querySelector('.sec-tab'));
+}
+
+function adminTab(tab,btn){
+  document.querySelectorAll('.sec-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const c=document.getElementById('admin-content');
+  if(tab==='maq'){
+    let html='';
+    MACHINES.forEach(m=>{
+      const d=adminData[m];
+      const tot=d.ots.reduce((a,o)=>a+o.bobinas,0);
+      html+=`<div style="margin-bottom:16px"><strong style="font-size:14px;color:var(--blue)">${m}</strong> — ${d.ots.length} órdenes, ${tot} bobinas<br><br>`;
+      if(d.ots.length){
+        html+=`<table><thead><tr><th>OT</th><th>Producto</th><th>Bobinas</th><th>Metros</th><th>Estatus</th></tr></thead><tbody>`;
+        d.ots.forEach(o=>{
+          const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
+          html+=`<tr><td>${o.ot}</td><td style="font-size:11px">${o.desc}</td><td>${o.bobinas}</td><td>${o.metros.toLocaleString()} m</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
+        });
+        html+='</tbody></table>';
+      }else html+='<span style="font-size:13px;color:var(--muted)">Sin producción registrada.</span>';
+      html+='</div><hr style="border:none;border-top:1px solid var(--border);margin:12px 0">';
+    });
+    c.innerHTML=html;
+  } else if(tab==='ot'){
+    let rows='';
+    Object.entries(adminData).forEach(([m,d])=>{
+      d.ots.forEach(o=>{
+        const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
+        rows+=`<tr><td>${o.ot}</td><td>${m}</td><td style="font-size:11px">${o.desc}</td><td>${o.bobinas}</td><td>${o.metros.toLocaleString()} m</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
+      });
+    });
+    c.innerHTML=`<table><thead><tr><th>OT</th><th>Máquina</th><th>Descripción</th><th>Bobinas</th><th>Metros</th><th>Estatus</th></tr></thead><tbody>${rows||'<tr><td colspan="6" style="color:var(--muted)">Sin datos</td></tr>'}</tbody></table>`;
+  } else {
+    // live bobinas from session + sample
+    const all=[...bobinas,
+      {id:500423,num:31,mach:'EXT005',ot:'20040032',fecha:'21-05-2026',hora:'09:25:20',metros:500,peso:50.8125,operario:'Luis Angel Martinez Lopez',col:'CLARO',rem:'26050179'},
+      {id:500410,num:18,mach:'EXT001',ot:'26050163',fecha:'21-05-2026',hora:'07:10:00',metros:2000,peso:40.2,operario:'Juan Quiroz Segovia',col:'CLARO',rem:'26050163'},
+    ];
+    let rows=all.map(b=>`<tr><td>${b.id}</td><td>${b.mach}</td><td>${b.ot}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.metros} m</td><td>${b.peso} Kg</td><td style="font-size:11px">${b.operario}</td></tr>`).join('');
+    c.innerHTML=`<table><thead><tr><th>ID</th><th>Máq.</th><th>OT</th><th>#Bob.</th><th>Fecha</th><th>Metros</th><th>Peso</th><th>Operario</th></tr></thead><tbody>${rows||'<tr><td colspan="8" style="color:var(--muted)">Sin bobinas</td></tr>'}</tbody></table>`;
+  }
+}
+</script>
+</body>
+</html>
