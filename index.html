@@ -542,7 +542,8 @@ function finalizarProceso(){
 
 // ══════════════════ BÚSQUEDA PRODUCCIÓN ══════════════════
 function buscarBobinaProd(){
-  const id=parseInt(document.getElementById('prod-search').value);
+  const raw=document.getElementById('prod-search').value.trim();
+  const id=parseInt(raw);
   const r=document.getElementById('prod-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
   const b=findBobina(id);
@@ -572,7 +573,8 @@ function limpiarProd(){
 
 // ══════════════════ BÚSQUEDA CALIDAD ══════════════════
 function buscarBobinaCalidad(){
-  const id=parseInt(document.getElementById('cal-search').value);
+  const raw=document.getElementById('cal-search').value.trim();
+  const id=parseInt(raw);
   const r=document.getElementById('cal-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
   const b=findBobina(id);
@@ -627,7 +629,8 @@ function limpiarCalidad(){
 
 // busca en sesión + histórico demo
 function findBobina(id){
-  return bobinas.find(b=>b.id===id) || sampleBobinas.find(b=>b.id===id) || null;
+  if(!id||isNaN(id)) return null;
+  return bobinas.find(b=>Number(b.id)===id) || sampleBobinas.find(b=>Number(b.id)===id) || null;
 }
 
 // LABEL
