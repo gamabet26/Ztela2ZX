@@ -9,45 +9,35 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
 :root{--blue:#0D3B8C;--blue2:#1a56c4;--accent:#e63946;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280;--success:#16a34a;--warn:#d97706}
 body{background:var(--bg);color:var(--text);min-height:100vh}
-
-/* SPLASH */
 #splash{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;cursor:pointer}
 #splash canvas{position:absolute;inset:0;opacity:.25}
 .zx-logo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
-.zx-text{font-size:96px;font-weight:900;color:#1a56c4;letter-spacing:-4px;animation:zxpulse 2s ease-in-out infinite}
-.zx-sub{font-size:22px;color:#fff;letter-spacing:6px;font-weight:300;opacity:.8}
-.zx-enter{margin-top:24px;font-size:13px;color:#666;letter-spacing:2px;animation:blink 1.5s infinite}
-@keyframes zxpulse{0%,100%{text-shadow:0 0 20px #1a56c466;transform:scale(1)}50%{text-shadow:0 0 60px #1a56c4aa;transform:scale(1.04)}}
+.zx-text{font-size:144px;font-weight:900;color:#1a56c4;letter-spacing:-6px;animation:zxpulse 2s ease-in-out infinite}
+.zx-sub{font-size:30px;color:#fff;letter-spacing:8px;font-weight:300;opacity:.8}
+.zx-enter{margin-top:28px;font-size:14px;color:#666;letter-spacing:2px;animation:blink 1.5s infinite}
+@keyframes zxpulse{0%,100%{text-shadow:0 0 30px #1a56c466;transform:scale(1)}50%{text-shadow:0 0 80px #1a56c4bb;transform:scale(1.06)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-/* SHELL */
 #app{display:none;flex-direction:column;min-height:100vh}
-header{background:var(--blue);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:0 2px 8px #0003}
+header{background:var(--blue);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:0 2px 8px #0003;flex-wrap:wrap;gap:4px}
 .logo-h{font-size:20px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:8px}
 .logo-h span{color:#5b9bf8}
-nav{display:flex;gap:4px}
-nav button{background:transparent;border:none;color:#ffffffaa;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;transition:.2s}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:transparent;border:none;color:#ffffffaa;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:.2s}
 nav button.active,nav button:hover{background:#ffffff1a;color:#fff}
 main{flex:1;padding:24px;max-width:1200px;width:100%;margin:0 auto}
-
-/* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
 .card-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--blue)}
-
-/* TABS machines */
 .mach-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
 .mach-tab{padding:7px 18px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px;font-weight:500;transition:.15s}
 .mach-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-
-/* FORM */
 .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.form-grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:12px;color:var(--muted);font-weight:500}
 .field input,.field select,.field textarea{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--card);color:var(--text);transition:.15s}
 .field input:focus,.field select:focus{outline:none;border-color:var(--blue2);box-shadow:0 0 0 3px #1a56c420}
 .field input[readonly],.field input.auto{background:#f8f9fb;color:var(--muted)}
 .field textarea{resize:vertical;min-height:60px}
-
 .btn{padding:9px 18px;border-radius:7px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:13px;font-weight:500;transition:.15s;color:var(--text)}
 .btn:hover{background:var(--bg)}
 .btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
@@ -55,10 +45,7 @@ main{flex:1;padding:24px;max-width:1200px;width:100%;margin:0 auto}
 .btn-danger{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
 .btn-success{background:#dcfce7;color:#15803d;border-color:#86efac}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-
 .sep{height:1px;background:var(--border);margin:16px 0}
-
-/* TABLE */
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{background:#f8f9fb;padding:9px 12px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border);font-size:12px}
 td{padding:9px 12px;border-bottom:1px solid var(--border)}
@@ -68,19 +55,11 @@ tr:hover td{background:#f8f9fb}
 .badge-ok{background:#dcfce7;color:#15803d}
 .badge-pend{background:#fef9c3;color:#854d0e}
 .badge-fin{background:#dbeafe;color:#1e40af}
-
-/* ALERT */
 .alert{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none}
 .alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
-
-/* PRINT LABEL */
-@media print{
-  body *{visibility:hidden}
-  #label-print,#label-print *{visibility:visible}
-  #label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}
-}
+@media print{body *{visibility:hidden}#label-print,#label-print *{visibility:visible}#label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}}
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .label-wrap .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
 .label-wrap .lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}
@@ -90,28 +69,40 @@ tr:hover td{background:#f8f9fb}
 .label-grid .lf span:first-child{font-size:10px;color:#888}
 .label-grid .lf span:last-child{font-weight:600;font-size:13px}
 .label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}
-
-/* MODAL */
 .modal-bg{position:fixed;inset:0;background:#0007;z-index:100;display:none;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto}
+.modal{background:#fff;border-radius:12px;padding:24px;max-width:660px;width:95%;max-height:85vh;overflow-y:auto}
 .modal h3{font-size:16px;font-weight:600;margin-bottom:16px;color:var(--blue)}
-.modal-close{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted)}
-
-/* DASHBOARD */
+.modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center}
 .stat .sv{font-size:28px;font-weight:700;color:var(--blue)}
 .stat .sl{font-size:12px;color:var(--muted);margin-top:2px}
-
-.sec-tabs{display:flex;gap:6px;margin-bottom:16px}
-.sec-tab{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px}
+.sec-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.sec-tab{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px;transition:.15s}
 .sec-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tbl-action{display:flex;gap:6px}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:4px 6px;border-radius:4px;transition:.15s}
+.icon-btn:hover{background:var(--bg)}
+.icon-btn.del:hover{background:#fee2e2;color:#b91c1c}
+
+/* CONSULTA CARDS */
+.result-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px;margin-top:16px}
+.result-card .rc-title{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:4px}
+.result-card .rc-val{font-size:18px;font-weight:700;color:var(--text)}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+.result-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px}
+.result-item .ri-label{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:4px}
+.result-item .ri-val{font-size:15px;font-weight:700;color:var(--text)}
+.result-item.highlight{border-color:var(--blue2);background:#eff6ff}
+.result-item.highlight .ri-val{color:var(--blue)}
+.search-box{display:flex;gap:10px;align-items:flex-end}
+.search-box .field{flex:1}
+.not-found{text-align:center;padding:32px;color:var(--muted);font-size:14px}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash" onclick="enterApp()">
   <canvas id="circuit"></canvas>
   <div class="zx-logo">
@@ -121,59 +112,35 @@ tr:hover td{background:#f8f9fb}
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <header>
     <div class="logo-h">ZX <span>Ztela 2</span></div>
     <nav>
       <button class="active" onclick="showView('operador',this)">Operador</button>
+      <button onclick="showView('produccion',this)">Producción</button>
+      <button onclick="showView('calidad',this)">Calidad</button>
       <button onclick="showView('admin',this)">Administrador</button>
     </nav>
   </header>
   <main>
 
-    <!-- OPERADOR -->
+    <!-- ══════════════════ OPERADOR ══════════════════ -->
     <div id="view-operador">
       <div class="mach-tabs" id="mach-tabs"></div>
       <div class="card">
         <div class="card-title">📋 Registro de producción — <span id="mach-label">EXT001</span></div>
-
         <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo para continuar.</div>
         <div id="alert-metro" class="alert alert-err">🚫 Regla de oro: los metros no pueden exceder 3,000 m. Por favor corrija el valor.</div>
         <div id="alert-med" class="alert alert-warn">⚠ Debe guardar las 5 mediciones antes de imprimir la etiqueta.</div>
         <div id="alert-save" class="alert alert-ok">✅ Bobina guardada correctamente.</div>
-
         <div class="form-grid">
-          <div class="field">
-            <label>Operario</label>
-            <select id="sel-op" onchange="checkForm()">
-              <option value="">— Seleccione —</option>
-              <option>Juan Quiroz Segovia</option>
-              <option>Roberto Martínez Salazar</option>
-              <option>José Alfonso Ochoa Leija</option>
-              <option>Erik Rodrigo Presas Jasso</option>
-              <option>Israel Rodríguez Herrera</option>
-              <option>Francisco Abelardo Garza Hernández</option>
-              <option>Fabián de León Mejía</option>
-              <option>Erick González Palomo</option>
-              <option>Gerardo Martínez Alvarado</option>
-              <option>Josué Rodolfo Gaytán Rodríguez</option>
-              <option>Luis Angel Ochoa Leija</option>
-              <option>Luis Antonio Mendez Martinez</option>
-            </select>
+          <div class="field"><label>Operario</label>
+            <select id="sel-op" onchange="checkForm()"><option value="">— Seleccione —</option></select>
           </div>
-          <div class="field">
-            <label>Orden de trabajo</label>
-            <select id="sel-ot" onchange="loadOT()">
-              <option value="">— Seleccione —</option>
-              <option data-prod="20-710901-14085-01" data-desc="NX300606-GEN-S/I-CLO-13" data-med="13" data-col="CLARO" data-rem="26050179" data-sig="IMPRESIÓN">26050163</option>
-              <option data-prod="20-500901-17512-01NT250606" data-desc="NT250606-GEN-S/I-CLO-390MM" data-med="390MM" data-col="CLARO" data-rem="26050224" data-sig="CONVERSIÓN">26050162</option>
-              <option data-prod="20-300901-14196-01F1710" data-desc="F1710-GEN-S/I-BCO-160MM" data-med="160MM" data-col="BLANCO" data-rem="26050226" data-sig="BARNIZADO">20040026</option>
-              <option data-prod="20-230901-17468-01" data-desc="B501518RT-GEN-S/I-CLO-14" data-med="14" data-col="CLARO" data-rem="26050179" data-sig="">20040032</option>
-            </select>
+          <div class="field"><label>Orden de trabajo</label>
+            <select id="sel-ot" onchange="loadOT()"><option value="">— Seleccione —</option></select>
           </div>
         </div>
-
         <div class="form-grid" style="margin-top:12px">
           <div class="field"><label>Descripción</label><input id="f-desc" readonly class="auto" placeholder="—"/></div>
           <div class="field"><label>Producto</label><input id="f-prod" readonly class="auto" placeholder="—"/></div>
@@ -182,7 +149,6 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Siguiente proceso</label><input id="f-sig" readonly class="auto" placeholder="—"/></div>
           <div class="field"><label>Remisión</label><input id="f-rem" readonly class="auto" placeholder="—"/></div>
         </div>
-
         <div class="sep"></div>
         <div class="card-title">🧵 Bobina actual</div>
         <div class="form-grid">
@@ -191,20 +157,16 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Fecha</label><input id="f-fecha" readonly class="auto"/></div>
           <div class="field"><label>Hora</label><input id="f-hora" readonly class="auto"/></div>
           <div class="field"><label>Lote</label><input id="f-lote" readonly class="auto"/></div>
-          <div class="field">
-            <label>Metros totales ⚠ máx 3,000</label>
-            <input id="f-metros" type="number" min="0" max="3000" placeholder="0" oninput="validarMetros(this)"/>
-          </div>
+          <div class="field"><label>Metros totales ⚠ máx 3,000</label><input id="f-metros" type="number" min="0" max="3000" placeholder="0" oninput="validarMetros(this)"/></div>
           <div class="field"><label>Peso (Kg)</label><input id="f-peso" type="number" placeholder="0.0" step="0.01"/></div>
           <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Opcional..."></textarea></div>
         </div>
         <div class="btn-row">
           <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
           <button class="btn btn-danger" onclick="cancelarBobina()">Cancelar bobina</button>
-          <button class="btn" onclick="openModal('modal-list')">Lista de bobinas</button>
+          <button class="btn" onclick="openListModal()">Lista de bobinas</button>
           <button class="btn btn-success" onclick="guardarBobina()">Guardar bobina</button>
         </div>
-
         <div class="sep"></div>
         <div class="card-title">📐 Parámetros de proceso</div>
         <div class="form-grid">
@@ -215,33 +177,80 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Encogimiento vertical</label><input id="p-ev" type="number" placeholder="—"/></div>
           <div class="field"><label>Calibre reverso</label><input id="p-cr" type="number" placeholder="—"/></div>
           <div class="field"><label>Enc. Dir. Máquina</label><input id="p-edm" type="number" placeholder="—"/></div>
-          <div class="field">
-            <label>Deslamine</label>
+          <div class="field"><label>Deslamine</label>
             <select id="p-des"><option value="">— Seleccione —</option><option>Sí</option><option>No</option></select>
           </div>
           <div class="field"><label>Temperatura de túnel</label><input id="p-temp" type="number" placeholder="—"/></div>
         </div>
-        <div id="mediciones-guardadas" style="margin-top:8px;font-size:12px;color:var(--muted)">Mediciones guardadas: <strong id="med-count">0</strong> / 5</div>
-
+        <div style="margin-top:8px;font-size:12px;color:var(--muted)">Mediciones guardadas: <strong id="med-count">0</strong> / 5</div>
         <div class="btn-row" style="margin-top:16px">
-          <button class="btn" onclick="revCoord()">Revisión por coordinador</button>
-          <button class="btn btn-primary" onclick="guardarParams()">Guardar parámetros</button>
-          <button class="btn btn-success" onclick="finalizarProceso()">Finalizar proceso</button>
-          <button class="btn" onclick="revCalidad()">Revisión de calidad</button>
-          <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir etiqueta</button>
+          <div class="field" style="min-width:200px">
+            <label>Revisión por coordinador</label>
+            <select id="sel-coord">
+              <option value="">— Seleccione coordinador —</option>
+              <option>Gumaro Flores</option>
+              <option>Joaquin Gonzalez</option>
+              <option>Erick Presas</option>
+              <option>Israel Rodriguez</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+            <button class="btn" onclick="revCoord()">✔ Registrar revisión</button>
+            <button class="btn btn-primary" onclick="guardarParams()">Guardar parámetros</button>
+            <button class="btn btn-success" onclick="finalizarProceso()">Finalizar proceso</button>
+            <button class="btn" onclick="revCalidad()">Revisión de calidad</button>
+            <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir etiqueta</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- ADMIN -->
+    <!-- ══════════════════ PRODUCCIÓN ══════════════════ -->
+    <div id="view-produccion" style="display:none">
+      <div class="card">
+        <div class="card-title">🏭 Consulta de producción — Bobina</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Ingresa el ID de bobina para consultar encogimiento, calibre y medida registrados.</p>
+        <div class="search-box">
+          <div class="field">
+            <label>ID de bobina</label>
+            <input id="prod-search" type="number" placeholder="Ej. 500442" onkeydown="if(event.key==='Enter')buscarBobinaProd()"/>
+          </div>
+          <button class="btn btn-primary" onclick="buscarBobinaProd()" style="height:38px">Buscar</button>
+          <button class="btn" onclick="limpiarProd()" style="height:38px">Limpiar</button>
+        </div>
+        <div id="prod-result"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ CALIDAD ══════════════════ -->
+    <div id="view-calidad" style="display:none">
+      <div class="card">
+        <div class="card-title">🔬 Consulta de calidad — Bobina</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Ingresa el ID de bobina para ver todos los datos de calidad registrados.</p>
+        <div class="search-box">
+          <div class="field">
+            <label>ID de bobina</label>
+            <input id="cal-search" type="number" placeholder="Ej. 500442" onkeydown="if(event.key==='Enter')buscarBobinaCalidad()"/>
+          </div>
+          <button class="btn btn-primary" onclick="buscarBobinaCalidad()" style="height:38px">Buscar</button>
+          <button class="btn" onclick="limpiarCalidad()" style="height:38px">Limpiar</button>
+        </div>
+        <div id="cal-result"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════ ADMIN ══════════════════ -->
     <div id="view-admin" style="display:none">
       <div class="stat-grid" id="stats-grid"></div>
-      <div class="sec-tabs">
-        <button class="sec-tab active" onclick="adminTab('maq',this)">Por máquina</button>
-        <button class="sec-tab" onclick="adminTab('ot',this)">Por orden de trabajo</button>
-        <button class="sec-tab" onclick="adminTab('bob',this)">Bobinas</button>
+      <div class="sec-tabs" id="admin-tabs">
+        <button class="sec-tab active" onclick="adminTab('produccion',this)">Producción</button>
+        <button class="sec-tab" onclick="adminTab('operadores',this)">Operadores</button>
+        <button class="sec-tab" onclick="adminTab('maquinas',this)">Máquinas</button>
+        <button class="sec-tab" onclick="adminTab('ordenes',this)">Órdenes de trabajo</button>
+        <button class="sec-tab" onclick="adminTab('productos',this)">Productos</button>
+        <button class="sec-tab" onclick="adminTab('remisiones',this)">Remisiones</button>
       </div>
-      <div class="card" id="admin-content"></div>
+      <div id="admin-content"></div>
     </div>
 
   </main>
@@ -256,6 +265,19 @@ tr:hover td{background:#f8f9fb}
   </div>
 </div>
 
+<!-- MODAL FORM -->
+<div class="modal-bg" id="modal-form">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-form')">×</button>
+    <h3 id="mf-title">Alta</h3>
+    <div id="mf-body"></div>
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn btn-primary" onclick="saveModalForm()">Guardar</button>
+      <button class="btn" onclick="closeModal('modal-form')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 <!-- LABEL PRINT -->
 <div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
   <div class="label-wrap" id="label-content"></div>
@@ -266,78 +288,129 @@ tr:hover td{background:#f8f9fb}
 </div>
 
 <script>
-// ─── CIRCUIT ANIMATION ───
+// CIRCUIT ANIMATION
 const canvas=document.getElementById('circuit'),ctx=canvas.getContext('2d');
-let nodes=[],W,H;
+let W,H,nodes=[];
 function resizeCanvas(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-resizeCanvas();
-window.addEventListener('resize',resizeCanvas);
+resizeCanvas();window.addEventListener('resize',resizeCanvas);
 for(let i=0;i<60;i++)nodes.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
 function drawCircuit(){
-  ctx.clearRect(0,0,W,H);
-  ctx.strokeStyle='#1a56c4';ctx.lineWidth=.8;
+  ctx.clearRect(0,0,W,H);ctx.strokeStyle='#1a56c4';ctx.lineWidth=.8;
   for(let i=0;i<nodes.length;i++){
     nodes[i].x+=nodes[i].vx;nodes[i].y+=nodes[i].vy;
     if(nodes[i].x<0||nodes[i].x>W)nodes[i].vx*=-1;
     if(nodes[i].y<0||nodes[i].y>H)nodes[i].vy*=-1;
     for(let j=i+1;j<nodes.length;j++){
       const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<180){
-        ctx.globalAlpha=(1-d/180)*.6;
-        ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);
-        // right-angle circuit lines
-        ctx.lineTo(nodes[j].x,nodes[i].y);
-        ctx.lineTo(nodes[j].x,nodes[j].y);
-        ctx.stroke();
-      }
+      if(d<180){ctx.globalAlpha=(1-d/180)*.6;ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();}
     }
-    ctx.globalAlpha=.8;ctx.fillStyle='#1a56c4';
-    ctx.beginPath();ctx.arc(nodes[i].x,nodes[i].y,2,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=.8;ctx.fillStyle='#1a56c4';ctx.beginPath();ctx.arc(nodes[i].x,nodes[i].y,2,0,Math.PI*2);ctx.fill();
   }
-  ctx.globalAlpha=1;
-  requestAnimationFrame(drawCircuit);
+  ctx.globalAlpha=1;requestAnimationFrame(drawCircuit);
 }
 drawCircuit();
 
 function enterApp(){
-  document.getElementById('splash').style.opacity='0';
-  document.getElementById('splash').style.transition='opacity .6s';
-  setTimeout(()=>{
-    document.getElementById('splash').style.display='none';
-    document.getElementById('app').style.display='flex';
-    initApp();
-  },600);
+  const s=document.getElementById('splash');
+  s.style.transition='opacity .6s';s.style.opacity='0';
+  setTimeout(()=>{s.style.display='none';document.getElementById('app').style.display='flex';initApp();},600);
 }
 
-// ─── STATE ───
+// STATE
 const MACHINES=['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'];
-let curMach='EXT001', formActive=false, medCount=0;
-let bobinas=[], lastSavedBobina=null;
-let bobID=500440, bobNum=1;
+let curMach='EXT001',formActive=false,medCount=0,bobinas=[],lastSavedBobina=null,lastParams={};
+let bobID=500440,bobNum=1;
 const TODAY=new Date();
 const fmtDate=d=>`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
 const fmtLote=d=>`${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getFullYear()).slice(2)}`;
 const nowTime=()=>{const n=new Date();return`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`};
 
-// sample admin data
-const adminData={
-  EXT001:{ots:[{ot:'26050163',prod:'20-710901-14085-01',desc:'NX300606-GEN-S/I-CLO-13',bobinas:9,metros:4500,status:'Iniciado'},
-               {ot:'20040026',prod:'20-300901-14196-01',desc:'F1710-GEN-S/I-BCO-160MM',bobinas:3,metros:1500,status:'Finalizado'}]},
-  EXT002:{ots:[{ot:'26050162',prod:'20-500901-17512-01',desc:'NT250606-GEN-S/I-CLO-390MM',bobinas:5,metros:2500,status:'En espera'}]},
-  EXT003:{ots:[]},EXT004:{ots:[]},EXT005:{ots:[{ot:'20040032',prod:'20-230901-17468-01',desc:'B501518RT-GEN-S/I-CLO-14',bobinas:31,metros:15500,status:'Finalizado'}]},EXT006:{ots:[]}
-};
+// CATALOGS
+let catOperadores=[
+  {id:1,nombre:'Juan Quiroz Segovia',usuario:'jquiroz',activo:true},
+  {id:2,nombre:'Roberto Martínez Salazar',usuario:'rmartinez',activo:true},
+  {id:3,nombre:'José Alfonso Ochoa Leija',usuario:'jaochoa',activo:true},
+  {id:4,nombre:'Erik Rodrigo Presas Jasso',usuario:'epresas',activo:true},
+  {id:5,nombre:'Israel Rodríguez Herrera',usuario:'irodriguez',activo:true},
+  {id:6,nombre:'Francisco Abelardo Garza Hernández',usuario:'fgarza',activo:true},
+  {id:7,nombre:'Fabián de León Mejía',usuario:'fdeleon',activo:true},
+  {id:8,nombre:'Erick González Palomo',usuario:'egonzalez',activo:true},
+  {id:9,nombre:'Gerardo Martínez Alvarado',usuario:'gmartinez',activo:true},
+  {id:10,nombre:'Josué Rodolfo Gaytán Rodríguez',usuario:'jgaytan',activo:true},
+  {id:11,nombre:'Luis Angel Ochoa Leija',usuario:'laochoa',activo:true},
+  {id:12,nombre:'Luis Antonio Mendez Martinez',usuario:'lamendez',activo:true},
+];
+let catMaquinas=[
+  {id:1,codigo:'EXT001',nombre:'Extrusora 1',activo:true},
+  {id:2,codigo:'EXT002',nombre:'Extrusora 2',activo:true},
+  {id:3,codigo:'EXT003',nombre:'Extrusora 3',activo:true},
+  {id:4,codigo:'EXT004',nombre:'Extrusora 4',activo:true},
+  {id:5,codigo:'EXT005',nombre:'Extrusora 5',activo:true},
+  {id:6,codigo:'EXT006',nombre:'Extrusora 6',activo:true},
+];
+let catOrdenes=[
+  {id:1,ot:'26050163',prod:'20-710901-14085-01',desc:'NX300606-GEN-S/I-CLO-13',med:'13',col:'CLARO',rem:'26050179',sig:'IMPRESIÓN',maq:'EXT001',status:'Iniciado'},
+  {id:2,ot:'26050162',prod:'20-500901-17512-01',desc:'NT250606-GEN-S/I-CLO-390MM',med:'390MM',col:'CLARO',rem:'26050224',sig:'CONVERSIÓN',maq:'EXT002',status:'En espera'},
+  {id:3,ot:'20040026',prod:'20-300901-14196-01',desc:'F1710-GEN-S/I-BCO-160MM',med:'160MM',col:'BLANCO',rem:'26050226',sig:'BARNIZADO',maq:'EXT001',status:'Finalizado'},
+  {id:4,ot:'20040032',prod:'20-230901-17468-01',desc:'B501518RT-GEN-S/I-CLO-14',med:'14',col:'CLARO',rem:'26050179',sig:'',maq:'EXT005',status:'Finalizado'},
+];
+let catProductos=[
+  {id:1,codigo:'20-710901-14085-01',desc:'NX300606-GEN-S/I-CLO-13',med:'13',col:'CLARO',dep:'EXTRUSIÓN'},
+  {id:2,codigo:'20-500901-17512-01',desc:'NT250606-GEN-S/I-CLO-390MM',med:'390MM',col:'CLARO',dep:'EXTRUSIÓN'},
+  {id:3,codigo:'20-300901-14196-01',desc:'F1710-GEN-S/I-BCO-160MM',med:'160MM',col:'BLANCO',dep:'EXTRUSIÓN'},
+  {id:4,codigo:'20-230901-17468-01',desc:'B501518RT-GEN-S/I-CLO-14',med:'14',col:'CLARO',dep:'EXTRUSIÓN'},
+];
+let catRemisiones=[
+  {id:1,num:'26050179',prod:'20-710901-14085-01',status:'Iniciado'},
+  {id:2,num:'26050224',prod:'20-500901-17512-01',status:'En espera'},
+  {id:3,num:'26050226',prod:'20-300901-14196-01',status:'Finalizado'},
+];
+let nextId={op:13,maq:7,ot:5,prod:5,rem:4};
+let currentModalType='',editingId=null;
+
+// SAMPLE historical bobinas for demo search
+const sampleBobinas=[
+  {id:500423,num:31,mach:'EXT005',ot:'20040032',fecha:'21-05-2026',hora:'09:25:20',metros:500,peso:50.8125,
+   operario:'Luis Angel Ochoa Leija',col:'CLARO',rem:'26050179',prod:'20-230901-17468-01',
+   desc:'B501518RT-GEN-S/I-CLO-14',med:'14',lote:'052126',
+   params:{med:14,ancho:15,eh:8,cf:480,ev:6,cr:510,edm:18,des:'No',temp:185}},
+  {id:500410,num:18,mach:'EXT001',ot:'26050163',fecha:'21-05-2026',hora:'07:10:00',metros:2000,peso:40.2,
+   operario:'Juan Quiroz Segovia',col:'CLARO',rem:'26050163',prod:'20-710901-14085-01',
+   desc:'NX300606-GEN-S/I-CLO-13',med:'13',lote:'052126',
+   params:{med:13,ancho:12,eh:7,cf:460,ev:5,cr:490,edm:16,des:'No',temp:183}},
+];
 
 function initApp(){
-  // machine tabs
-  const mt=document.getElementById('mach-tabs');
-  MACHINES.forEach(m=>{
-    const b=document.createElement('button');
-    b.className='mach-tab'+(m==='EXT001'?' active':'');
-    b.textContent=m;b.onclick=()=>selectMach(m,b);
-    mt.appendChild(b);
-  });
+  buildMachTabs();
+  populateSelects();
   initBobina();
   renderAdmin();
+}
+
+function buildMachTabs(){
+  const mt=document.getElementById('mach-tabs');mt.innerHTML='';
+  catMaquinas.filter(m=>m.activo).forEach((m,i)=>{
+    const b=document.createElement('button');
+    b.className='mach-tab'+(i===0?' active':'');
+    b.textContent=m.codigo;b.onclick=()=>selectMach(m.codigo,b);
+    mt.appendChild(b);
+  });
+}
+
+function populateSelects(){
+  const so=document.getElementById('sel-op');
+  so.innerHTML='<option value="">— Seleccione —</option>';
+  catOperadores.filter(o=>o.activo).forEach(o=>{
+    const opt=document.createElement('option');opt.value=o.id;opt.textContent=o.nombre;so.appendChild(opt);
+  });
+  const st=document.getElementById('sel-ot');
+  st.innerHTML='<option value="">— Seleccione —</option>';
+  catOrdenes.filter(o=>o.status!=='Finalizado').forEach(o=>{
+    const opt=document.createElement('option');
+    opt.value=o.id;opt.textContent=o.ot;
+    Object.assign(opt.dataset,{prod:o.prod,desc:o.desc,med:o.med,col:o.col,rem:o.rem,sig:o.sig});
+    st.appendChild(opt);
+  });
 }
 
 function selectMach(m,btn){
@@ -349,28 +422,25 @@ function selectMach(m,btn){
 }
 
 function showView(v,btn){
-  document.getElementById('view-operador').style.display=v==='operador'?'block':'none';
-  document.getElementById('view-admin').style.display=v==='admin'?'block':'none';
+  ['operador','produccion','calidad','admin'].forEach(id=>
+    document.getElementById('view-'+id).style.display=id===v?'block':'none');
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+  if(v==='admin')renderAdmin();
 }
 
-// ─── FORM ───
+// OPERADOR
 function resetForm(){
   ['sel-op','sel-ot'].forEach(id=>document.getElementById(id).value='');
   ['f-desc','f-prod','f-med','f-col','f-sig','f-rem'].forEach(id=>document.getElementById(id).value='');
-  formActive=false; medCount=0; updateMedCount();
-  hideAlerts(); initBobina();
+  formActive=false;medCount=0;updateMedCount();hideAlerts();initBobina();
 }
-
 function checkForm(){
-  const op=document.getElementById('sel-op').value;
-  const ot=document.getElementById('sel-ot').value;
+  const op=document.getElementById('sel-op').value,ot=document.getElementById('sel-ot').value;
   const al=document.getElementById('alert-sel');
   if(!op||!ot){al.style.display='block';formActive=false;}
   else{al.style.display='none';formActive=true;}
 }
-
 function loadOT(){
   checkForm();
   const sel=document.getElementById('sel-ot');
@@ -382,9 +452,8 @@ function loadOT(){
   document.getElementById('f-col').value=opt.dataset.col||'';
   document.getElementById('f-sig').value=opt.dataset.sig||'';
   document.getElementById('f-rem').value=opt.dataset.rem||'';
-  bobNum=1; initBobina();
+  bobNum=1;initBobina();
 }
-
 function initBobina(){
   bobID++;
   document.getElementById('f-id').value=bobID;
@@ -396,31 +465,29 @@ function initBobina(){
   document.getElementById('f-peso').value='';
   document.getElementById('f-obs').value='';
 }
-
 function validarMetros(inp){
   const v=parseFloat(inp.value);
   const al=document.getElementById('alert-metro');
   if(v>3000){al.style.display='block';inp.style.borderColor='#e63946';}
   else{al.style.display='none';inp.style.borderColor='';}
 }
-
 function nuevaBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
-  bobNum++; initBobina(); medCount=0; updateMedCount();
+  bobNum++;initBobina();medCount=0;updateMedCount();
 }
-
-function cancelarBobina(){initBobina(); medCount=0; updateMedCount(); hideAlerts();}
-
+function cancelarBobina(){initBobina();medCount=0;updateMedCount();hideAlerts();}
 function guardarBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
   const metros=parseFloat(document.getElementById('f-metros').value);
   if(metros>3000){document.getElementById('alert-metro').style.display='block';return;}
+  const opSel=document.getElementById('sel-op');
+  const opNombre=opSel.options[opSel.selectedIndex].textContent;
+  const otSel=document.getElementById('sel-ot');
   const b={
-    id:document.getElementById('f-id').value,
+    id:parseInt(document.getElementById('f-id').value),
     num:document.getElementById('f-num').value,
-    ot:document.getElementById('sel-ot').value,
-    operario:document.getElementById('sel-op').value,
-    mach:curMach,
+    ot:otSel.options[otSel.selectedIndex].textContent,
+    operario:opNombre,mach:curMach,
     fecha:document.getElementById('f-fecha').value,
     hora:document.getElementById('f-hora').value,
     lote:document.getElementById('f-lote').value,
@@ -431,30 +498,41 @@ function guardarBobina(){
     desc:document.getElementById('f-desc').value,
     med:document.getElementById('f-med').value,
     col:document.getElementById('f-col').value,
-    rem:document.getElementById('f-rem').value
+    rem:document.getElementById('f-rem').value,
+    params:{...lastParams}
   };
-  bobinas.push(b); lastSavedBobina=b;
+  bobinas.push(b);lastSavedBobina=b;
   const al=document.getElementById('alert-save');al.style.display='block';
   setTimeout(()=>al.style.display='none',2500);
 }
-
 function guardarParams(){
-  medCount=Math.min(medCount+1,5); updateMedCount();
-  if(medCount===5){
-    const al=document.getElementById('alert-med');al.style.display='none';
-  }
+  // snapshot de parámetros actuales
+  lastParams={
+    med:document.getElementById('p-med').value,
+    ancho:document.getElementById('p-ancho').value,
+    eh:document.getElementById('p-eh').value,
+    cf:document.getElementById('p-cf').value,
+    ev:document.getElementById('p-ev').value,
+    cr:document.getElementById('p-cr').value,
+    edm:document.getElementById('p-edm').value,
+    des:document.getElementById('p-des').value,
+    temp:document.getElementById('p-temp').value,
+  };
+  medCount=Math.min(medCount+1,5);updateMedCount();
+  if(medCount===5)document.getElementById('alert-med').style.display='none';
 }
-
 function updateMedCount(){document.getElementById('med-count').textContent=medCount;}
 function hideAlerts(){['alert-sel','alert-metro','alert-med','alert-save'].forEach(id=>document.getElementById(id).style.display='none');}
-
 function imprimirEtiqueta(){
   if(medCount<5){document.getElementById('alert-med').style.display='block';return;}
   if(!lastSavedBobina){alert('Primero guarde una bobina.');return;}
   renderLabel(lastSavedBobina);
 }
-
-function revCoord(){alert('Revisión por coordinador registrada.');}
+function revCoord(){
+  const c=document.getElementById('sel-coord').value;
+  if(!c){alert('Seleccione un coordinador.');return;}
+  alert(`Revisión por coordinador registrada: ${c}`);
+}
 function revCalidad(){alert('Revisión de calidad registrada.');}
 function finalizarProceso(){
   if(confirm('¿Finalizar el proceso para esta orden de trabajo?')){
@@ -462,15 +540,101 @@ function finalizarProceso(){
   }
 }
 
-// ─── LABEL ───
+// ══════════════════ BÚSQUEDA PRODUCCIÓN ══════════════════
+function buscarBobinaProd(){
+  const id=parseInt(document.getElementById('prod-search').value);
+  const r=document.getElementById('prod-result');
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
+  const b=findBobina(id);
+  if(!b){r.innerHTML=`<div class="not-found">⚠ No se encontró la bobina <strong>${id}</strong> en esta sesión.</div>`;return;}
+  const p=b.params||{};
+  r.innerHTML=`
+    <div class="result-card">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Bobina <strong style="color:var(--text)">#${b.id}</strong> — OT: ${b.ot} — Máquina: ${b.mach}</div>
+      <div class="result-grid">
+        <div class="result-item highlight"><div class="ri-label">Encogimiento horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Encogimiento vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Enc. Dir. Máquina</div><div class="ri-val">${p.edm||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Medida</div><div class="ri-val">${b.med||'—'}</div></div>
+        <div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">${p.ancho||'—'}</div></div>
+        <div class="result-item"><div class="ri-label">Temperatura túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
+        <div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">${p.des||'—'}</div></div>
+      </div>
+    </div>`;
+}
+
+function limpiarProd(){
+  document.getElementById('prod-search').value='';
+  document.getElementById('prod-result').innerHTML='';
+}
+
+// ══════════════════ BÚSQUEDA CALIDAD ══════════════════
+function buscarBobinaCalidad(){
+  const id=parseInt(document.getElementById('cal-search').value);
+  const r=document.getElementById('cal-result');
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
+  const b=findBobina(id);
+  if(!b){r.innerHTML=`<div class="not-found">⚠ No se encontró la bobina <strong>${id}</strong> en esta sesión.</div>`;return;}
+  const p=b.params||{};
+  r.innerHTML=`
+    <div class="result-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <div>
+          <div style="font-size:18px;font-weight:700;color:var(--blue)">Bobina #${b.id}</div>
+          <div style="font-size:12px;color:var(--muted)">Registro de calidad completo</div>
+        </div>
+        <span class="badge badge-ok">✓ Datos completos</span>
+      </div>
+      <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Identificación</div>
+      <div class="result-grid" style="margin-top:0;margin-bottom:16px">
+        <div class="result-item"><div class="ri-label">Orden de trabajo</div><div class="ri-val">${b.ot}</div></div>
+        <div class="result-item"><div class="ri-label">Máquina</div><div class="ri-val">${b.mach}</div></div>
+        <div class="result-item"><div class="ri-label">Operador</div><div class="ri-val" style="font-size:13px">${b.operario}</div></div>
+        <div class="result-item"><div class="ri-label">Fecha / Lote</div><div class="ri-val">${b.fecha} / ${b.lote}</div></div>
+        <div class="result-item"><div class="ri-label">Num. bobina</div><div class="ri-val">${b.num}</div></div>
+        <div class="result-item"><div class="ri-label">Remisión</div><div class="ri-val">${b.rem}</div></div>
+      </div>
+      <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Producto</div>
+      <div class="result-grid" style="margin-top:0;margin-bottom:16px">
+        <div class="result-item"><div class="ri-label">Código producto</div><div class="ri-val" style="font-size:12px">${b.prod}</div></div>
+        <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">${b.desc}</div></div>
+        <div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">${b.med}</div></div>
+        <div class="result-item"><div class="ri-label">Color</div><div class="ri-val">${b.col}</div></div>
+        <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
+        <div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">${b.peso} Kg</div></div>
+      </div>
+      <div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Parámetros de proceso</div>
+      <div class="result-grid" style="margin-top:0">
+        <div class="result-item highlight"><div class="ri-label">Encogimiento horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Encogimiento vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Enc. Dir. Máquina</div><div class="ri-val">${p.edm||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
+        <div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
+        <div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">${p.ancho||'—'}</div></div>
+        <div class="result-item"><div class="ri-label">Temperatura túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
+        <div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">${p.des||'—'}</div></div>
+      </div>
+      ${b.obs?`<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> ${b.obs}</div>`:''}
+    </div>`;
+}
+
+function limpiarCalidad(){
+  document.getElementById('cal-search').value='';
+  document.getElementById('cal-result').innerHTML='';
+}
+
+// busca en sesión + histórico demo
+function findBobina(id){
+  return bobinas.find(b=>b.id===id) || sampleBobinas.find(b=>b.id===id) || null;
+}
+
+// LABEL
 function renderLabel(b){
-  const lp=document.getElementById('label-print');
-  const lc=document.getElementById('label-content');
-  lc.innerHTML=`
-    <div class="lh">
-      <div class="brand">z<span style="color:#e63946">∪</span>bex</div>
-      <div class="mach">${b.mach}</div>
-    </div>
+  const lp=document.getElementById('label-print'),lc=document.getElementById('label-content');
+  const p=b.params||{};
+  lc.innerHTML=`<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">${b.mach}</div></div>
     <div class="label-grid">
       <div class="lf"><span>ID bobina</span><span>${b.id}</span></div>
       <div class="lf"><span>Remisión</span><span>${b.rem}</span></div>
@@ -479,95 +643,233 @@ function renderLabel(b){
       <div class="lf"><span>Lote</span><span>${b.lote}</span></div>
       <div class="lf"><span>Medida</span><span>${b.med}</span></div>
       <div class="lf"><span>Peso</span><span>${b.peso} Kg</span></div>
-      <div class="lf"><span>Calibre frente</span><span>${document.getElementById('p-cf').value||'—'}</span></div>
+      <div class="lf"><span>Calibre frente</span><span>${p.cf||'—'}</span></div>
       <div class="lf"><span>Color</span><span>${b.col}</span></div>
-      <div class="lf"><span>Calibre reverso</span><span>${document.getElementById('p-cr').value||'—'}</span></div>
-      <div class="lf"><span>Enc. ancho plano</span><span>${document.getElementById('p-ancho').value||'—'}</span></div>
-      <div class="lf"><span>Enc. Dir. Maq.</span><span>${document.getElementById('p-edm').value||'—'}</span></div>
+      <div class="lf"><span>Calibre reverso</span><span>${p.cr||'—'}</span></div>
+      <div class="lf"><span>Enc. ancho plano</span><span>${p.ancho||'—'}</span></div>
+      <div class="lf"><span>Enc. Dir. Maq.</span><span>${p.edm||'—'}</span></div>
       <div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>${b.desc}</span></div>
       <div class="lf"><span>Turno</span><span>${b.hora}</span></div>
       <div class="lf"><span>Cod. prod.</span><span>${b.prod}</span></div>
       <div class="lf"><span>Metros</span><span>${b.metros} m</span></div>
       <div class="lf" style="grid-column:1/-1"><span>Operario</span><span>${b.operario}</span></div>
-      <div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>${b.obs||'—'}</span></div>
+      ${b.obs?`<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>${b.obs}</span></div>`:''}
     </div>
-    <div class="label-bar">
-      <svg id="barcode-svg"></svg>
-      <div style="font-size:11px;margin-top:4px;letter-spacing:2px">${b.id}</div>
-    </div>`;
+    <div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">${b.id}</div></div>`;
   lp.style.display='flex';
   try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
 }
 
-// ─── MODAL ───
-function openModal(id){
-  const ot=document.getElementById('sel-ot').value||'—';
+// MODALS
+function openListModal(){
+  const otSel=document.getElementById('sel-ot');
+  const ot=otSel.options[otSel.selectedIndex].textContent||'—';
   document.getElementById('ml-ot').textContent=ot;
   const bobs=bobinas.filter(b=>b.ot===ot&&b.mach===curMach);
   const body=document.getElementById('ml-body');
-  if(!bobs.length){body.innerHTML='<p style="color:var(--muted);font-size:13px">No hay bobinas registradas para esta orden.</p>';
-  }else{
-    body.innerHTML=`<table><thead><tr><th>ID</th><th>#</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead><tbody>${
-      bobs.map(b=>`<tr><td>${b.id}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.hora}</td><td>${b.metros} m</td><td>${b.peso} Kg</td></tr>`).join('')
-    }</tbody></table>`;
-  }
-  document.getElementById(id).classList.add('open');
+  if(!bobs.length){body.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0">No hay bobinas registradas para esta orden.</p>';}
+  else{body.innerHTML=`<table><thead><tr><th>ID</th><th>#</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead><tbody>${
+    bobs.map(b=>`<tr><td>${b.id}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.hora}</td><td>${b.metros} m</td><td>${b.peso} Kg</td></tr>`).join('')
+  }</tbody></table>`;}
+  document.getElementById('modal-list').classList.add('open');
 }
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
-// ─── ADMIN ───
+// ADMIN
 function renderAdmin(){
-  // stats
-  let totBob=0,totMet=0,totOT=0;
-  Object.values(adminData).forEach(d=>{d.ots.forEach(o=>{totBob+=o.bobinas;totMet+=o.metros;totOT++;});});
+  let totBob=bobinas.length+48,totMet=bobinas.reduce((a,b)=>a+b.metros,0)+24500;
   document.getElementById('stats-grid').innerHTML=`
-    <div class="stat"><div class="sv">${MACHINES.length}</div><div class="sl">Máquinas</div></div>
-    <div class="stat"><div class="sv">${totOT}</div><div class="sl">Órdenes registradas</div></div>
+    <div class="stat"><div class="sv">${catMaquinas.filter(m=>m.activo).length}</div><div class="sl">Máquinas activas</div></div>
+    <div class="stat"><div class="sv">${catOrdenes.length}</div><div class="sl">Órdenes registradas</div></div>
     <div class="stat"><div class="sv">${totBob}</div><div class="sl">Bobinas totales</div></div>
-    <div class="stat"><div class="sv">${(totMet/1000).toFixed(1)}k</div><div class="sl">Metros producidos</div></div>`;
-  adminTab('maq',document.querySelector('.sec-tab'));
+    <div class="stat"><div class="sv">${(totMet/1000).toFixed(1)}k m</div><div class="sl">Metros producidos</div></div>
+    <div class="stat"><div class="sv">${catOperadores.filter(o=>o.activo).length}</div><div class="sl">Operadores activos</div></div>`;
+  adminTab('produccion',document.querySelector('#admin-tabs .sec-tab'));
 }
 
 function adminTab(tab,btn){
-  document.querySelectorAll('.sec-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#admin-tabs .sec-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   const c=document.getElementById('admin-content');
-  if(tab==='maq'){
+  if(tab==='produccion')renderProduccion(c);
+  else if(tab==='operadores')renderCatOperadores(c);
+  else if(tab==='maquinas')renderCatMaquinas(c);
+  else if(tab==='ordenes')renderCatOrdenes(c);
+  else if(tab==='productos')renderCatProductos(c);
+  else if(tab==='remisiones')renderCatRemisiones(c);
+}
+
+function renderProduccion(c){
+  const subTabs=['Por máquina','Por OT','Bobinas'];
+  let html=`<div class="card"><div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">`;
+  subTabs.forEach((t,i)=>html+=`<button class="sec-tab${i===0?' active':''}" onclick="prodSubTab('${t}',this)">${t}</button>`);
+  html+=`</div><div id="prod-sub"></div></div>`;
+  c.innerHTML=html;
+  prodSubTab('Por máquina',c.querySelector('.sec-tab'));
+}
+
+function prodSubTab(tab,btn){
+  const sub=document.getElementById('prod-sub');
+  btn.parentElement.querySelectorAll('.sec-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(tab==='Por máquina'){
     let html='';
-    MACHINES.forEach(m=>{
-      const d=adminData[m];
-      const tot=d.ots.reduce((a,o)=>a+o.bobinas,0);
-      html+=`<div style="margin-bottom:16px"><strong style="font-size:14px;color:var(--blue)">${m}</strong> — ${d.ots.length} órdenes, ${tot} bobinas<br><br>`;
-      if(d.ots.length){
-        html+=`<table><thead><tr><th>OT</th><th>Producto</th><th>Bobinas</th><th>Metros</th><th>Estatus</th></tr></thead><tbody>`;
-        d.ots.forEach(o=>{
+    catMaquinas.forEach(m=>{
+      const ots=catOrdenes.filter(o=>o.maq===m.codigo);
+      html+=`<div style="margin-bottom:16px"><strong style="font-size:14px;color:var(--blue)">${m.codigo} — ${m.nombre}</strong> &nbsp;<span style="font-size:12px;color:var(--muted)">${ots.length} órdenes</span><br><br>`;
+      if(ots.length){
+        html+=`<table><thead><tr><th>OT</th><th>Descripción</th><th>Estatus</th></tr></thead><tbody>`;
+        ots.forEach(o=>{
           const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
-          html+=`<tr><td>${o.ot}</td><td style="font-size:11px">${o.desc}</td><td>${o.bobinas}</td><td>${o.metros.toLocaleString()} m</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
+          html+=`<tr><td>${o.ot}</td><td style="font-size:11px">${o.desc}</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
         });
         html+='</tbody></table>';
-      }else html+='<span style="font-size:13px;color:var(--muted)">Sin producción registrada.</span>';
+      }else html+='<span style="font-size:12px;color:var(--muted)">Sin producción.</span>';
       html+='</div><hr style="border:none;border-top:1px solid var(--border);margin:12px 0">';
     });
-    c.innerHTML=html;
-  } else if(tab==='ot'){
-    let rows='';
-    Object.entries(adminData).forEach(([m,d])=>{
-      d.ots.forEach(o=>{
-        const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
-        rows+=`<tr><td>${o.ot}</td><td>${m}</td><td style="font-size:11px">${o.desc}</td><td>${o.bobinas}</td><td>${o.metros.toLocaleString()} m</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
-      });
-    });
-    c.innerHTML=`<table><thead><tr><th>OT</th><th>Máquina</th><th>Descripción</th><th>Bobinas</th><th>Metros</th><th>Estatus</th></tr></thead><tbody>${rows||'<tr><td colspan="6" style="color:var(--muted)">Sin datos</td></tr>'}</tbody></table>`;
-  } else {
-    // live bobinas from session + sample
-    const all=[...bobinas,
-      {id:500423,num:31,mach:'EXT005',ot:'20040032',fecha:'21-05-2026',hora:'09:25:20',metros:500,peso:50.8125,operario:'Luis Angel Martinez Lopez',col:'CLARO',rem:'26050179'},
-      {id:500410,num:18,mach:'EXT001',ot:'26050163',fecha:'21-05-2026',hora:'07:10:00',metros:2000,peso:40.2,operario:'Juan Quiroz Segovia',col:'CLARO',rem:'26050163'},
-    ];
-    let rows=all.map(b=>`<tr><td>${b.id}</td><td>${b.mach}</td><td>${b.ot}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.metros} m</td><td>${b.peso} Kg</td><td style="font-size:11px">${b.operario}</td></tr>`).join('');
-    c.innerHTML=`<table><thead><tr><th>ID</th><th>Máq.</th><th>OT</th><th>#Bob.</th><th>Fecha</th><th>Metros</th><th>Peso</th><th>Operario</th></tr></thead><tbody>${rows||'<tr><td colspan="8" style="color:var(--muted)">Sin bobinas</td></tr>'}</tbody></table>`;
+    sub.innerHTML=html;
+  }else if(tab==='Por OT'){
+    let rows=catOrdenes.map(o=>{
+      const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
+      return`<tr><td>${o.ot}</td><td>${o.maq}</td><td style="font-size:11px">${o.desc}</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
+    }).join('');
+    sub.innerHTML=`<table><thead><tr><th>OT</th><th>Máquina</th><th>Descripción</th><th>Estatus</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }else{
+    const all=[...bobinas,...sampleBobinas];
+    sub.innerHTML=`<table><thead><tr><th>ID</th><th>Máq.</th><th>OT</th><th>#Bob.</th><th>Fecha</th><th>Metros</th><th>Peso</th><th>Operario</th></tr></thead><tbody>${
+      all.map(b=>`<tr><td>${b.id}</td><td>${b.mach}</td><td>${b.ot}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.metros} m</td><td>${b.peso} Kg</td><td style="font-size:11px">${b.operario}</td></tr>`).join('')
+    }</tbody></table>`;
   }
 }
+
+const formDefs={
+  operadores:{title:'Operador',fields:[
+    {id:'nombre',label:'Nombre completo',type:'text'},
+    {id:'usuario',label:'Usuario',type:'text'},
+    {id:'activo',label:'Estatus',type:'select',opts:['true|Activo','false|Inactivo']},
+  ]},
+  maquinas:{title:'Máquina',fields:[
+    {id:'codigo',label:'Código (ej. EXT007)',type:'text'},
+    {id:'nombre',label:'Nombre',type:'text'},
+    {id:'activo',label:'Estatus',type:'select',opts:['true|Activa','false|Inactiva']},
+  ]},
+  ordenes:{title:'Orden de trabajo',fields:[
+    {id:'ot',label:'Número de OT',type:'text'},
+    {id:'maq',label:'Máquina',type:'select',opts:catMaquinas.map(m=>`${m.codigo}|${m.codigo}`)},
+    {id:'prod',label:'Código de producto',type:'text'},
+    {id:'desc',label:'Descripción',type:'text'},
+    {id:'med',label:'Medida',type:'text'},
+    {id:'col',label:'Color',type:'text'},
+    {id:'rem',label:'Remisión',type:'text'},
+    {id:'sig',label:'Siguiente proceso',type:'text'},
+    {id:'status',label:'Estatus',type:'select',opts:['En espera|En espera','Iniciado|Iniciado','Finalizado|Finalizado']},
+  ]},
+  productos:{title:'Producto',fields:[
+    {id:'codigo',label:'Código',type:'text'},
+    {id:'desc',label:'Descripción',type:'text'},
+    {id:'med',label:'Medida',type:'text'},
+    {id:'col',label:'Color',type:'text'},
+    {id:'dep',label:'Departamento',type:'text'},
+  ]},
+  remisiones:{title:'Remisión',fields:[
+    {id:'num',label:'Número de remisión',type:'text'},
+    {id:'prod',label:'Producto',type:'text'},
+    {id:'status',label:'Estatus',type:'select',opts:['En espera|En espera','Iniciado|Iniciado','Finalizado|Finalizado']},
+  ]},
+};
+
+function renderCatOperadores(c){
+  let rows=catOperadores.map(o=>`<tr><td>${o.id}</td><td>${o.nombre}</td><td>${o.usuario}</td>
+    <td><span class="badge ${o.activo?'badge-ok':'badge-pend'}">${o.activo?'Activo':'Inactivo'}</span></td>
+    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('operadores',${o.id})">✏️</button><button class="icon-btn del" onclick="delItem('operadores',${o.id})">🗑</button></div></td></tr>`).join('');
+  c.innerHTML=catHeader('Operadores','operadores')+`<table><thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function renderCatMaquinas(c){
+  let rows=catMaquinas.map(m=>`<tr><td>${m.codigo}</td><td>${m.nombre}</td>
+    <td><span class="badge ${m.activo?'badge-ok':'badge-pend'}">${m.activo?'Activa':'Inactiva'}</span></td>
+    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('maquinas',${m.id})">✏️</button><button class="icon-btn del" onclick="delItem('maquinas',${m.id})">🗑</button></div></td></tr>`).join('');
+  c.innerHTML=catHeader('Máquinas','maquinas')+`<table><thead><tr><th>Código</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function renderCatOrdenes(c){
+  let rows=catOrdenes.map(o=>{
+    const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
+    return`<tr><td>${o.ot}</td><td>${o.maq}</td><td style="font-size:11px">${o.desc}</td><td>${o.med}</td><td>${o.col}</td>
+    <td><span class="badge ${cls}">${o.status}</span></td>
+    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('ordenes',${o.id})">✏️</button><button class="icon-btn del" onclick="delItem('ordenes',${o.id})">🗑</button></div></td></tr>`;
+  }).join('');
+  c.innerHTML=catHeader('Órdenes de trabajo','ordenes')+`<table><thead><tr><th>OT</th><th>Máquina</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function renderCatProductos(c){
+  let rows=catProductos.map(p=>`<tr><td style="font-size:11px">${p.codigo}</td><td style="font-size:11px">${p.desc}</td><td>${p.med}</td><td>${p.col}</td><td>${p.dep}</td>
+    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('productos',${p.id})">✏️</button><button class="icon-btn del" onclick="delItem('productos',${p.id})">🗑</button></div></td></tr>`).join('');
+  c.innerHTML=catHeader('Productos','productos')+`<table><thead><tr><th>Código</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Depto.</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function renderCatRemisiones(c){
+  let rows=catRemisiones.map(r=>{
+    const cls=r.status==='Finalizado'?'badge-fin':r.status==='Iniciado'?'badge-ok':'badge-pend';
+    return`<tr><td>${r.num}</td><td style="font-size:11px">${r.prod}</td>
+    <td><span class="badge ${cls}">${r.status}</span></td>
+    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('remisiones',${r.id})">✏️</button><button class="icon-btn del" onclick="delItem('remisiones',${r.id})">🗑</button></div></td></tr>`;
+  }).join('');
+  c.innerHTML=catHeader('Remisiones','remisiones')+`<table><thead><tr><th>Número</th><th>Producto</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function catHeader(title,type){
+  return`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <span style="font-size:15px;font-weight:600;color:var(--blue)">${title}</span>
+    <button class="btn btn-primary" onclick="openAdd('${type}')">+ Agregar</button>
+  </div>`;
+}
+
+function openAdd(type){
+  currentModalType=type;editingId=null;
+  const def=formDefs[type];
+  document.getElementById('mf-title').textContent='Agregar '+def.title;
+  document.getElementById('mf-body').innerHTML=buildFormFields(def.fields,{});
+  document.getElementById('modal-form').classList.add('open');
+}
+function openEdit(type,id){
+  currentModalType=type;editingId=id;
+  const def=formDefs[type];
+  const cat=getCat(type);
+  const item=cat.find(i=>i.id===id)||{};
+  document.getElementById('mf-title').textContent='Editar '+def.title;
+  document.getElementById('mf-body').innerHTML=buildFormFields(def.fields,item);
+  document.getElementById('modal-form').classList.add('open');
+}
+function buildFormFields(fields,vals){
+  return'<div class="form-grid">'+fields.map(f=>{
+    let inp='';
+    if(f.type==='select'){
+      inp=`<select id="mfi-${f.id}">`;
+      f.opts.forEach(o=>{const[v,l]=o.split('|');inp+=`<option value="${v}" ${String(vals[f.id])===v?'selected':''}>${l}</option>`;});
+      inp+='</select>';
+    }else{inp=`<input type="${f.type}" id="mfi-${f.id}" value="${vals[f.id]||''}" placeholder="${f.label}"/>`;}
+    return`<div class="field"><label>${f.label}</label>${inp}</div>`;
+  }).join('')+'</div>';
+}
+function saveModalForm(){
+  const def=formDefs[currentModalType];
+  const cat=getCat(currentModalType);
+  const obj={};
+  def.fields.forEach(f=>{
+    const el=document.getElementById('mfi-'+f.id);
+    obj[f.id]=el.value;
+    if(f.id==='activo')obj[f.id]=el.value==='true';
+  });
+  if(editingId){const idx=cat.findIndex(i=>i.id===editingId);if(idx>-1)cat[idx]={...cat[idx],...obj};}
+  else{obj.id=Date.now();cat.push(obj);}
+  closeModal('modal-form');
+  populateSelects();buildMachTabs();renderAdmin();
+  document.querySelector('#admin-tabs .sec-tab.active').click();
+}
+function delItem(type,id){
+  if(!confirm('¿Eliminar este registro?'))return;
+  const cat=getCat(type);const idx=cat.findIndex(i=>i.id===id);if(idx>-1)cat.splice(idx,1);
+  populateSelects();buildMachTabs();renderAdmin();
+  document.querySelector('#admin-tabs .sec-tab.active').click();
+}
+function getCat(type){return{operadores:catOperadores,maquinas:catMaquinas,ordenes:catOrdenes,productos:catProductos,remisiones:catRemisiones}[type];}
 </script>
 </body>
 </html>
