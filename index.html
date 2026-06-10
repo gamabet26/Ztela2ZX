@@ -1058,46 +1058,200 @@ function buscarEtiquetaAdmin(){
 }
 
 function renderProduccion(c){
-  c.innerHTML=`<div class="card"><div style="display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap">
-    <button class="sec-tab active" onclick="prodSubTab('maq',this)">Por máquina</button>
-    <button class="sec-tab" onclick="prodSubTab('ot',this)">Por OT</button>
-    <button class="sec-tab" onclick="prodSubTab('bob',this)">Bobinas</button>
-  </div><div id="prod-sub"></div></div>`;
-  prodSubTab('maq',c.querySelector('.sec-tab'));
+  const machOpts=catMaquinas.map(m=>`<option value="${m.codigo}">${m.codigo}</option>`).join('');
+  c.innerHTML=`<div class="card">
+    <div class="card-title">📊 Consulta de producción</div>
+    <div class="sec-tabs" id="prod-tabs">
+      <button class="sec-tab active" onclick="prodSubTab('bob',this)">Por bobina</button>
+      <button class="sec-tab" onclick="prodSubTab('ext',this)">Por extruder</button>
+      <button class="sec-tab" onclick="prodSubTab('ot',this)">Por OT</button>
+    </div>
+
+    <!-- POR BOBINA -->
+    <div id="psub-bob">
+      <div class="search-box" style="margin-bottom:12px">
+        <div class="field"><label>ID de bobina</label>
+          <input id="pq-bob-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')queryBobina()"/>
+        </div>
+        <button class="btn btn-primary" onclick="queryBobina()" style="height:38px">Buscar</button>
+        <button class="btn" onclick="limpiarProdQuery('bob')" style="height:38px">Limpiar</button>
+      </div>
+      <div id="pres-bob"></div>
+    </div>
+
+    <!-- POR EXTRUDER -->
+    <div id="psub-ext" style="display:none">
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="field"><label>Extruder</label>
+          <select id="pq-ext-maq"><option value="">— Todas —</option>${machOpts}</select>
+        </div>
+        <div class="field"><label>Fecha inicio</label>
+          <input id="pq-ext-di" type="date"/>
+        </div>
+        <div class="field"><label>Hora inicio</label>
+          <input id="pq-ext-hi" type="time" value="00:00"/>
+        </div>
+        <div class="field"><label>Fecha fin</label>
+          <input id="pq-ext-df" type="date"/>
+        </div>
+        <div class="field"><label>Hora fin</label>
+          <input id="pq-ext-hf" type="time" value="23:59"/>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-bottom:12px">
+        <button class="btn btn-primary" onclick="queryExtruder()">🔍 Consultar</button>
+        <button class="btn" onclick="limpiarProdQuery('ext')">Limpiar</button>
+        <button class="btn btn-success" id="btn-xl-ext" style="display:none" onclick="exportarExcel('ext')">📥 Exportar Excel</button>
+      </div>
+      <div id="pres-ext"></div>
+    </div>
+
+    <!-- POR OT -->
+    <div id="psub-ot" style="display:none">
+      <div class="search-box" style="margin-bottom:12px">
+        <div class="field"><label>Número de OT</label>
+          <input id="pq-ot-id" placeholder="Ej. 26050163" onkeydown="if(event.key==='Enter')queryOT()"/>
+        </div>
+        <button class="btn btn-primary" onclick="queryOT()" style="height:38px">Buscar</button>
+        <button class="btn" onclick="limpiarProdQuery('ot')" style="height:38px">Limpiar</button>
+        <button class="btn btn-success" id="btn-xl-ot" style="display:none" onclick="exportarExcel('ot')">📥 Exportar Excel</button>
+      </div>
+      <div id="pres-ot"></div>
+    </div>
+  </div>`;
 }
 
+let prodResultados={bob:[],ext:[],ot:[]};
+
 function prodSubTab(tab,btn){
-  const sub=document.getElementById('prod-sub');
-  btn.parentElement.querySelectorAll('.sec-tab').forEach(b=>b.classList.remove('active'));
+  ['bob','ext','ot'].forEach(t=>document.getElementById('psub-'+t).style.display=t===tab?'block':'none');
+  document.querySelectorAll('#prod-tabs .sec-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  if(tab==='maq'){
-    let html='';
-    catMaquinas.forEach(m=>{
-      const ots=catOrdenes.filter(o=>o.maq===m.codigo);
-      html+=`<div style="margin-bottom:16px"><strong style="font-size:14px;color:var(--blue)">${m.codigo} — ${m.nombre}</strong> <span style="font-size:12px;color:var(--muted)">${ots.length} órdenes</span><br><br>`;
-      if(ots.length){
-        html+=`<table><thead><tr><th>OT</th><th>Descripción</th><th>Estatus</th></tr></thead><tbody>`;
-        ots.forEach(o=>{
-          const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
-          html+=`<tr><td>${o.ot}</td><td style="font-size:11px">${o.desc}</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
-        });
-        html+='</tbody></table>';
-      }else html+='<span style="font-size:12px;color:var(--muted)">Sin producción.</span>';
-      html+='</div><hr style="border:none;border-top:1px solid var(--border);margin:12px 0">';
-    });
-    sub.innerHTML=html;
-  }else if(tab==='ot'){
-    const rows=catOrdenes.map(o=>{
-      const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
-      return`<tr><td>${o.ot}</td><td>${o.maq}</td><td style="font-size:11px">${o.desc}</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
-    }).join('');
-    sub.innerHTML=`<table><thead><tr><th>OT</th><th>Máquina</th><th>Descripción</th><th>Estatus</th></tr></thead><tbody>${rows}</tbody></table>`;
-  }else{
-    const all=[...bobinas,...sampleBobinas];
-    sub.innerHTML=`<table><thead><tr><th>ID</th><th>Máq.</th><th>OT</th><th>#</th><th>Fecha</th><th>Metros</th><th>Peso</th><th>Operario</th></tr></thead><tbody>
-      ${all.map(b=>`<tr><td>${b.id}</td><td>${b.mach}</td><td>${b.ot}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.metros} m</td><td>${b.peso} Kg</td><td style="font-size:11px">${b.operario}</td></tr>`).join('')}
-    </tbody></table>`;
-  }
+}
+
+function allBobinas(){return[...bobinas,...sampleBobinas];}
+
+// parse dd-mm-yyyy hh:mm:ss -> Date
+function parseBoDate(b){
+  const[d,m,y]=b.fecha.split('-');
+  const[hh,mm,ss]=(b.hora||'00:00:00').split(':');
+  return new Date(y,m-1,d,hh,mm,ss||0);
+}
+
+function buildProdTable(rows){
+  if(!rows.length)return'<div class="not-found">Sin resultados para los criterios seleccionados.</div>';
+  // group by OT for summary
+  const byOT={};
+  rows.forEach(b=>{
+    if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,prod:b.prod,desc:b.desc,med:b.med,bobinas:0,peso:0,metros:0,fecha:b.fecha,op:b.ot};
+    byOT[b.ot].bobinas++;
+    byOT[b.ot].peso+=parseFloat(b.peso)||0;
+    byOT[b.ot].metros+=parseFloat(b.metros)||0;
+  });
+  const sumRows=Object.values(byOT);
+  const totBob=sumRows.reduce((a,r)=>a+r.bobinas,0);
+  const totPeso=sumRows.reduce((a,r)=>a+r.peso,0);
+  const totMet=sumRows.reduce((a,r)=>a+r.metros,0);
+  return`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+      <span style="font-size:13px;color:var(--muted)">${rows.length} bobina(s) encontradas</span>
+      <div style="display:flex;gap:12px;font-size:13px">
+        <span>🧵 <strong>${totBob}</strong> bobinas</span>
+        <span>📏 <strong>${totMet.toLocaleString()}</strong> m</span>
+        <span>⚖ <strong>${totPeso.toFixed(2)}</strong> Kg</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+    <table><thead><tr>
+      <th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th>
+      <th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th>
+    </tr></thead><tbody>
+    ${sumRows.map(r=>`<tr>
+      <td>${r.fecha}</td>
+      <td style="font-weight:600">${r.ot}</td>
+      <td>${r.mach}</td>
+      <td style="font-size:11px">${r.prod}</td>
+      <td style="font-size:11px">${r.desc}</td>
+      <td style="text-align:center"><strong>${r.bobinas}</strong></td>
+      <td>${r.peso.toFixed(3)}</td>
+      <td>${r.med}</td>
+      <td>${r.metros.toLocaleString()} m</td>
+    </tr>`).join('')}
+    </tbody></table></div>`;
+}
+
+function queryBobina(){
+  const id=parseInt(document.getElementById('pq-bob-id').value.trim());
+  const r=document.getElementById('pres-bob');
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
+  const b=findBobina(id);
+  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
+  prodResultados.bob=[b];
+  r.innerHTML=buildProdTable([b])+
+    `<div class="btn-row" style="margin-top:12px">
+      <button class="btn btn-success" onclick="exportarExcel('bob')">📥 Exportar Excel</button>
+    </div>`;
+}
+
+function queryExtruder(){
+  const maq=document.getElementById('pq-ext-maq').value;
+  const di=document.getElementById('pq-ext-di').value;
+  const hi=document.getElementById('pq-ext-hi').value||'00:00';
+  const df=document.getElementById('pq-ext-df').value;
+  const hf=document.getElementById('pq-ext-hf').value||'23:59';
+  if(!di||!df){alert('Selecciona el rango de fechas.');return;}
+  const desde=new Date(`${di}T${hi}:00`);
+  const hasta=new Date(`${df}T${hf}:00`);
+  let rows=allBobinas().filter(b=>{
+    const t=parseBoDate(b);
+    return t>=desde && t<=hasta && (!maq||b.mach===maq);
+  });
+  prodResultados.ext=rows;
+  const r=document.getElementById('pres-ext');
+  r.innerHTML=buildProdTable(rows);
+  document.getElementById('btn-xl-ext').style.display=rows.length?'inline-block':'none';
+}
+
+function queryOT(){
+  const ot=document.getElementById('pq-ot-id').value.trim();
+  const r=document.getElementById('pres-ot');
+  if(!ot){r.innerHTML='<div class="not-found">Ingresa un número de OT.</div>';return;}
+  const rows=allBobinas().filter(b=>b.ot===ot);
+  prodResultados.ot=rows;
+  if(!rows.length){r.innerHTML=`<div class="not-found">⚠ No hay bobinas registradas para OT <strong>${ot}</strong>.</div>`;document.getElementById('btn-xl-ot').style.display='none';return;}
+  r.innerHTML=buildProdTable(rows);
+  document.getElementById('btn-xl-ot').style.display='inline-block';
+}
+
+function limpiarProdQuery(tab){
+  document.getElementById('pres-'+tab).innerHTML='';
+  if(tab==='ext'){['pq-ext-maq','pq-ext-di','pq-ext-hi','pq-ext-df','pq-ext-hf'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id.endsWith('hi')?'00:00':id.endsWith('hf')?'23:59':'';});document.getElementById('btn-xl-ext').style.display='none';}
+  if(tab==='ot'){document.getElementById('pq-ot-id').value='';document.getElementById('btn-xl-ot').style.display='none';}
+  if(tab==='bob')document.getElementById('pq-bob-id').value='';
+  prodResultados[tab]=[];
+}
+
+function exportarExcel(tab){
+  const rows=prodResultados[tab];
+  if(!rows||!rows.length){alert('Sin datos para exportar.');return;}
+  // group same as table
+  const byOT={};
+  rows.forEach(b=>{
+    if(!byOT[b.ot])byOT[b.ot]={Fecha:b.fecha,OT:b.ot,Maquina:b.mach,Codigo:b.prod,Descripcion:b.desc,Bobinas:0,Peso_Kg:0,Medida:b.med,Metros:0};
+    byOT[b.ot].Bobinas++;
+    byOT[b.ot].Peso_Kg+=parseFloat(b.peso)||0;
+    byOT[b.ot].Metros+=parseFloat(b.metros)||0;
+  });
+  const data=Object.values(byOT).map(r=>({...r,Peso_Kg:parseFloat(r.Peso_Kg.toFixed(3))}));
+  // build CSV and download as xlsx-compatible
+  const cols=Object.keys(data[0]);
+  const csv=[cols.join('\t'),...data.map(r=>cols.map(k=>r[k]).join('\t'))].join('\n');
+  const BOM='\uFEFF';
+  const blob=new Blob([BOM+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`Produccion_${tab}_${new Date().toISOString().slice(0,10)}.xls`;
+  a.click();URL.revokeObjectURL(url);
 }
 
 function catHeader(title,type){
