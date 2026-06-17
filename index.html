@@ -531,6 +531,16 @@ function guardarBobina(){
   bobinas.push(b);lastSavedBobina=b;
   const al=document.getElementById('alert-save');al.style.display='block';
   setTimeout(()=>al.style.display='none',2500);
+  // limpiar campos para siguiente bobina
+  bobNum++;
+  bobID++;
+  document.getElementById('f-id').value=bobID;
+  document.getElementById('f-num').value=bobNum;
+  document.getElementById('f-hora').value=nowTime();
+  document.getElementById('f-metros').value='';
+  document.getElementById('f-metros').style.borderColor='';
+  document.getElementById('f-peso').value='';
+  document.getElementById('f-obs').value='';
 }
 function guardarParams(){
   lastParams={
