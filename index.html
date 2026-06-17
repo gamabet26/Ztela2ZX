@@ -478,7 +478,11 @@ function loadOT(){
   document.getElementById('f-col').value=opt.dataset.col||'';
   document.getElementById('f-sig').value=opt.dataset.sig||'';
   document.getElementById('f-rem').value=opt.dataset.rem||'';
-  bobNum=1;initBobina();
+  // continuar consecutivo por OT — contar bobinas ya registradas para esta OT
+  const otTexto=opt.textContent;
+  const yaRegistradas=bobinas.filter(b=>b.ot===otTexto&&b.mach===curMach).length;
+  bobNum=yaRegistradas+1;
+  initBobina();
 }
 function initBobina(){
   bobID++;
@@ -531,8 +535,9 @@ function guardarBobina(){
   bobinas.push(b);lastSavedBobina=b;
   const al=document.getElementById('alert-save');al.style.display='block';
   setTimeout(()=>al.style.display='none',2500);
-  // limpiar campos para siguiente bobina
-  bobNum++;
+  // siguiente bobina — consecutivo por OT
+  const otTexto=document.getElementById('sel-ot').options[document.getElementById('sel-ot').selectedIndex].textContent;
+  bobNum=bobinas.filter(x=>x.ot===otTexto&&x.mach===curMach).length+1;
   bobID++;
   document.getElementById('f-id').value=bobID;
   document.getElementById('f-num').value=bobNum;
