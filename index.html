@@ -9,22 +9,44 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
 :root{--blue:#0D3B8C;--blue2:#1a56c4;--accent:#e63946;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280}
 body{background:var(--bg);color:var(--text);min-height:100vh}
-#splash{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;cursor:pointer}
+
+/* SPLASH */
+#splash{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
 #splash canvas{position:absolute;inset:0;opacity:.25}
 .zx-logo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
 .zx-text{font-size:144px;font-weight:900;color:#1a56c4;letter-spacing:-6px;animation:zxpulse 2s ease-in-out infinite}
 .zx-sub{font-size:30px;color:#fff;letter-spacing:8px;font-weight:300;opacity:.8}
-.zx-enter{margin-top:28px;font-size:14px;color:#666;letter-spacing:2px;animation:blink 1.5s infinite}
 @keyframes zxpulse{0%,100%{text-shadow:0 0 30px #1a56c466;transform:scale(1)}50%{text-shadow:0 0 80px #1a56c4bb;transform:scale(1.06)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* LOGIN */
+#login-screen{display:none;position:fixed;inset:0;background:#000;z-index:8000;align-items:center;justify-content:center}
+#login-screen canvas{position:absolute;inset:0;opacity:.15}
+.login-card{position:relative;z-index:2;background:#fff;border-radius:16px;padding:40px 36px;width:100%;max-width:380px;box-shadow:0 20px 60px #0005}
+.login-card .zx-brand{font-size:36px;font-weight:900;color:var(--blue);letter-spacing:-2px;margin-bottom:4px}
+.login-card .zx-brand span{color:#5b9bf8}
+.login-card h2{font-size:15px;color:var(--muted);font-weight:400;margin-bottom:28px}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.login-field label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.login-field input{padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;transition:.15s}
+.login-field input:focus{outline:none;border-color:var(--blue2);box-shadow:0 0 0 3px #1a56c420}
+.login-btn{width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:.15s}
+.login-btn:hover{background:var(--blue2)}
+.login-btn:disabled{opacity:.6;cursor:not-allowed}
+.login-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none}
+
+/* APP */
 #app{display:none;flex-direction:column;min-height:100vh}
 header{background:var(--blue);color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:0 2px 8px #0003;flex-wrap:wrap;gap:4px}
 .logo-h{font-size:18px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:8px}
 .logo-h span{color:#5b9bf8}
+.header-right{display:flex;align-items:center;gap:12px}
+.user-badge{font-size:12px;color:#ffffff99;display:flex;align-items:center;gap:6px}
+.logout-btn{background:#ffffff15;border:1px solid #ffffff30;color:#fff;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px}
 nav{display:flex;gap:2px;flex-wrap:wrap}
 nav button{background:transparent;border:none;color:#ffffffaa;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:.2s}
 nav button.active,nav button:hover{background:#ffffff1a;color:#fff}
 main{flex:1;padding:20px;max-width:1200px;width:100%;margin:0 auto}
+
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
 .card-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--blue)}
 .mach-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
@@ -39,11 +61,11 @@ main{flex:1;padding:20px;max-width:1200px;width:100%;margin:0 auto}
 .field textarea{resize:vertical;min-height:60px}
 .btn{padding:9px 18px;border-radius:7px;border:1.5px solid var(--border);background:var(--card);cursor:pointer;font-size:13px;font-weight:500;transition:.15s;color:var(--text)}
 .btn:hover{background:var(--bg)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
 .btn-primary:hover{background:var(--blue2)}
 .btn-danger{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
 .btn-success{background:#dcfce7;color:#15803d;border-color:#86efac}
-.btn-warn{background:#fef3c7;color:#92400e;border-color:#fcd34d}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .sep{height:1px;background:var(--border);margin:16px 0}
 table{width:100%;border-collapse:collapse;font-size:13px}
@@ -55,11 +77,12 @@ tr:hover td{background:#f8f9fb}
 .badge-ok{background:#dcfce7;color:#15803d}
 .badge-pend{background:#fef9c3;color:#854d0e}
 .badge-fin{background:#dbeafe;color:#1e40af}
-.badge-red{background:#fee2e2;color:#b91c1c}
 .alert{padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none}
 .alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
+.spinning{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 @media print{body *{visibility:hidden}#label-print,#label-print *{visibility:visible}#label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}}
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
@@ -72,7 +95,7 @@ tr:hover td{background:#f8f9fb}
 .label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}
 .modal-bg{position:fixed;inset:0;background:#0007;z-index:100;display:none;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:12px;padding:24px;max-width:660px;width:95%;max-height:85vh;overflow-y:auto}
+.modal{background:#fff;border-radius:12px;padding:24px;max-width:700px;width:95%;max-height:85vh;overflow-y:auto}
 .modal h3{font-size:16px;font-weight:600;margin-bottom:16px;color:var(--blue)}
 .modal-close{float:right;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px}
@@ -96,7 +119,6 @@ tr:hover td{background:#f8f9fb}
 .search-box{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
 .search-box .field{flex:1;min-width:160px}
 .not-found{text-align:center;padding:32px;color:var(--muted);font-size:14px}
-/* ALMACEN */
 .scan-box{display:flex;gap:10px;align-items:flex-end;background:#eff6ff;border:2px dashed var(--blue2);border-radius:10px;padding:16px;margin-bottom:16px;flex-wrap:wrap}
 .scan-box .field{flex:1;min-width:180px}
 .scan-box .field input{font-size:16px;font-weight:600;letter-spacing:1px;border:2px solid var(--blue2)}
@@ -111,15 +133,18 @@ tr:hover td{background:#f8f9fb}
 </head>
 <body>
 
-<div id="splash" onclick="enterApp()">
+<!-- SPLASH -->
+<div id="splash">
   <canvas id="circuit"></canvas>
   <div class="zx-logo">
     <div class="zx-text">ZX</div>
     <div class="zx-sub">ZTELA 2</div>
-    <div class="zx-enter">toca para entrar</div>
   </div>
 </div>
 
+
+
+<!-- APP -->
 <div id="app">
   <header>
     <div class="logo-h">ZX <span>Ztela 2</span></div>
@@ -130,10 +155,13 @@ tr:hover td{background:#f8f9fb}
       <button onclick="showView('almacen',this)">Almacén</button>
       <button onclick="showView('admin',this)">Administrador</button>
     </nav>
+    <div class="header-right">
+      <div class="user-badge">Ztela 2 ZX</div>
+    </div>
   </header>
   <main>
 
-    <!-- ══ OPERADOR ══ -->
+    <!-- OPERADOR -->
     <div id="view-operador">
       <div class="mach-tabs" id="mach-tabs"></div>
       <div class="card">
@@ -141,9 +169,14 @@ tr:hover td{background:#f8f9fb}
         <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo para continuar.</div>
         <div id="alert-metro" class="alert alert-err">🚫 Máximo 2,000 metros por bobina. Por favor corrija el valor.</div>
         <div id="alert-save" class="alert alert-ok">✅ Bobina guardada correctamente.</div>
+        <div id="alert-api-err" class="alert alert-err"></div>
         <div class="form-grid">
-          <div class="field"><label>Operario</label><select id="sel-op" onchange="checkForm()"><option value="">— Seleccione —</option></select></div>
-          <div class="field"><label>Orden de trabajo</label><select id="sel-ot" onchange="loadOT()"><option value="">— Seleccione —</option></select></div>
+          <div class="field"><label>Operario</label>
+            <select id="sel-op" onchange="checkForm()"><option value="">— Seleccione —</option></select>
+          </div>
+          <div class="field"><label>Orden de trabajo</label>
+            <select id="sel-ot" onchange="loadOT()"><option value="">— Seleccione —</option></select>
+          </div>
         </div>
         <div class="form-grid" style="margin-top:12px">
           <div class="field"><label>Descripción</label><input id="f-desc" readonly class="auto" placeholder="—"/></div>
@@ -175,7 +208,9 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Encogimiento vertical</label><input id="p-ev" type="number" placeholder="—"/></div>
           <div class="field"><label>Calibre reverso</label><input id="p-cr" type="number" placeholder="—"/></div>
           <div class="field"><label>Enc. Dir. Máquina</label><input id="p-edm" type="number" placeholder="—"/></div>
-          <div class="field"><label>Deslamine</label><select id="p-des"><option value="">— Seleccione —</option><option>Sí</option><option>No</option></select></div>
+          <div class="field"><label>Deslamine</label>
+            <select id="p-des"><option value="">— Seleccione —</option><option value="true">Sí</option><option value="false">No</option></select>
+          </div>
           <div class="field"><label>Temperatura de túnel</label><input id="p-temp" type="number" placeholder="—"/></div>
         </div>
         <div class="btn-row" style="margin-top:16px">
@@ -187,14 +222,14 @@ tr:hover td{background:#f8f9fb}
             <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
             <button class="btn btn-danger" onclick="cancelarBobina()">Cancelar bobina</button>
             <button class="btn" onclick="openListModal()">Lista de bobinas</button>
-            <button class="btn btn-success" onclick="guardarBobina()">Guardar bobina</button>
+            <button class="btn btn-success" id="btn-guardar" onclick="guardarBobina()">Guardar bobina</button>
             <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir etiqueta</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ══ PRODUCCIÓN ══ -->
+    <!-- PRODUCCIÓN -->
     <div id="view-produccion" style="display:none">
       <div class="card">
         <div class="card-title">🏭 Consulta de producción — Bobina</div>
@@ -207,7 +242,7 @@ tr:hover td{background:#f8f9fb}
       </div>
     </div>
 
-    <!-- ══ CALIDAD ══ -->
+    <!-- CALIDAD -->
     <div id="view-calidad" style="display:none">
       <div class="card">
         <div class="card-title">🔬 Consulta de calidad — Bobina</div>
@@ -220,7 +255,7 @@ tr:hover td{background:#f8f9fb}
       </div>
     </div>
 
-    <!-- ══ ALMACÉN ══ -->
+    <!-- ALMACÉN -->
     <div id="view-almacen" style="display:none">
       <div class="sec-tabs">
         <button class="sec-tab active" onclick="almacenTab('entradas',this)">📥 Entradas</button>
@@ -231,7 +266,7 @@ tr:hover td{background:#f8f9fb}
       <div id="almacen-content"></div>
     </div>
 
-    <!-- ══ ADMIN ══ -->
+    <!-- ADMIN -->
     <div id="view-admin" style="display:none">
       <div class="stat-grid" id="stats-grid"></div>
       <div class="sec-tabs" id="admin-tabs">
@@ -241,8 +276,6 @@ tr:hover td{background:#f8f9fb}
         <button class="sec-tab" onclick="adminTab('operadores',this)">Operadores</button>
         <button class="sec-tab" onclick="adminTab('maquinas',this)">Máquinas</button>
         <button class="sec-tab" onclick="adminTab('ordenes',this)">Órdenes de trabajo</button>
-        <button class="sec-tab" onclick="adminTab('productos',this)">Productos</button>
-        <button class="sec-tab" onclick="adminTab('remisiones',this)">Remisiones</button>
       </div>
       <div id="admin-content"></div>
     </div>
@@ -282,157 +315,154 @@ tr:hover td{background:#f8f9fb}
 </div>
 
 <script>
-// ── CIRCUIT ──
-const canvas=document.getElementById('circuit'),ctx=canvas.getContext('2d');
-let W,H,nodes=[];
-function resizeCanvas(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-resizeCanvas();window.addEventListener('resize',resizeCanvas);
-for(let i=0;i<60;i++)nodes.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
-function drawCircuit(){
-  ctx.clearRect(0,0,W,H);ctx.strokeStyle='#1a56c4';ctx.lineWidth=.8;
-  for(let i=0;i<nodes.length;i++){
-    nodes[i].x+=nodes[i].vx;nodes[i].y+=nodes[i].vy;
-    if(nodes[i].x<0||nodes[i].x>W)nodes[i].vx*=-1;
-    if(nodes[i].y<0||nodes[i].y>H)nodes[i].vy*=-1;
-    for(let j=i+1;j<nodes.length;j++){
-      const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
-      if(d<180){ctx.globalAlpha=(1-d/180)*.6;ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();}
+// ── CIRCUIT ANIMATION ──
+function initCircuit(canvasId){
+  const cv=document.getElementById(canvasId),cx=cv.getContext('2d');
+  let w,h,nd=[];
+  function resize(){w=cv.width=window.innerWidth;h=cv.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(let i=0;i<60;i++)nd.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
+  function draw(){
+    cx.clearRect(0,0,w,h);cx.strokeStyle='#1a56c4';cx.lineWidth=.8;
+    for(let i=0;i<nd.length;i++){
+      nd[i].x+=nd[i].vx;nd[i].y+=nd[i].vy;
+      if(nd[i].x<0||nd[i].x>w)nd[i].vx*=-1;
+      if(nd[i].y<0||nd[i].y>h)nd[i].vy*=-1;
+      for(let j=i+1;j<nd.length;j++){
+        const dx=nd[i].x-nd[j].x,dy=nd[i].y-nd[j].y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<180){cx.globalAlpha=(1-d/180)*.6;cx.beginPath();cx.moveTo(nd[i].x,nd[i].y);cx.lineTo(nd[j].x,nd[i].y);cx.lineTo(nd[j].x,nd[j].y);cx.stroke();}
+      }
+      cx.globalAlpha=.8;cx.fillStyle='#1a56c4';cx.beginPath();cx.arc(nd[i].x,nd[i].y,2,0,Math.PI*2);cx.fill();
     }
-    ctx.globalAlpha=.8;ctx.fillStyle='#1a56c4';ctx.beginPath();ctx.arc(nodes[i].x,nodes[i].y,2,0,Math.PI*2);ctx.fill();
+    cx.globalAlpha=1;requestAnimationFrame(draw);
   }
-  ctx.globalAlpha=1;requestAnimationFrame(drawCircuit);
+  draw();
 }
-drawCircuit();
+initCircuit('circuit');
 
-function enterApp(){
+// ── API ──
+const API='http://192.168.43.170/api';
+let jwtToken=null, currentUser=null;
+
+async function apiFetch(path, opts={}){
+  const headers={'Content-Type':'application/json',...(jwtToken?{Authorization:`Bearer ${jwtToken}`}:{})};
+  const res=await fetch(API+path,{...opts,headers:{...headers,...(opts.headers||{})}});
+  if(res.status===401){doLogout();throw new Error('Sesión expirada');}
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||`Error ${res.status}`);
+  return data;
+}
+
+
+
+// ── SPLASH → APP ──
+setTimeout(()=>{
   const s=document.getElementById('splash');
   s.style.transition='opacity .6s';s.style.opacity='0';
-  setTimeout(()=>{s.style.display='none';document.getElementById('app').style.display='flex';initApp();},600);
-}
+  setTimeout(()=>{
+    s.style.display='none';
+    document.getElementById('app').style.display='flex';
+    initApp();
+  },600);
+},2000);
 
 // ── STATE ──
-const MACHINES=['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'];
-const AREAS=['Impresión','Conversión','Barnizado','Corrugado','Empaque','Refilado','Rectificado'];
-let curMach='EXT001',formActive=false,bobinas=[],lastSavedBobina=null,lastParams={};
-let bobID=500440,bobNum=1;
+let curMach='EXT001', formActive=false, bobinas=[], lastSavedBobina=null;
+let curWOId=null; // work_order id numérico para API
 const TODAY=new Date();
 const fmtDate=d=>`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
 const fmtLote=d=>`${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getFullYear()).slice(2)}`;
 const nowTime=()=>{const n=new Date();return`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`};
 
-// Almacén state
-let almStock={};   // {ubicacion: [bobina,...]}
-let almEntradaLoc='', almEntradaList=[];
-let almSalidaLoc='', almRegresosBobina=null;
+let almStock={}, almEntradaLoc='', almEntradaList=[], almSalidaLoc='', almRegresosBobina=null;
+const AREAS=['Impresión','Conversión','Barnizado','Corrugado','Empaque','Refilado','Rectificado'];
+const UBICACIONES=(()=>{const l=[];['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'].forEach(x=>{for(let n=1;n<=3;n++)l.push(x+n);});return l;})();
 
-// Generate ubicaciones A1-AE3
-const UBICACIONES=(()=>{
-  const locs=[];
-  const letras=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'];
-  letras.forEach(l=>{for(let n=1;n<=3;n++)locs.push(l+n);});
-  return locs;
-})();
-
-// ── CATALOGS ──
 let catCoordinadores=[
   {id:1,nombre:'Gumaro Flores',activo:true},
   {id:2,nombre:'Joaquin Gonzalez',activo:true},
   {id:3,nombre:'Erick Presas',activo:true},
   {id:4,nombre:'Israel Rodriguez',activo:true},
 ];
-let catOperadores=[
-  {id:1,nombre:'Juan Quiroz Segovia',usuario:'jquiroz',activo:true},
-  {id:2,nombre:'Roberto Martínez Salazar',usuario:'rmartinez',activo:true},
-  {id:3,nombre:'José Alfonso Ochoa Leija',usuario:'jaochoa',activo:true},
-  {id:4,nombre:'Erik Rodrigo Presas Jasso',usuario:'epresas',activo:true},
-  {id:5,nombre:'Israel Rodríguez Herrera',usuario:'irodriguez',activo:true},
-  {id:6,nombre:'Francisco Abelardo Garza Hernández',usuario:'fgarza',activo:true},
-  {id:7,nombre:'Fabián de León Mejía',usuario:'fdeleon',activo:true},
-  {id:8,nombre:'Erick González Palomo',usuario:'egonzalez',activo:true},
-  {id:9,nombre:'Gerardo Martínez Alvarado',usuario:'gmartinez',activo:true},
-  {id:10,nombre:'Josué Rodolfo Gaytán Rodríguez',usuario:'jgaytan',activo:true},
-  {id:11,nombre:'Luis Angel Ochoa Leija',usuario:'laochoa',activo:true},
-  {id:12,nombre:'Luis Antonio Mendez Martinez',usuario:'lamendez',activo:true},
-];
-let catMaquinas=[
-  {id:1,codigo:'EXT001',nombre:'Extrusora 1',activo:true},
-  {id:2,codigo:'EXT002',nombre:'Extrusora 2',activo:true},
-  {id:3,codigo:'EXT003',nombre:'Extrusora 3',activo:true},
-  {id:4,codigo:'EXT004',nombre:'Extrusora 4',activo:true},
-  {id:5,codigo:'EXT005',nombre:'Extrusora 5',activo:true},
-  {id:6,codigo:'EXT006',nombre:'Extrusora 6',activo:true},
-];
-let catOrdenes=[
-  {id:1,ot:'26050163',prod:'20-710901-14085-01',desc:'NX300606-GEN-S/I-CLO-13',med:'13',col:'CLARO',rem:'26050179',sig:'IMPRESIÓN',maq:'EXT001',status:'Iniciado'},
-  {id:2,ot:'26050162',prod:'20-500901-17512-01',desc:'NT250606-GEN-S/I-CLO-390MM',med:'390MM',col:'CLARO',rem:'26050224',sig:'CONVERSIÓN',maq:'EXT002',status:'En espera'},
-  {id:3,ot:'20040026',prod:'20-300901-14196-01',desc:'F1710-GEN-S/I-BCO-160MM',med:'160MM',col:'BLANCO',rem:'26050226',sig:'BARNIZADO',maq:'EXT001',status:'Finalizado'},
-  {id:4,ot:'20040032',prod:'20-230901-17468-01',desc:'B501518RT-GEN-S/I-CLO-14',med:'14',col:'CLARO',rem:'26050179',sig:'',maq:'EXT005',status:'Finalizado'},
-];
-let catProductos=[
-  {id:1,codigo:'20-710901-14085-01',desc:'NX300606-GEN-S/I-CLO-13',med:'13',col:'CLARO',dep:'EXTRUSIÓN'},
-  {id:2,codigo:'20-500901-17512-01',desc:'NT250606-GEN-S/I-CLO-390MM',med:'390MM',col:'CLARO',dep:'EXTRUSIÓN'},
-  {id:3,codigo:'20-300901-14196-01',desc:'F1710-GEN-S/I-BCO-160MM',med:'160MM',col:'BLANCO',dep:'EXTRUSIÓN'},
-  {id:4,codigo:'20-230901-17468-01',desc:'B501518RT-GEN-S/I-CLO-14',med:'14',col:'CLARO',dep:'EXTRUSIÓN'},
-];
-let catRemisiones=[
-  {id:1,num:'26050179',prod:'20-710901-14085-01',status:'Iniciado'},
-  {id:2,num:'26050224',prod:'20-500901-17512-01',status:'En espera'},
-  {id:3,num:'26050226',prod:'20-300901-14196-01',status:'Finalizado'},
-];
-let currentModalType='',editingId=null;
+let currentModalType='', editingId=null;
+let prodResultados={bob:[],ext:[],ot:[]};
 
-const sampleBobinas=[
-  {id:500423,num:31,mach:'EXT005',ot:'20040032',fecha:'21-05-2026',hora:'09:25:20',metros:500,peso:50.8125,
-   operario:'Luis Angel Ochoa Leija',col:'CLARO',rem:'26050179',prod:'20-230901-17468-01',
-   desc:'B501518RT-GEN-S/I-CLO-14',med:'14',lote:'052126',coordinador:'Gumaro Flores',
-   params:{med:14,ancho:15,eh:8,cf:480,ev:6,cr:510,edm:18,des:'No',temp:185}},
-  {id:500410,num:18,mach:'EXT001',ot:'26050163',fecha:'21-05-2026',hora:'07:10:00',metros:2000,peso:40.2,
-   operario:'Juan Quiroz Segovia',col:'CLARO',rem:'26050163',prod:'20-710901-14085-01',
-   desc:'NX300606-GEN-S/I-CLO-13',med:'13',lote:'052126',coordinador:'Erick Presas',
-   params:{med:13,ancho:12,eh:7,cf:460,ev:5,cr:490,edm:16,des:'No',temp:183}},
-];
-
-function initApp(){
-  buildMachTabs();
-  populateSelects();
-  initBobina();
+// ── INIT ──
+async function initApp(){
+  await Promise.all([loadMachines(), loadOperators(), loadWorkOrders()]);
+  populateCoord();
   renderAdmin();
 }
 
-function buildMachTabs(){
+// Fallback data mientras el backend no esté disponible
+const FALLBACK_MACHINES=[
+  {id:'EXT001',name:'Extrusora 001'},{id:'EXT002',name:'Extrusora 002'},
+  {id:'EXT003',name:'Extrusora 003'},{id:'EXT004',name:'Extrusora 004'},
+  {id:'EXT005',name:'Extrusora 005'},{id:'EXT006',name:'Extrusora 006'}
+];
+const FALLBACK_OPERATORS=[
+  {id:1,full_name:'Juan Quiroz Segovia'},{id:2,full_name:'Roberto Martínez Salazar'},
+  {id:3,full_name:'José Alfonso Ochoa Leija'},{id:4,full_name:'Erik Rodrigo Presas Jasso'},
+  {id:5,full_name:'Israel Rodríguez Herrera'},{id:6,full_name:'Francisco Abelardo Garza Hernández'},
+  {id:7,full_name:'Fabián de León Mejía'},{id:8,full_name:'Erick González Palomo'},
+  {id:9,full_name:'Gerardo Martínez Alvarado'},{id:10,full_name:'Josué Rodolfo Gaytán Rodríguez'},
+  {id:11,full_name:'Luis Angel Ochoa Leija'},{id:12,full_name:'Luis Antonio Mendez Martinez'},
+];
+const FALLBACK_ORDERS=[
+  {id:1,ot_number:'26050163',product_code:'20-710901-14085-01',description:'NX300606-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'IMPRESIÓN',remision:'26050179',status:'iniciado'},
+  {id:2,ot_number:'26050162',product_code:'20-500901-17512-01',description:'NT250606-GEN-S/I-CLO-390MM',measure:'390MM',color:'CLARO',next_process:'CONVERSIÓN',remision:'26050224',status:'pendiente'},
+  {id:3,ot_number:'20040032',product_code:'20-230901-17468-01',description:'B501518RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'26050179',status:'iniciado'},
+];
+
+async function loadMachines(){
+  let data=FALLBACK_MACHINES;
+  try{data=await apiFetch('/machines');}catch(e){console.warn('API no disponible, usando datos locales.');}
   const mt=document.getElementById('mach-tabs');mt.innerHTML='';
-  catMaquinas.filter(m=>m.activo).forEach((m,i)=>{
+  data.forEach((m,i)=>{
     const b=document.createElement('button');
     b.className='mach-tab'+(i===0?' active':'');
-    b.textContent=m.codigo;
-    b.onclick=()=>selectMach(m.codigo,b);
+    b.textContent=m.id;b.dataset.id=m.id;b.dataset.name=m.name;
+    b.onclick=()=>selectMach(m.id,b);
     mt.appendChild(b);
   });
+  if(data.length){curMach=data[0].id;document.getElementById('mach-label').textContent=data[0].id;}
 }
 
-function populateSelects(){
-  const soEl=document.getElementById('sel-op');
-  soEl.innerHTML='<option value="">— Seleccione —</option>';
-  catOperadores.filter(o=>o.activo).forEach(o=>{
-    const opt=document.createElement('option');opt.value=o.id;opt.textContent=o.nombre;soEl.appendChild(opt);
+async function loadOperators(){
+  let data=FALLBACK_OPERATORS;
+  try{data=await apiFetch('/operators');}catch(e){console.warn('API no disponible, usando datos locales.');}
+  const so=document.getElementById('sel-op');
+  so.innerHTML='<option value="">— Seleccione —</option>';
+  data.forEach(o=>{
+    const opt=document.createElement('option');opt.value=o.id;opt.textContent=o.full_name;so.appendChild(opt);
   });
-  const stEl=document.getElementById('sel-ot');
-  stEl.innerHTML='<option value="">— Seleccione —</option>';
-  catOrdenes.filter(o=>o.status!=='Finalizado').forEach(o=>{
-    const opt=document.createElement('option');opt.value=o.id;opt.textContent=o.ot;
-    Object.assign(opt.dataset,{prod:o.prod,desc:o.desc,med:o.med,col:o.col,rem:o.rem,sig:o.sig});
-    stEl.appendChild(opt);
+}
+
+async function loadWorkOrders(){
+  let data=FALLBACK_ORDERS;
+  try{data=await apiFetch('/work-orders');}catch(e){console.warn('API no disponible, usando datos locales.');}
+  const st=document.getElementById('sel-ot');
+  st.innerHTML='<option value="">— Seleccione —</option>';
+  data.forEach(o=>{
+    const opt=document.createElement('option');
+    opt.value=o.id;opt.textContent=o.ot_number;
+    Object.assign(opt.dataset,{prod:o.product_code,desc:o.description,med:o.measure,col:o.color,rem:o.remision,sig:o.next_process});
+    st.appendChild(opt);
   });
-  const coordEl=document.getElementById('sel-coord');
-  const prevCoord=coordEl.value;
-  coordEl.innerHTML='<option value="">— Seleccione —</option>';
+}
+
+function populateCoord(){
+  const el=document.getElementById('sel-coord');
+  const prev=el.value;
+  el.innerHTML='<option value="">— Seleccione —</option>';
   catCoordinadores.filter(c=>c.activo).forEach(c=>{
-    const opt=document.createElement('option');opt.value=c.nombre;opt.textContent=c.nombre;
-    if(c.nombre===prevCoord)opt.selected=true;
-    coordEl.appendChild(opt);
+    const opt=document.createElement('option');opt.value=c.id;opt.textContent=c.nombre;
+    if(c.id===parseInt(prev))opt.selected=true;
+    el.appendChild(opt);
   });
 }
 
+// ── OPERADOR ──
 function selectMach(m,btn){
   curMach=m;
   document.querySelectorAll('.mach-tab').forEach(b=>b.classList.remove('active'));
@@ -450,40 +480,34 @@ function showView(v,btn){
   if(v==='almacen')almacenTab('entradas',document.querySelector('#view-almacen .sec-tab'));
 }
 
-// ── OPERADOR ──
 function resetForm(){
   ['sel-op','sel-ot'].forEach(id=>document.getElementById(id).value='');
-  ['f-desc','f-prod','f-med','f-col','f-sig','f-rem'].forEach(id=>document.getElementById(id).value='');
-  formActive=false;hideAlerts();initBobina();
+  ['f-desc','f-prod','f-med','f-col','f-sig','f-rem','f-id','f-num','f-fecha','f-hora','f-lote','f-metros','f-peso','f-obs'].forEach(id=>document.getElementById(id).value='');
+  formActive=false;curWOId=null;hideAlerts();
 }
+
 function checkForm(){
-  const op=document.getElementById('sel-op').value,ot=document.getElementById('sel-ot').value;
+  const op=document.getElementById('sel-op').value, ot=document.getElementById('sel-ot').value;
   if(!op||!ot){document.getElementById('alert-sel').style.display='block';formActive=false;}
   else{document.getElementById('alert-sel').style.display='none';formActive=true;}
 }
-function getNextBobNum(otTexto){
-  const registradas=bobinas.filter(b=>b.ot===otTexto&&b.mach===curMach).length;
-  return registradas+1;
-}
 
-function loadOT(){
+async function loadOT(){
   checkForm();
   const stEl=document.getElementById('sel-ot');
   const opt=stEl.options[stEl.selectedIndex];
   if(!opt.value)return;
+  curWOId=parseInt(opt.value);
   document.getElementById('f-desc').value=opt.dataset.desc||'';
   document.getElementById('f-prod').value=opt.dataset.prod||'';
   document.getElementById('f-med').value=opt.dataset.med||'';
   document.getElementById('f-col').value=opt.dataset.col||'';
   document.getElementById('f-sig').value=opt.dataset.sig||'';
   document.getElementById('f-rem').value=opt.dataset.rem||'';
-  bobNum=getNextBobNum(opt.textContent);
-  initBobina();
+  await initBobina();
 }
-function initBobina(){
-  bobID++;
-  document.getElementById('f-id').value=bobID;
-  document.getElementById('f-num').value=bobNum;
+
+async function initBobina(){
   document.getElementById('f-fecha').value=fmtDate(TODAY);
   document.getElementById('f-hora').value=nowTime();
   document.getElementById('f-lote').value=fmtLote(TODAY);
@@ -491,112 +515,223 @@ function initBobina(){
   document.getElementById('f-metros').style.borderColor='';
   document.getElementById('f-peso').value='';
   document.getElementById('f-obs').value='';
+  document.getElementById('f-id').value='—';
+  document.getElementById('f-num').value='—';
+  if(curWOId && formActive){
+    try{
+      const res=await apiFetch(`/bobbins/next-number?work_order_id=${curWOId}&machine_id=${curMach}`);
+      document.getElementById('f-num').value=res.next_number;
+    }catch(e){document.getElementById('f-num').value='?';}
+  }
 }
+
+function nuevaBobina(){
+  if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
+  initBobina();
+}
+function cancelarBobina(){resetForm();}
+
 function validarMetros(inp){
   const v=parseFloat(inp.value);
   const al=document.getElementById('alert-metro');
   if(v>2000){al.style.display='block';inp.style.borderColor='#e63946';}
   else{al.style.display='none';inp.style.borderColor='';}
 }
-function nuevaBobina(){
-  if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
-  bobNum++;initBobina();
+
+function hideAlerts(){
+  ['alert-sel','alert-metro','alert-save','alert-api-err'].forEach(id=>document.getElementById(id).style.display='none');
 }
-function cancelarBobina(){initBobina();hideAlerts();}
-function guardarBobina(){
+
+function showApiErr(msg){
+  const el=document.getElementById('alert-api-err');
+  el.textContent='⚠ '+msg;el.style.display='block';
+}
+
+async function guardarBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
-  const metros=parseFloat(document.getElementById('f-metros').value);
+  const metros=parseFloat(document.getElementById('f-metros').value)||0;
   if(metros>2000){document.getElementById('alert-metro').style.display='block';return;}
-  const opEl=document.getElementById('sel-op');
-  const otEl=document.getElementById('sel-ot');
-  const b={
-    id:parseInt(document.getElementById('f-id').value),
-    num:document.getElementById('f-num').value,
-    ot:otEl.options[otEl.selectedIndex].textContent,
-    operario:opEl.options[opEl.selectedIndex].textContent,
-    mach:curMach,
-    fecha:document.getElementById('f-fecha').value,
-    hora:document.getElementById('f-hora').value,
-    lote:document.getElementById('f-lote').value,
-    metros:metros||0,
-    peso:document.getElementById('f-peso').value,
-    obs:document.getElementById('f-obs').value,
-    prod:document.getElementById('f-prod').value,
-    desc:document.getElementById('f-desc').value,
-    med:document.getElementById('f-med').value,
-    col:document.getElementById('f-col').value,
-    rem:document.getElementById('f-rem').value,
-    coordinador:document.getElementById('sel-coord').value||'—',
-    params:{...lastParams}
-  };
-  bobinas.push(b);lastSavedBobina=b;
-  const al=document.getElementById('alert-save');al.style.display='block';
-  setTimeout(()=>al.style.display='none',2500);
-  // calcular siguiente número de bobina para esta OT
-  const otElSave=document.getElementById('sel-ot');
-  const otTextoSave=otElSave.options[otElSave.selectedIndex].textContent;
-  bobNum=getNextBobNum(otTextoSave);
-  bobID++;
-  document.getElementById('f-id').value=bobID;
-  document.getElementById('f-num').value=bobNum;
-  document.getElementById('f-hora').value=nowTime();
-  document.getElementById('f-metros').value='';
-  document.getElementById('f-metros').style.borderColor='';
-  document.getElementById('f-peso').value='';
-  document.getElementById('f-obs').value='';
+  const opId=parseInt(document.getElementById('sel-op').value);
+  const btn=document.getElementById('btn-guardar');
+  btn.disabled=true;btn.textContent='⏳ Guardando...';
+  try{
+    // 1. POST bobina
+    const bobRes=await apiFetch('/bobbins',{method:'POST',body:JSON.stringify({
+      work_order_id:curWOId,
+      machine_id:curMach,
+      operator_id:opId,
+      meters:metros,
+      weight_kg:parseFloat(document.getElementById('f-peso').value)||0,
+      observations:document.getElementById('f-obs').value||null
+    })});
+    // 2. POST parámetros
+    const params={
+      bobbin_id:bobRes.id,
+      measurement_number:1,
+      measure:parseFloat(document.getElementById('p-med').value)||null,
+      flat_width:parseFloat(document.getElementById('p-ancho').value)||null,
+      horizontal_shrinkage:parseFloat(document.getElementById('p-eh').value)||null,
+      front_gauge:parseFloat(document.getElementById('p-cf').value)||null,
+      vertical_shrinkage:parseFloat(document.getElementById('p-ev').value)||null,
+      back_gauge:parseFloat(document.getElementById('p-cr').value)||null,
+      machine_direction_shrinkage:parseFloat(document.getElementById('p-edm').value)||null,
+      delamination:document.getElementById('p-des').value==='true'?true:document.getElementById('p-des').value==='false'?false:null,
+      tunnel_temperature:parseFloat(document.getElementById('p-temp').value)||null
+    };
+    await apiFetch('/process-params',{method:'POST',body:JSON.stringify(params)});
+
+    // 3. POST revisión coordinador si se seleccionó
+    const coordId=document.getElementById('sel-coord').value;
+    const coordName=document.getElementById('sel-coord').options[document.getElementById('sel-coord').selectedIndex].textContent;
+    if(coordId){
+      await apiFetch('/reviews',{method:'POST',body:JSON.stringify({
+        bobbin_id:bobRes.id, review_type:'coordinator', reviewer_id:parseInt(coordId), notes:''
+      })}).catch(()=>{});
+    }
+
+    // Guardar localmente para etiqueta e historial
+    const opEl=document.getElementById('sel-op');
+    const stEl=document.getElementById('sel-ot');
+    const b={
+      id:bobRes.id,
+      num:bobRes.bobbin_number,
+      ot:stEl.options[stEl.selectedIndex].textContent,
+      operario:opEl.options[opEl.selectedIndex].textContent,
+      mach:curMach,
+      fecha:bobRes.production_date?bobRes.production_date.split('-').reverse().join('-'):fmtDate(TODAY),
+      hora:bobRes.production_time||nowTime(),
+      lote:bobRes.lot_code||fmtLote(TODAY),
+      metros,
+      peso:document.getElementById('f-peso').value,
+      obs:document.getElementById('f-obs').value,
+      prod:document.getElementById('f-prod').value,
+      desc:document.getElementById('f-desc').value,
+      med:document.getElementById('f-med').value,
+      col:document.getElementById('f-col').value,
+      rem:document.getElementById('f-rem').value,
+      coordinador:coordName||'—',
+      params:{
+        med:document.getElementById('p-med').value,
+        ancho:document.getElementById('p-ancho').value,
+        eh:document.getElementById('p-eh').value,
+        cf:document.getElementById('p-cf').value,
+        ev:document.getElementById('p-ev').value,
+        cr:document.getElementById('p-cr').value,
+        edm:document.getElementById('p-edm').value,
+        des:document.getElementById('p-des').value==='true'?'Sí':document.getElementById('p-des').value==='false'?'No':'—',
+        temp:document.getElementById('p-temp').value,
+      }
+    };
+    bobinas.push(b);lastSavedBobina=b;
+
+    const al=document.getElementById('alert-save');al.style.display='block';
+    setTimeout(()=>al.style.display='none',2500);
+
+    // limpiar para siguiente
+    ['p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-temp'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('p-des').value='';
+    await initBobina();
+
+  }catch(e){
+    showApiErr(e.message);
+  }finally{
+    btn.disabled=false;btn.textContent='Guardar bobina';
+  }
 }
-function guardarParams(){
-  lastParams={
-    med:document.getElementById('p-med').value,
-    ancho:document.getElementById('p-ancho').value,
-    eh:document.getElementById('p-eh').value,
-    cf:document.getElementById('p-cf').value,
-    ev:document.getElementById('p-ev').value,
-    cr:document.getElementById('p-cr').value,
-    edm:document.getElementById('p-edm').value,
-    des:document.getElementById('p-des').value,
-    temp:document.getElementById('p-temp').value,
-  };
-  alert('Parámetros guardados.');
-}
-function hideAlerts(){['alert-sel','alert-metro','alert-save'].forEach(id=>document.getElementById(id).style.display='none');}
+
 function imprimirEtiqueta(){
   if(!lastSavedBobina){alert('Primero guarde una bobina.');return;}
   renderLabel(lastSavedBobina,false);
 }
-function revCoord(){
-  const c=document.getElementById('sel-coord').value;
-  if(!c){alert('Seleccione un coordinador.');return;}
-  alert(`Revisión registrada: ${c}`);
-}
-function revCalidad(){alert('Revisión de calidad registrada.');}
-function finalizarProceso(){
-  if(confirm('¿Finalizar el proceso para esta orden de trabajo?')){alert('Proceso finalizado.');resetForm();}
+
+function getNextBobNum(otTexto){
+  return bobinas.filter(b=>b.ot===otTexto&&b.mach===curMach).length+1;
 }
 
-// ── BÚSQUEDA ──
-function findBobina(id){
-  if(!id||isNaN(id))return null;
-  return bobinas.find(b=>Number(b.id)===id)||sampleBobinas.find(b=>Number(b.id)===id)||null;
+// ── LISTA BOBINAS MODAL ──
+async function openListModal(){
+  const otEl=document.getElementById('sel-ot');
+  const otNum=otEl.options[otEl.selectedIndex].textContent||'—';
+  document.getElementById('ml-ot').textContent=otNum;
+  document.getElementById('ml-body').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
+  document.getElementById('modal-list').classList.add('open');
+  try{
+    const apiBobs=await apiFetch(`/bobbins?work_order_id=${curWOId}&machine_id=${curMach}`);
+    // merge API + local (la API puede no tener las recién guardadas aún)
+    const localIds=new Set(bobinas.map(b=>b.id));
+    const merged=[...bobinas.filter(b=>b.ot===otNum&&b.mach===curMach),
+      ...apiBobs.filter(b=>!localIds.has(b.id)).map(b=>({
+        id:b.id,num:b.bobbin_number,operario:b.operator_name,
+        fecha:b.production_date?b.production_date.split('-').reverse().join('-'):'—',
+        hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}
+      }))
+    ];
+    renderListModal(otNum,'',merged);
+  }catch(e){
+    renderListModal(otNum,'',bobinas.filter(b=>b.ot===otNum&&b.mach===curMach));
+  }
 }
+
+function renderListModal(ot,filtroOp,bobs){
+  const body=document.getElementById('ml-body');
+  if(!bobs||!bobs.length){body.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0">No hay bobinas registradas.</p>';return;}
+  const ops=[...new Set(bobs.map(b=>b.operario))];
+  const filtradas=filtroOp?bobs.filter(b=>b.operario===filtroOp):bobs;
+  const totM=filtradas.reduce((a,b)=>a+(parseFloat(b.metros)||0),0);
+  const totP=filtradas.reduce((a,b)=>a+(parseFloat(b.peso)||0),0);
+  body.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <div class="field" style="min-width:200px;margin:0">
+        <label style="font-size:11px;color:var(--muted)">Filtrar por operador</label>
+        <select onchange="renderListModal('${ot}',this.value,${JSON.stringify(bobs).replace(/'/g,'&#39;')})" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px">
+          <option value="">— Todos —</option>
+          ${ops.map(o=>`<option value="${o}"${o===filtroOp?' selected':''}>${o}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600">
+        <span style="color:var(--blue)">📏 ${totM.toLocaleString()} m</span>
+        <span style="color:var(--muted)">⚖ ${totP.toFixed(2)} Kg</span>
+        <span style="color:var(--muted);font-weight:400">${filtradas.length} bobina(s)</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+    <table><thead><tr><th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead>
+    <tbody>${filtradas.map(b=>`<tr>
+      <td>${b.id}</td><td>${b.num||b.bobbin_number}</td>
+      <td style="font-size:11px">${b.operario||b.operator_name}</td>
+      <td>${b.fecha||b.production_date}</td><td>${b.hora||b.production_time}</td>
+      <td>${b.metros||b.meters} m</td><td>${parseFloat(b.peso||b.weight_kg||0).toFixed(2)} Kg</td>
+    </tr>`).join('')}</tbody>
+    <tfoot><tr style="background:#f8f9fb;font-weight:600">
+      <td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td>
+      <td style="color:var(--blue)">${totM.toLocaleString()} m</td>
+      <td>${totP.toFixed(2)} Kg</td>
+    </tr></tfoot>
+    </table></div>`;
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+
+// ── BÚSQUEDAS ──
+function findBobina(id){return bobinas.find(b=>Number(b.id)===id)||null;}
+
 function buscarBobinaProd(){
   const id=parseInt(document.getElementById('prod-search').value.trim());
   const r=document.getElementById('prod-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
   const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ No se encontró la bobina <strong>${id}</strong>.</div>`;return;}
+  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada en esta sesión.</div>`;return;}
   const p=b.params||{};
-  r.innerHTML=`<div class="result-card">
-    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Bobina <strong style="color:var(--text)">#${b.id}</strong> — OT: ${b.ot} — Máquina: ${b.mach}</div>
+  r.innerHTML=`<div class="result-card"><div style="font-size:13px;color:var(--muted);margin-bottom:12px">Bobina <strong>#${b.id}</strong> — OT: ${b.ot} — ${b.mach}</div>
     <div class="result-grid">
-      <div class="result-item highlight"><div class="ri-label">Encogimiento horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Encogimiento vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
+      <div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
+      <div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
       <div class="result-item highlight"><div class="ri-label">Enc. Dir. Máquina</div><div class="ri-val">${p.edm||'—'}</div></div>
       <div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
       <div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
       <div class="result-item highlight"><div class="ri-label">Medida</div><div class="ri-val">${b.med||'—'}</div></div>
       <div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">${p.ancho||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Temperatura túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
+      <div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
       <div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">${p.des||'—'}</div></div>
     </div></div>`;
 }
@@ -607,27 +742,24 @@ function buscarBobinaCalidad(){
   const r=document.getElementById('cal-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
   const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ No se encontró la bobina <strong>${id}</strong>.</div>`;return;}
+  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
   const p=b.params||{};
   r.innerHTML=`<div class="result-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
-      <div><div style="font-size:18px;font-weight:700;color:var(--blue)">Bobina #${b.id}</div>
-      <div style="font-size:12px;color:var(--muted)">Registro de calidad completo</div></div>
-      <span class="badge badge-ok">✓ Datos completos</span></div>
+    <div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">Bobina #${b.id}</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Registro completo de calidad</div>
     <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div>
     <div class="result-grid" style="margin-top:0;margin-bottom:16px">
-      <div class="result-item"><div class="ri-label">Orden de trabajo</div><div class="ri-val">${b.ot}</div></div>
+      <div class="result-item"><div class="ri-label">OT</div><div class="ri-val">${b.ot}</div></div>
       <div class="result-item"><div class="ri-label">Máquina</div><div class="ri-val">${b.mach}</div></div>
-      <div class="result-item"><div class="ri-label">Operador</div><div class="ri-val" style="font-size:13px">${b.operario}</div></div>
-      <div class="result-item"><div class="ri-label">Coordinador</div><div class="ri-val" style="font-size:13px">${b.coordinador||'—'}</div></div>
+      <div class="result-item"><div class="ri-label">Operador</div><div class="ri-val" style="font-size:12px">${b.operario}</div></div>
+      <div class="result-item"><div class="ri-label">Coordinador</div><div class="ri-val" style="font-size:12px">${b.coordinador||'—'}</div></div>
       <div class="result-item"><div class="ri-label">Fecha / Lote</div><div class="ri-val">${b.fecha} / ${b.lote}</div></div>
-      <div class="result-item"><div class="ri-label">Num. bobina</div><div class="ri-val">${b.num}</div></div>
       <div class="result-item"><div class="ri-label">Remisión</div><div class="ri-val">${b.rem}</div></div>
     </div>
     <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producto</div>
     <div class="result-grid" style="margin-top:0;margin-bottom:16px">
-      <div class="result-item"><div class="ri-label">Código producto</div><div class="ri-val" style="font-size:12px">${b.prod}</div></div>
-      <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">${b.desc}</div></div>
+      <div class="result-item"><div class="ri-label">Código</div><div class="ri-val" style="font-size:11px">${b.prod}</div></div>
+      <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:11px">${b.desc}</div></div>
       <div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">${b.med}</div></div>
       <div class="result-item"><div class="ri-label">Color</div><div class="ri-val">${b.col}</div></div>
       <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
@@ -635,320 +767,19 @@ function buscarBobinaCalidad(){
     </div>
     <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div>
     <div class="result-grid" style="margin-top:0">
-      <div class="result-item highlight"><div class="ri-label">Encogimiento horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Encogimiento vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
+      <div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
+      <div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
       <div class="result-item highlight"><div class="ri-label">Enc. Dir. Máquina</div><div class="ri-val">${p.edm||'—'}</div></div>
       <div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
       <div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
       <div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">${p.ancho||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Temperatura túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
+      <div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
       <div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">${p.des||'—'}</div></div>
     </div>
     ${b.obs?`<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> ${b.obs}</div>`:''}
   </div>`;
 }
 function limpiarCalidad(){document.getElementById('cal-search').value='';document.getElementById('cal-result').innerHTML='';}
-
-// ══════════════════════════════════════════
-// ── ALMACÉN ──
-// ══════════════════════════════════════════
-function almacenTab(tab,btn){
-  document.querySelectorAll('#view-almacen .sec-tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const c=document.getElementById('almacen-content');
-  if(tab==='entradas')renderEntradas(c);
-  else if(tab==='stock')renderStock(c);
-  else if(tab==='salidas')renderSalidas(c);
-  else if(tab==='regresos')renderRegresos(c);
-}
-
-// ── ENTRADAS ──
-function renderEntradas(c){
-  c.innerHTML=`
-  <div class="card">
-    <div class="card-title">📥 Entradas — Recepción de bobinas</div>
-    <div style="margin-bottom:12px;font-size:13px;color:var(--muted)">
-      <span class="step-num">1</span>Escanea la ubicación &nbsp;
-      <span class="step-num">2</span>Escanea cada bobina &nbsp;
-      <span class="step-num">3</span>Guarda la entrada
-    </div>
-    <div class="scan-box">
-      <div class="field">
-        <label>📍 Escanear ubicación</label>
-        <input id="ent-loc" placeholder="Escanea o escribe ubicación (ej. A1)" 
-          onkeydown="if(event.key==='Enter')confirmarUbicacionEntrada()"
-          oninput="this.value=this.value.toUpperCase()"/>
-      </div>
-      <button class="btn btn-primary" onclick="confirmarUbicacionEntrada()" style="height:38px">Confirmar</button>
-    </div>
-    <div id="ent-loc-info"></div>
-    <div id="ent-scan-bob" style="display:none">
-      <div class="scan-box">
-        <div class="field">
-          <label>🧵 Escanear ID de bobina</label>
-          <input id="ent-bob" type="number" placeholder="Escanea etiqueta de bobina" 
-            onkeydown="if(event.key==='Enter')agregarBobinaEntrada()"/>
-        </div>
-        <button class="btn btn-success" onclick="agregarBobinaEntrada()" style="height:38px">+ Agregar</button>
-      </div>
-      <div id="ent-list"></div>
-      <div class="btn-row" id="ent-actions" style="display:none">
-        <button class="btn btn-primary" onclick="guardarEntrada()">💾 Guardar entrada</button>
-        <button class="btn btn-danger" onclick="cancelarEntrada()">Cancelar</button>
-      </div>
-    </div>
-  </div>`;
-  almEntradaLoc='';almEntradaList=[];
-}
-
-function confirmarUbicacionEntrada(){
-  const val=document.getElementById('ent-loc').value.trim().toUpperCase();
-  if(!val){alert('Ingresa una ubicación.');return;}
-  if(!UBICACIONES.includes(val)){alert(`Ubicación "${val}" no reconocida. Verifica el código.`);return;}
-  almEntradaLoc=val;
-  const existentes=(almStock[val]||[]).length;
-  document.getElementById('ent-loc-info').innerHTML=`
-    <div class="loc-badge">📍 ${val} <span style="font-size:12px;font-weight:400;opacity:.8">${existentes} bobina(s) en stock</span></div>`;
-  document.getElementById('ent-scan-bob').style.display='block';
-  document.getElementById('ent-bob').focus();
-  renderListaEntrada();
-}
-
-function agregarBobinaEntrada(){
-  const id=parseInt(document.getElementById('ent-bob').value);
-  if(!id){alert('ID de bobina inválido.');return;}
-  if(almEntradaList.find(b=>Number(b.id)===id)){alert('Esta bobina ya fue agregada a la lista.');return;}
-  const b=findBobina(id);
-  if(!b){
-    if(!confirm(`Bobina ${id} no encontrada en el sistema.\n¿Agregar de todas formas?`))return;
-    almEntradaList.push({id,desc:'Sin datos',ot:'—',metros:'—',peso:'—',med:'—',col:'—'});
-  }else{
-    almEntradaList.push({...b});
-  }
-  document.getElementById('ent-bob').value='';
-  document.getElementById('ent-bob').focus();
-  renderListaEntrada();
-}
-
-function renderListaEntrada(){
-  const el=document.getElementById('ent-list');
-  const act=document.getElementById('ent-actions');
-  if(!almEntradaList.length){el.innerHTML='<p style="color:var(--muted);font-size:13px;padding:8px 0">Sin bobinas agregadas aún.</p>';act.style.display='none';return;}
-  act.style.display='flex';
-  el.innerHTML=`<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">${almEntradaList.length} bobina(s) para ingresar a <strong>${almEntradaLoc}</strong></div>`+
-    almEntradaList.map((b,i)=>`
-    <div class="bobina-row">
-      <div class="br-info">
-        <div class="br-id">#${b.id}</div>
-        <div class="br-sub">${b.desc} | ${b.metros} m | ${b.peso} Kg | ${b.col}</div>
-      </div>
-      <button class="icon-btn del" onclick="quitarBobinaEntrada(${i})" title="Quitar">✕</button>
-    </div>`).join('');
-}
-
-function quitarBobinaEntrada(i){almEntradaList.splice(i,1);renderListaEntrada();}
-
-function guardarEntrada(){
-  if(!almEntradaLoc||!almEntradaList.length){alert('Selecciona ubicación y agrega al menos una bobina.');return;}
-  if(!almStock[almEntradaLoc])almStock[almEntradaLoc]=[];
-  almEntradaList.forEach(b=>{
-    if(!almStock[almEntradaLoc].find(x=>Number(x.id)===Number(b.id)))
-      almStock[almEntradaLoc].push({...b,fechaEntrada:fmtDate(TODAY)});
-  });
-  alert(`✅ ${almEntradaList.length} bobina(s) registradas en ubicación ${almEntradaLoc}`);
-  almEntradaLoc='';almEntradaList=[];
-  renderEntradas(document.getElementById('almacen-content'));
-}
-
-function cancelarEntrada(){almEntradaLoc='';almEntradaList=[];renderEntradas(document.getElementById('almacen-content'));}
-
-// ── STOCK ──
-function renderStock(c){
-  c.innerHTML=`
-  <div class="card">
-    <div class="card-title">📦 Stock — Consulta de inventario por ubicación</div>
-    <div class="scan-box">
-      <div class="field">
-        <label>📍 Escanear ubicación</label>
-        <input id="stk-loc" placeholder="Escanea o escribe ubicación (ej. B2)"
-          onkeydown="if(event.key==='Enter')consultarStock()"
-          oninput="this.value=this.value.toUpperCase()"/>
-      </div>
-      <button class="btn btn-primary" onclick="consultarStock()" style="height:38px">Consultar</button>
-      <button class="btn" onclick="limpiarStock()" style="height:38px">Limpiar</button>
-    </div>
-    <div id="stk-result"></div>
-  </div>`;
-}
-
-function consultarStock(){
-  const val=document.getElementById('stk-loc').value.trim().toUpperCase();
-  if(!val){alert('Ingresa una ubicación.');return;}
-  const r=document.getElementById('stk-result');
-  const bobs=almStock[val]||[];
-  if(!bobs.length){
-    r.innerHTML=`<div class="not-found">📍 Ubicación <strong>${val}</strong> — sin inventario registrado.</div>`;return;
-  }
-  const totMetros=bobs.reduce((a,b)=>a+(parseFloat(b.metros)||0),0);
-  const totPeso=bobs.reduce((a,b)=>a+(parseFloat(b.peso)||0),0);
-  r.innerHTML=`
-    <div class="loc-badge" style="margin-top:8px">📍 ${val}</div>
-    <div class="result-grid" style="margin-top:8px;margin-bottom:16px">
-      <div class="result-item highlight"><div class="ri-label">Bobinas en stock</div><div class="ri-val">${bobs.length}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Total metros</div><div class="ri-val">${totMetros.toLocaleString()} m</div></div>
-      <div class="result-item highlight"><div class="ri-label">Total peso</div><div class="ri-val">${totPeso.toFixed(2)} Kg</div></div>
-    </div>
-    <table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>OT</th><th>Fecha entrada</th></tr></thead><tbody>
-      ${bobs.map(b=>`<tr>
-        <td style="font-weight:700;color:var(--blue)">${b.id}</td>
-        <td style="font-size:11px">${b.desc}</td>
-        <td>${b.metros} m</td><td>${b.peso} Kg</td><td>${b.col}</td><td>${b.ot}</td>
-        <td style="font-size:11px">${b.fechaEntrada||'—'}</td>
-      </tr>`).join('')}
-    </tbody></table>`;
-}
-function limpiarStock(){document.getElementById('stk-loc').value='';document.getElementById('stk-result').innerHTML='';}
-
-// ── SALIDAS ──
-function renderSalidas(c){
-  c.innerHTML=`
-  <div class="card">
-    <div class="card-title">📤 Salidas — Despacho a producción</div>
-    <div style="margin-bottom:12px;font-size:13px;color:var(--muted)">
-      <span class="step-num">1</span>Escanea la ubicación &nbsp;
-      <span class="step-num">2</span>Selecciona las bobinas &nbsp;
-      <span class="step-num">3</span>Llena destino y guarda
-    </div>
-    <div class="scan-box">
-      <div class="field">
-        <label>📍 Escanear ubicación</label>
-        <input id="sal-loc" placeholder="Escanea o escribe ubicación"
-          onkeydown="if(event.key==='Enter')cargarStockSalida()"
-          oninput="this.value=this.value.toUpperCase()"/>
-      </div>
-      <button class="btn btn-primary" onclick="cargarStockSalida()" style="height:38px">Cargar inventario</button>
-    </div>
-    <div id="sal-content"></div>
-  </div>`;
-  almSalidaLoc='';
-}
-
-function cargarStockSalida(){
-  const val=document.getElementById('sal-loc').value.trim().toUpperCase();
-  if(!val){alert('Ingresa una ubicación.');return;}
-  const bobs=almStock[val]||[];
-  const c=document.getElementById('sal-content');
-  if(!bobs.length){c.innerHTML=`<div class="not-found">📍 <strong>${val}</strong> — sin inventario disponible.</div>`;return;}
-  almSalidaLoc=val;
-  const areasOpts=AREAS.map(a=>`<option>${a}</option>`).join('');
-  c.innerHTML=`
-    <div class="loc-badge" style="margin:12px 0">📍 ${val} — ${bobs.length} bobina(s) disponibles</div>
-    <div style="margin-bottom:12px;font-size:13px;font-weight:600;color:var(--muted)">Selecciona las bobinas a despachar:</div>
-    <div id="sal-bobs">
-      ${bobs.map((b,i)=>`
-      <div class="bobina-row">
-        <input type="checkbox" id="chk-sal-${i}" value="${i}"/>
-        <label for="chk-sal-${i}" class="br-info" style="cursor:pointer">
-          <div class="br-id">#${b.id}</div>
-          <div class="br-sub">${b.desc} | ${b.metros} m | ${b.peso} Kg | ${b.col} | OT: ${b.ot}</div>
-        </label>
-      </div>`).join('')}
-    </div>
-    <div class="sep"></div>
-    <div class="form-grid" style="margin-top:12px">
-      <div class="field"><label>Área destino</label>
-        <select id="sal-area"><option value="">— Seleccione —</option>${areasOpts}</select>
-      </div>
-      <div class="field"><label>Número de pedido</label>
-        <input id="sal-pedido" placeholder="Ej. PED-2026-001"/>
-      </div>
-      <div class="field"><label>Entrega a (persona)</label>
-        <input id="sal-persona" placeholder="Nombre de quien recibe"/>
-      </div>
-    </div>
-    <div class="btn-row" style="margin-top:16px">
-      <button class="btn btn-primary" onclick="guardarSalida()">💾 Registrar salida</button>
-      <button class="btn" onclick="renderSalidas(document.getElementById('almacen-content'))">Cancelar</button>
-    </div>`;
-}
-
-function guardarSalida(){
-  const bobs=almStock[almSalidaLoc]||[];
-  const checks=[...document.querySelectorAll('[id^=chk-sal-]:checked')];
-  if(!checks.length){alert('Selecciona al menos una bobina.');return;}
-  const area=document.getElementById('sal-area').value;
-  const pedido=document.getElementById('sal-pedido').value.trim();
-  const persona=document.getElementById('sal-persona').value.trim();
-  if(!area||!pedido||!persona){alert('Completa el área, pedido y persona que recibe.');return;}
-  const idxs=checks.map(c=>parseInt(c.value)).sort((a,b)=>b-a);
-  const despachadas=idxs.map(i=>bobs[i]);
-  idxs.forEach(i=>bobs.splice(i,1));
-  alert(`✅ ${despachadas.length} bobina(s) despachadas a ${area}\nPedido: ${pedido} | Recibe: ${persona}`);
-  renderSalidas(document.getElementById('almacen-content'));
-}
-
-// ── REGRESOS ──
-function renderRegresos(c){
-  c.innerHTML=`
-  <div class="card">
-    <div class="card-title">🔄 Regresos — Reimprimir etiqueta con nuevo peso</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Escanea el ID de bobina que regresa. Verifica los datos, ingresa el nuevo peso y reimprimir.</p>
-    <div class="scan-box">
-      <div class="field">
-        <label>🧵 ID de bobina</label>
-        <input id="reg-id" type="number" placeholder="Escanea o ingresa ID"
-          onkeydown="if(event.key==='Enter')buscarBobinaRegreso()"/>
-      </div>
-      <button class="btn btn-primary" onclick="buscarBobinaRegreso()" style="height:38px">Buscar</button>
-      <button class="btn" onclick="limpiarRegreso()" style="height:38px">Limpiar</button>
-    </div>
-    <div id="reg-result"></div>
-  </div>`;
-  almRegresosBobina=null;
-}
-
-function buscarBobinaRegreso(){
-  const id=parseInt(document.getElementById('reg-id').value.trim());
-  const r=document.getElementById('reg-result');
-  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
-  const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ No se encontró la bobina <strong>${id}</strong>.</div>`;return;}
-  almRegresosBobina={...b};
-  r.innerHTML=`
-    <div class="result-card">
-      <div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #${b.id} — ${b.mach}</div>
-      <div class="result-grid" style="margin-top:0;margin-bottom:16px">
-        <div class="result-item"><div class="ri-label">OT</div><div class="ri-val">${b.ot}</div></div>
-        <div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">${b.operario}</div></div>
-        <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">${b.desc}</div></div>
-        <div class="result-item"><div class="ri-label">Producto</div><div class="ri-val" style="font-size:11px">${b.prod}</div></div>
-        <div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">${b.med}</div></div>
-        <div class="result-item"><div class="ri-label">Color</div><div class="ri-val">${b.col}</div></div>
-        <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
-        <div class="result-item"><div class="ri-label">Peso original</div><div class="ri-val">${b.peso} Kg</div></div>
-        <div class="result-item"><div class="ri-label">Lote</div><div class="ri-val">${b.lote}</div></div>
-        <div class="result-item"><div class="ri-label">Fecha</div><div class="ri-val">${b.fecha}</div></div>
-      </div>
-      <div class="sep"></div>
-      <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap">
-        <div class="field" style="min-width:200px">
-          <label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg) — Regreso</label>
-          <input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Ingresa el nuevo peso"
-            style="border:2px solid var(--blue2);font-size:15px;font-weight:600"/>
-        </div>
-        <button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button>
-      </div>
-    </div>`;
-}
-
-function imprimirEtiquetaRegreso(){
-  const nuevoPeso=document.getElementById('reg-nuevo-peso').value.trim();
-  if(!nuevoPeso){alert('Ingresa el nuevo peso antes de imprimir.');return;}
-  const b={...almRegresosBobina,nuevoPeso};
-  renderLabel(b,true);
-}
-
-function limpiarRegreso(){document.getElementById('reg-id').value='';document.getElementById('reg-result').innerHTML='';almRegresosBobina=null;}
 
 // ── LABEL ──
 function renderLabel(b,esRegreso){
@@ -958,9 +789,7 @@ function renderLabel(b,esRegreso){
     ?`<div class="lf"><span>Peso original</span><span>${b.peso} Kg</span></div>
        <div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso (regreso)</span><span style="color:#92400e">${b.nuevoPeso} Kg</span></div>`
     :`<div class="lf"><span>Peso</span><span>${b.peso} Kg</span></div>`;
-  lc.innerHTML=`
-    <div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div>
-    <div class="mach">${b.mach}${esRegreso?' <span style="font-size:11px;color:#b91c1c">[REGRESO]</span>':''}</div></div>
+  lc.innerHTML=`<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">${b.mach}${esRegreso?' <span style="font-size:11px;color:#b91c1c">[REGRESO]</span>':''}</div></div>
     <div class="label-grid">
       <div class="lf"><span>ID bobina</span><span>${b.id}</span></div>
       <div class="lf"><span>Remisión</span><span>${b.rem}</span></div>
@@ -981,87 +810,229 @@ function renderLabel(b,esRegreso){
       <div class="lf" style="grid-column:1/-1"><span>Operario</span><span>${b.operario}</span></div>
       ${b.obs?`<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>${b.obs}</span></div>`:''}
     </div>
-    <div class="label-bar"><svg id="barcode-svg"></svg>
-    <div style="font-size:11px;margin-top:4px;letter-spacing:2px">${b.id}</div></div>`;
+    <div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">${b.id}</div></div>`;
   lp.style.display='flex';
   try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
 }
 
-// ── MODALS ──
-function openListModal(){
-  const otEl=document.getElementById('sel-ot');
-  const ot=otEl.options[otEl.selectedIndex].textContent||'—';
-  document.getElementById('ml-ot').textContent=ot;
-  renderListModal(ot, '');
-  document.getElementById('modal-list').classList.add('open');
+// ── ALMACÉN ──
+function almacenTab(tab,btn){
+  document.querySelectorAll('#view-almacen .sec-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const c=document.getElementById('almacen-content');
+  if(tab==='entradas')renderEntradas(c);
+  else if(tab==='stock')renderStock(c);
+  else if(tab==='salidas')renderSalidas(c);
+  else if(tab==='regresos')renderRegresos(c);
 }
 
-function renderListModal(ot, filtroOp){
-  const bobs=bobinas.filter(b=>b.ot===ot&&b.mach===curMach);
-  const body=document.getElementById('ml-body');
-  if(!bobs.length){
-    body.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0">No hay bobinas registradas para esta orden.</p>';
-    return;
-  }
-  // operadores únicos
-  const ops=[...new Set(bobs.map(b=>b.operario))];
-  const filtradas=filtroOp?bobs.filter(b=>b.operario===filtroOp):bobs;
-  const totMetros=filtradas.reduce((a,b)=>a+(parseFloat(b.metros)||0),0);
-  const totPeso=filtradas.reduce((a,b)=>a+(parseFloat(b.peso)||0),0);
-
-  body.innerHTML=`
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-      <div class="field" style="min-width:200px;margin:0">
-        <label style="font-size:11px;color:var(--muted)">Filtrar por operador</label>
-        <select onchange="renderListModal('${ot}',this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px">
-          <option value="">— Todos los operadores —</option>
-          ${ops.map(o=>`<option value="${o}"${o===filtroOp?' selected':''}>${o}</option>`).join('')}
-        </select>
+function renderEntradas(c){
+  c.innerHTML=`<div class="card">
+    <div class="card-title">📥 Entradas</div>
+    <div class="scan-box">
+      <div class="field"><label>📍 Escanear ubicación</label>
+        <input id="ent-loc" placeholder="Ej. A1" onkeydown="if(event.key==='Enter')confirmarUbicacionEntrada()" oninput="this.value=this.value.toUpperCase()"/>
       </div>
-      <div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600">
-        <span style="color:var(--blue)">📏 ${totMetros.toLocaleString()} m</span>
-        <span style="color:var(--muted)">⚖ ${totPeso.toFixed(2)} Kg</span>
-        <span style="color:var(--muted);font-weight:400">${filtradas.length} bobina(s)</span>
+      <button class="btn btn-primary" onclick="confirmarUbicacionEntrada()" style="height:38px">Confirmar</button>
+    </div>
+    <div id="ent-loc-info"></div>
+    <div id="ent-scan-bob" style="display:none">
+      <div class="scan-box">
+        <div class="field"><label>🧵 Escanear ID de bobina</label>
+          <input id="ent-bob" type="number" placeholder="Escanea etiqueta" onkeydown="if(event.key==='Enter')agregarBobinaEntrada()"/>
+        </div>
+        <button class="btn btn-success" onclick="agregarBobinaEntrada()" style="height:38px">+ Agregar</button>
+      </div>
+      <div id="ent-list"></div>
+      <div class="btn-row" id="ent-actions" style="display:none">
+        <button class="btn btn-primary" onclick="guardarEntrada()">💾 Guardar entrada</button>
+        <button class="btn btn-danger" onclick="cancelarEntrada()">Cancelar</button>
       </div>
     </div>
-    <div style="overflow-x:auto">
-    <table>
-      <thead><tr>
-        <th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th>
-      </tr></thead>
-      <tbody>
-        ${filtradas.map(b=>`<tr>
-          <td>${b.id}</td>
-          <td>${b.num}</td>
-          <td style="font-size:11px">${b.operario}</td>
-          <td>${b.fecha}</td>
-          <td>${b.hora}</td>
-          <td>${b.metros} m</td>
-          <td>${b.peso} Kg</td>
-        </tr>`).join('')}
-      </tbody>
-      <tfoot>
-        <tr style="background:#f8f9fb;font-weight:600">
-          <td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td>
-          <td style="color:var(--blue)">${totMetros.toLocaleString()} m</td>
-          <td>${totPeso.toFixed(2)} Kg</td>
-        </tr>
-      </tfoot>
-    </table>
+  </div>`;
+  almEntradaLoc='';almEntradaList=[];
+}
+
+function confirmarUbicacionEntrada(){
+  const val=document.getElementById('ent-loc').value.trim().toUpperCase();
+  if(!val){alert('Ingresa una ubicación.');return;}
+  if(!UBICACIONES.includes(val)){alert(`Ubicación "${val}" no reconocida.`);return;}
+  almEntradaLoc=val;
+  const ex=(almStock[val]||[]).length;
+  document.getElementById('ent-loc-info').innerHTML=`<div class="loc-badge">📍 ${val} <span style="font-size:12px;font-weight:400;opacity:.8">${ex} bobina(s) en stock</span></div>`;
+  document.getElementById('ent-scan-bob').style.display='block';
+  document.getElementById('ent-bob').focus();
+  renderListaEntrada();
+}
+function agregarBobinaEntrada(){
+  const id=parseInt(document.getElementById('ent-bob').value);
+  if(!id)return;
+  if(almEntradaList.find(b=>Number(b.id)===id)){alert('Ya agregada.');return;}
+  const b=findBobina(id);
+  almEntradaList.push(b?{...b}:{id,desc:'Sin datos',ot:'—',metros:'—',peso:'—',med:'—',col:'—'});
+  document.getElementById('ent-bob').value='';
+  document.getElementById('ent-bob').focus();
+  renderListaEntrada();
+}
+function renderListaEntrada(){
+  const el=document.getElementById('ent-list'),act=document.getElementById('ent-actions');
+  if(!almEntradaList.length){el.innerHTML='';act.style.display='none';return;}
+  act.style.display='flex';
+  el.innerHTML=`<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">${almEntradaList.length} bobina(s) → ${almEntradaLoc}</div>`+
+    almEntradaList.map((b,i)=>`<div class="bobina-row">
+      <div class="br-info"><div class="br-id">#${b.id}</div><div class="br-sub">${b.desc} | ${b.metros} m | ${b.peso} Kg</div></div>
+      <button class="icon-btn del" onclick="almEntradaList.splice(${i},1);renderListaEntrada()">✕</button>
+    </div>`).join('');
+}
+function guardarEntrada(){
+  if(!almStock[almEntradaLoc])almStock[almEntradaLoc]=[];
+  almEntradaList.forEach(b=>{if(!almStock[almEntradaLoc].find(x=>Number(x.id)===Number(b.id)))almStock[almEntradaLoc].push({...b,fechaEntrada:fmtDate(TODAY)});});
+  alert(`✅ ${almEntradaList.length} bobina(s) en ${almEntradaLoc}`);
+  almEntradaLoc='';almEntradaList=[];
+  renderEntradas(document.getElementById('almacen-content'));
+}
+function cancelarEntrada(){almEntradaLoc='';almEntradaList=[];renderEntradas(document.getElementById('almacen-content'));}
+
+function renderStock(c){
+  c.innerHTML=`<div class="card">
+    <div class="card-title">📦 Stock por ubicación</div>
+    <div class="scan-box">
+      <div class="field"><label>📍 Escanear ubicación</label>
+        <input id="stk-loc" placeholder="Ej. B2" onkeydown="if(event.key==='Enter')consultarStock()" oninput="this.value=this.value.toUpperCase()"/>
+      </div>
+      <button class="btn btn-primary" onclick="consultarStock()" style="height:38px">Consultar</button>
+      <button class="btn" onclick="limpiarStock()" style="height:38px">Limpiar</button>
+    </div>
+    <div id="stk-result"></div>
+  </div>`;
+}
+function consultarStock(){
+  const val=document.getElementById('stk-loc').value.trim().toUpperCase();
+  const r=document.getElementById('stk-result');
+  const bobs=almStock[val]||[];
+  if(!bobs.length){r.innerHTML=`<div class="not-found">📍 <strong>${val}</strong> — sin inventario.</div>`;return;}
+  const totM=bobs.reduce((a,b)=>a+(parseFloat(b.metros)||0),0);
+  const totP=bobs.reduce((a,b)=>a+(parseFloat(b.peso)||0),0);
+  r.innerHTML=`<div class="loc-badge" style="margin-top:8px">📍 ${val}</div>
+    <div class="result-grid" style="margin-top:8px;margin-bottom:16px">
+      <div class="result-item highlight"><div class="ri-label">Bobinas</div><div class="ri-val">${bobs.length}</div></div>
+      <div class="result-item highlight"><div class="ri-label">Metros</div><div class="ri-val">${totM.toLocaleString()} m</div></div>
+      <div class="result-item highlight"><div class="ri-label">Peso</div><div class="ri-val">${totP.toFixed(2)} Kg</div></div>
+    </div>
+    <table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>Fecha entrada</th></tr></thead><tbody>
+      ${bobs.map(b=>`<tr><td style="font-weight:700;color:var(--blue)">${b.id}</td><td style="font-size:11px">${b.desc}</td><td>${b.metros} m</td><td>${b.peso} Kg</td><td>${b.col}</td><td style="font-size:11px">${b.fechaEntrada||'—'}</td></tr>`).join('')}
+    </tbody></table>`;
+}
+function limpiarStock(){document.getElementById('stk-loc').value='';document.getElementById('stk-result').innerHTML='';}
+
+function renderSalidas(c){
+  c.innerHTML=`<div class="card">
+    <div class="card-title">📤 Salidas</div>
+    <div class="scan-box">
+      <div class="field"><label>📍 Escanear ubicación</label>
+        <input id="sal-loc" placeholder="Ej. C1" onkeydown="if(event.key==='Enter')cargarStockSalida()" oninput="this.value=this.value.toUpperCase()"/>
+      </div>
+      <button class="btn btn-primary" onclick="cargarStockSalida()" style="height:38px">Cargar inventario</button>
+    </div>
+    <div id="sal-content"></div>
+  </div>`;
+  almSalidaLoc='';
+}
+function cargarStockSalida(){
+  const val=document.getElementById('sal-loc').value.trim().toUpperCase();
+  const bobs=almStock[val]||[];
+  const c=document.getElementById('sal-content');
+  if(!bobs.length){c.innerHTML=`<div class="not-found">📍 <strong>${val}</strong> — sin inventario.</div>`;return;}
+  almSalidaLoc=val;
+  const areasOpts=AREAS.map(a=>`<option>${a}</option>`).join('');
+  c.innerHTML=`<div class="loc-badge" style="margin:12px 0">📍 ${val} — ${bobs.length} bobina(s)</div>
+    <div style="margin-bottom:12px;font-size:13px;font-weight:600;color:var(--muted)">Selecciona las bobinas a despachar:</div>
+    <div id="sal-bobs">${bobs.map((b,i)=>`<div class="bobina-row">
+      <input type="checkbox" id="chk-sal-${i}" value="${i}"/>
+      <label for="chk-sal-${i}" class="br-info" style="cursor:pointer">
+        <div class="br-id">#${b.id}</div>
+        <div class="br-sub">${b.desc} | ${b.metros} m | ${b.peso} Kg | ${b.col}</div>
+      </label></div>`).join('')}</div>
+    <div class="sep"></div>
+    <div class="form-grid" style="margin-top:12px">
+      <div class="field"><label>Área destino</label><select id="sal-area"><option value="">— Seleccione —</option>${areasOpts}</select></div>
+      <div class="field"><label>Número de pedido</label><input id="sal-pedido" placeholder="Ej. PED-2026-001"/></div>
+      <div class="field"><label>Entrega a</label><input id="sal-persona" placeholder="Nombre de quien recibe"/></div>
+    </div>
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn btn-primary" onclick="guardarSalida()">💾 Registrar salida</button>
+      <button class="btn" onclick="renderSalidas(document.getElementById('almacen-content'))">Cancelar</button>
     </div>`;
 }
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+function guardarSalida(){
+  const bobs=almStock[almSalidaLoc]||[];
+  const checks=[...document.querySelectorAll('[id^=chk-sal-]:checked')];
+  if(!checks.length){alert('Selecciona al menos una bobina.');return;}
+  const area=document.getElementById('sal-area').value;
+  const pedido=document.getElementById('sal-pedido').value.trim();
+  const persona=document.getElementById('sal-persona').value.trim();
+  if(!area||!pedido||!persona){alert('Completa todos los campos.');return;}
+  const idxs=checks.map(c=>parseInt(c.value)).sort((a,b)=>b-a);
+  idxs.forEach(i=>bobs.splice(i,1));
+  alert(`✅ ${idxs.length} bobina(s) despachadas a ${area}\nPedido: ${pedido} | Recibe: ${persona}`);
+  renderSalidas(document.getElementById('almacen-content'));
+}
+
+function renderRegresos(c){
+  c.innerHTML=`<div class="card">
+    <div class="card-title">🔄 Regresos — Reimprimir etiqueta</div>
+    <div class="scan-box">
+      <div class="field"><label>🧵 ID de bobina</label>
+        <input id="reg-id" type="number" placeholder="Escanea o ingresa ID" onkeydown="if(event.key==='Enter')buscarBobinaRegreso()"/>
+      </div>
+      <button class="btn btn-primary" onclick="buscarBobinaRegreso()" style="height:38px">Buscar</button>
+      <button class="btn" onclick="limpiarRegreso()" style="height:38px">Limpiar</button>
+    </div>
+    <div id="reg-result"></div>
+  </div>`;
+  almRegresosBobina=null;
+}
+function buscarBobinaRegreso(){
+  const id=parseInt(document.getElementById('reg-id').value.trim());
+  const r=document.getElementById('reg-result');
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
+  const b=findBobina(id);
+  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
+  almRegresosBobina={...b};
+  r.innerHTML=`<div class="result-card">
+    <div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #${b.id} — ${b.mach}</div>
+    <div class="result-grid" style="margin-top:0;margin-bottom:16px">
+      <div class="result-item"><div class="ri-label">OT</div><div class="ri-val">${b.ot}</div></div>
+      <div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">${b.operario}</div></div>
+      <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">${b.desc}</div></div>
+      <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
+      <div class="result-item"><div class="ri-label">Peso original</div><div class="ri-val">${b.peso} Kg</div></div>
+      <div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">${b.med}</div></div>
+    </div>
+    <div class="sep"></div>
+    <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap">
+      <div class="field" style="min-width:200px">
+        <label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg)</label>
+        <input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Ingresa el nuevo peso" style="border:2px solid var(--blue2);font-size:15px;font-weight:600"/>
+      </div>
+      <button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button>
+    </div>
+  </div>`;
+}
+function imprimirEtiquetaRegreso(){
+  const np=document.getElementById('reg-nuevo-peso').value.trim();
+  if(!np){alert('Ingresa el nuevo peso.');return;}
+  renderLabel({...almRegresosBobina,nuevoPeso:np},true);
+}
+function limpiarRegreso(){document.getElementById('reg-id').value='';document.getElementById('reg-result').innerHTML='';almRegresosBobina=null;}
 
 // ── ADMIN ──
 function renderAdmin(){
-  const totBob=bobinas.length+48,totMet=bobinas.reduce((a,b)=>a+b.metros,0)+24500;
-  const totStock=Object.values(almStock).reduce((a,v)=>a+v.length,0);
   document.getElementById('stats-grid').innerHTML=`
-    <div class="stat"><div class="sv">${catMaquinas.filter(m=>m.activo).length}</div><div class="sl">Máquinas activas</div></div>
-    <div class="stat"><div class="sv">${catOrdenes.length}</div><div class="sl">Órdenes registradas</div></div>
-    <div class="stat"><div class="sv">${totBob}</div><div class="sl">Bobinas producidas</div></div>
-    <div class="stat"><div class="sv">${(totMet/1000).toFixed(1)}k m</div><div class="sl">Metros producidos</div></div>
-    <div class="stat"><div class="sv">${totStock}</div><div class="sl">Bobinas en almacén</div></div>`;
+    <div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div>
+    <div class="stat"><div class="sv">${bobinas.length}</div><div class="sl">Bobinas esta sesión</div></div>
+    <div class="stat"><div class="sv">${bobinas.reduce((a,b)=>a+(parseFloat(b.metros)||0),0).toLocaleString()} m</div><div class="sl">Metros esta sesión</div></div>
+    <div class="stat"><div class="sv">${Object.values(almStock).reduce((a,v)=>a+v.length,0)}</div><div class="sl">Bobinas en almacén</div></div>`;
   adminTab('produccion',document.querySelector('#admin-tabs .sec-tab'));
 }
 
@@ -1072,47 +1043,38 @@ function adminTab(tab,btn){
   if(tab==='produccion')renderProduccion(c);
   else if(tab==='etiqueta')renderAdminEtiqueta(c);
   else if(tab==='coordinadores')renderCatCoordinadores(c);
-  else if(tab==='operadores')renderCatOperadores(c);
-  else if(tab==='maquinas')renderCatMaquinas(c);
-  else if(tab==='ordenes')renderCatOrdenes(c);
-  else if(tab==='productos')renderCatProductos(c);
-  else if(tab==='remisiones')renderCatRemisiones(c);
+  else if(tab==='operadores')renderAdminOperadores(c);
+  else if(tab==='maquinas')renderAdminMaquinas(c);
+  else if(tab==='ordenes')renderAdminOrdenes(c);
 }
 
 function renderAdminEtiqueta(c){
   c.innerHTML=`<div class="card">
     <div class="card-title">🖨 Imprimir etiqueta por ID</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Ingresa el ID de bobina para visualizar e imprimir su etiqueta.</p>
     <div class="search-box">
       <div class="field"><label>ID de bobina</label>
-        <input id="adm-etq-id" type="number" placeholder="Ej. 500423"
-          onkeydown="if(event.key==='Enter')buscarEtiquetaAdmin()"/>
+        <input id="adm-etq-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')buscarEtiquetaAdmin()"/>
       </div>
-      <button class="btn btn-primary" onclick="buscarEtiquetaAdmin()" style="height:38px">Buscar y previsualizar</button>
+      <button class="btn btn-primary" onclick="buscarEtiquetaAdmin()" style="height:38px">Buscar</button>
       <button class="btn" onclick="document.getElementById('adm-etq-id').value='';document.getElementById('adm-etq-result').innerHTML=''" style="height:38px">Limpiar</button>
     </div>
     <div id="adm-etq-result"></div>
   </div>`;
 }
-
 function buscarEtiquetaAdmin(){
   const id=parseInt(document.getElementById('adm-etq-id').value.trim());
   const r=document.getElementById('adm-etq-result');
-  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ No se encontró la bobina <strong>${id}</strong>.</div>`;return;}
+  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
   const p=b.params||{};
   r.innerHTML=`<div class="result-card">
     <div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #${b.id} — ${b.mach}</div>
     <div class="result-grid" style="margin-top:0;margin-bottom:16px">
       <div class="result-item"><div class="ri-label">OT</div><div class="ri-val">${b.ot}</div></div>
       <div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">${b.operario}</div></div>
-      <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">${b.desc}</div></div>
-      <div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">${b.med}</div></div>
-      <div class="result-item"><div class="ri-label">Color</div><div class="ri-val">${b.col}</div></div>
       <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
       <div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">${b.peso} Kg</div></div>
-      <div class="result-item"><div class="ri-label">Lote</div><div class="ri-val">${b.lote}</div></div>
       <div class="result-item"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
       <div class="result-item"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
     </div>
@@ -1121,7 +1083,8 @@ function buscarEtiquetaAdmin(){
 }
 
 function renderProduccion(c){
-  const machOpts=catMaquinas.map(m=>`<option value="${m.codigo}">${m.codigo}</option>`).join('');
+  const machOpts=`<option value="">— Todas —</option>`+
+    [...document.querySelectorAll('.mach-tab')].map(b=>`<option value="${b.dataset.id}">${b.dataset.id}</option>`).join('');
   c.innerHTML=`<div class="card">
     <div class="card-title">📊 Consulta de producción</div>
     <div class="sec-tabs" id="prod-tabs">
@@ -1129,304 +1092,208 @@ function renderProduccion(c){
       <button class="sec-tab" onclick="prodSubTab('ext',this)">Por extruder</button>
       <button class="sec-tab" onclick="prodSubTab('ot',this)">Por OT</button>
     </div>
-
-    <!-- POR BOBINA -->
     <div id="psub-bob">
       <div class="search-box" style="margin-bottom:12px">
-        <div class="field"><label>ID de bobina</label>
-          <input id="pq-bob-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')queryBobina()"/>
-        </div>
+        <div class="field"><label>ID de bobina</label><input id="pq-bob-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')queryBobina()"/></div>
         <button class="btn btn-primary" onclick="queryBobina()" style="height:38px">Buscar</button>
         <button class="btn" onclick="limpiarProdQuery('bob')" style="height:38px">Limpiar</button>
-      </div>
-      <div id="pres-bob"></div>
+      </div><div id="pres-bob"></div>
     </div>
-
-    <!-- POR EXTRUDER -->
     <div id="psub-ext" style="display:none">
       <div class="form-grid" style="margin-bottom:12px">
-        <div class="field"><label>Extruder</label>
-          <select id="pq-ext-maq"><option value="">— Todas —</option>${machOpts}</select>
-        </div>
-        <div class="field"><label>Fecha inicio</label>
-          <input id="pq-ext-di" type="date"/>
-        </div>
-        <div class="field"><label>Hora inicio</label>
-          <input id="pq-ext-hi" type="time" value="00:00"/>
-        </div>
-        <div class="field"><label>Fecha fin</label>
-          <input id="pq-ext-df" type="date"/>
-        </div>
-        <div class="field"><label>Hora fin</label>
-          <input id="pq-ext-hf" type="time" value="23:59"/>
-        </div>
+        <div class="field"><label>Extruder</label><select id="pq-ext-maq">${machOpts}</select></div>
+        <div class="field"><label>Fecha inicio</label><input id="pq-ext-di" type="date"/></div>
+        <div class="field"><label>Hora inicio</label><input id="pq-ext-hi" type="time" value="00:00"/></div>
+        <div class="field"><label>Fecha fin</label><input id="pq-ext-df" type="date"/></div>
+        <div class="field"><label>Hora fin</label><input id="pq-ext-hf" type="time" value="23:59"/></div>
       </div>
       <div class="btn-row" style="margin-bottom:12px">
         <button class="btn btn-primary" onclick="queryExtruder()">🔍 Consultar</button>
         <button class="btn" onclick="limpiarProdQuery('ext')">Limpiar</button>
         <button class="btn btn-success" id="btn-xl-ext" style="display:none" onclick="exportarExcel('ext')">📥 Exportar Excel</button>
-      </div>
-      <div id="pres-ext"></div>
+      </div><div id="pres-ext"></div>
     </div>
-
-    <!-- POR OT -->
     <div id="psub-ot" style="display:none">
       <div class="search-box" style="margin-bottom:12px">
-        <div class="field"><label>Número de OT</label>
-          <input id="pq-ot-id" placeholder="Ej. 26050163" onkeydown="if(event.key==='Enter')queryOT()"/>
-        </div>
+        <div class="field"><label>Número de OT</label><input id="pq-ot-id" placeholder="Ej. 26050163" onkeydown="if(event.key==='Enter')queryOT()"/></div>
         <button class="btn btn-primary" onclick="queryOT()" style="height:38px">Buscar</button>
         <button class="btn" onclick="limpiarProdQuery('ot')" style="height:38px">Limpiar</button>
         <button class="btn btn-success" id="btn-xl-ot" style="display:none" onclick="exportarExcel('ot')">📥 Exportar Excel</button>
-      </div>
-      <div id="pres-ot"></div>
+      </div><div id="pres-ot"></div>
     </div>
   </div>`;
 }
-
-let prodResultados={bob:[],ext:[],ot:[]};
 
 function prodSubTab(tab,btn){
   ['bob','ext','ot'].forEach(t=>document.getElementById('psub-'+t).style.display=t===tab?'block':'none');
   document.querySelectorAll('#prod-tabs .sec-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
-
-function allBobinas(){return[...bobinas,...sampleBobinas];}
-
-// parse dd-mm-yyyy hh:mm:ss -> Date
-function parseBoDate(b){
-  const[d,m,y]=b.fecha.split('-');
-  const[hh,mm,ss]=(b.hora||'00:00:00').split(':');
-  return new Date(y,m-1,d,hh,mm,ss||0);
-}
-
+function allBobinas(){return[...bobinas];}
+function parseBoDate(b){const[d,m,y]=b.fecha.split('-');const[hh,mm,ss]=(b.hora||'00:00:00').split(':');return new Date(y,m-1,d,hh,mm,ss||0);}
 function buildProdTable(rows){
-  if(!rows.length)return'<div class="not-found">Sin resultados para los criterios seleccionados.</div>';
-  // group by OT for summary
+  if(!rows.length)return'<div class="not-found">Sin resultados.</div>';
   const byOT={};
   rows.forEach(b=>{
-    if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,prod:b.prod,desc:b.desc,med:b.med,bobinas:0,peso:0,metros:0,fecha:b.fecha,op:b.ot};
-    byOT[b.ot].bobinas++;
-    byOT[b.ot].peso+=parseFloat(b.peso)||0;
-    byOT[b.ot].metros+=parseFloat(b.metros)||0;
+    if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,prod:b.prod,desc:b.desc,med:b.med,bobinas:0,peso:0,metros:0,fecha:b.fecha};
+    byOT[b.ot].bobinas++;byOT[b.ot].peso+=parseFloat(b.peso)||0;byOT[b.ot].metros+=parseFloat(b.metros)||0;
   });
   const sumRows=Object.values(byOT);
-  const totBob=sumRows.reduce((a,r)=>a+r.bobinas,0);
-  const totPeso=sumRows.reduce((a,r)=>a+r.peso,0);
-  const totMet=sumRows.reduce((a,r)=>a+r.metros,0);
-  return`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-      <span style="font-size:13px;color:var(--muted)">${rows.length} bobina(s) encontradas</span>
-      <div style="display:flex;gap:12px;font-size:13px">
-        <span>🧵 <strong>${totBob}</strong> bobinas</span>
-        <span>📏 <strong>${totMet.toLocaleString()}</strong> m</span>
-        <span>⚖ <strong>${totPeso.toFixed(2)}</strong> Kg</span>
-      </div>
-    </div>
-    <div style="overflow-x:auto">
-    <table><thead><tr>
-      <th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th>
-      <th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th>
-    </tr></thead><tbody>
-    ${sumRows.map(r=>`<tr>
-      <td>${r.fecha}</td>
-      <td style="font-weight:600">${r.ot}</td>
-      <td>${r.mach}</td>
-      <td style="font-size:11px">${r.prod}</td>
-      <td style="font-size:11px">${r.desc}</td>
-      <td style="text-align:center"><strong>${r.bobinas}</strong></td>
-      <td>${r.peso.toFixed(3)}</td>
-      <td>${r.med}</td>
-      <td>${r.metros.toLocaleString()} m</td>
-    </tr>`).join('')}
+  const totB=sumRows.reduce((a,r)=>a+r.bobinas,0);
+  const totP=sumRows.reduce((a,r)=>a+r.peso,0);
+  const totM=sumRows.reduce((a,r)=>a+r.metros,0);
+  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+    <span style="font-size:13px;color:var(--muted)">${rows.length} bobina(s)</span>
+    <div style="display:flex;gap:12px;font-size:13px">
+      <span>🧵 <strong>${totB}</strong></span>
+      <span>📏 <strong>${totM.toLocaleString()}</strong> m</span>
+      <span>⚖ <strong>${totP.toFixed(2)}</strong> Kg</span>
+    </div></div>
+    <div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th><th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th></tr></thead>
+    <tbody>${sumRows.map(r=>`<tr><td>${r.fecha}</td><td style="font-weight:600">${r.ot}</td><td>${r.mach}</td><td style="font-size:11px">${r.prod}</td><td style="font-size:11px">${r.desc}</td><td style="text-align:center"><strong>${r.bobinas}</strong></td><td>${r.peso.toFixed(3)}</td><td>${r.med}</td><td>${r.metros.toLocaleString()} m</td></tr>`).join('')}
     </tbody></table></div>`;
 }
-
 function queryBobina(){
   const id=parseInt(document.getElementById('pq-bob-id').value.trim());
   const r=document.getElementById('pres-bob');
-  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   const b=findBobina(id);
   if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
   prodResultados.bob=[b];
-  r.innerHTML=buildProdTable([b])+
-    `<div class="btn-row" style="margin-top:12px">
-      <button class="btn btn-success" onclick="exportarExcel('bob')">📥 Exportar Excel</button>
-    </div>`;
+  r.innerHTML=buildProdTable([b])+`<div class="btn-row" style="margin-top:12px"><button class="btn btn-success" onclick="exportarExcel('bob')">📥 Exportar Excel</button></div>`;
 }
-
 function queryExtruder(){
   const maq=document.getElementById('pq-ext-maq').value;
-  const di=document.getElementById('pq-ext-di').value;
-  const hi=document.getElementById('pq-ext-hi').value||'00:00';
-  const df=document.getElementById('pq-ext-df').value;
-  const hf=document.getElementById('pq-ext-hf').value||'23:59';
+  const di=document.getElementById('pq-ext-di').value,hi=document.getElementById('pq-ext-hi').value||'00:00';
+  const df=document.getElementById('pq-ext-df').value,hf=document.getElementById('pq-ext-hf').value||'23:59';
   if(!di||!df){alert('Selecciona el rango de fechas.');return;}
-  const desde=new Date(`${di}T${hi}:00`);
-  const hasta=new Date(`${df}T${hf}:00`);
-  let rows=allBobinas().filter(b=>{
-    const t=parseBoDate(b);
-    return t>=desde && t<=hasta && (!maq||b.mach===maq);
-  });
+  const desde=new Date(`${di}T${hi}:00`),hasta=new Date(`${df}T${hf}:00`);
+  const rows=allBobinas().filter(b=>{const t=parseBoDate(b);return t>=desde&&t<=hasta&&(!maq||b.mach===maq);});
   prodResultados.ext=rows;
-  const r=document.getElementById('pres-ext');
-  r.innerHTML=buildProdTable(rows);
+  document.getElementById('pres-ext').innerHTML=buildProdTable(rows);
   document.getElementById('btn-xl-ext').style.display=rows.length?'inline-block':'none';
 }
-
 function queryOT(){
   const ot=document.getElementById('pq-ot-id').value.trim();
   const r=document.getElementById('pres-ot');
-  if(!ot){r.innerHTML='<div class="not-found">Ingresa un número de OT.</div>';return;}
+  if(!ot){r.innerHTML='<div class="not-found">Ingresa una OT.</div>';return;}
   const rows=allBobinas().filter(b=>b.ot===ot);
   prodResultados.ot=rows;
-  if(!rows.length){r.innerHTML=`<div class="not-found">⚠ No hay bobinas registradas para OT <strong>${ot}</strong>.</div>`;document.getElementById('btn-xl-ot').style.display='none';return;}
   r.innerHTML=buildProdTable(rows);
-  document.getElementById('btn-xl-ot').style.display='inline-block';
+  document.getElementById('btn-xl-ot').style.display=rows.length?'inline-block':'none';
 }
-
 function limpiarProdQuery(tab){
   document.getElementById('pres-'+tab).innerHTML='';
-  if(tab==='ext'){['pq-ext-maq','pq-ext-di','pq-ext-hi','pq-ext-df','pq-ext-hf'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id.endsWith('hi')?'00:00':id.endsWith('hf')?'23:59':'';});document.getElementById('btn-xl-ext').style.display='none';}
+  prodResultados[tab]=[];
+  if(tab==='ext'){['pq-ext-maq','pq-ext-di','pq-ext-hi','pq-ext-df','pq-ext-hf'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id.endsWith('hi')?'00:00':id.endsWith('hf')?'23:59':'';}); document.getElementById('btn-xl-ext').style.display='none';}
   if(tab==='ot'){document.getElementById('pq-ot-id').value='';document.getElementById('btn-xl-ot').style.display='none';}
   if(tab==='bob')document.getElementById('pq-bob-id').value='';
-  prodResultados[tab]=[];
 }
-
 function exportarExcel(tab){
-  const rows=prodResultados[tab];
-  if(!rows||!rows.length){alert('Sin datos para exportar.');return;}
-  // group same as table
+  const rows=prodResultados[tab];if(!rows||!rows.length){alert('Sin datos.');return;}
   const byOT={};
   rows.forEach(b=>{
     if(!byOT[b.ot])byOT[b.ot]={Fecha:b.fecha,OT:b.ot,Maquina:b.mach,Codigo:b.prod,Descripcion:b.desc,Bobinas:0,Peso_Kg:0,Medida:b.med,Metros:0};
-    byOT[b.ot].Bobinas++;
-    byOT[b.ot].Peso_Kg+=parseFloat(b.peso)||0;
-    byOT[b.ot].Metros+=parseFloat(b.metros)||0;
+    byOT[b.ot].Bobinas++;byOT[b.ot].Peso_Kg+=parseFloat(b.peso)||0;byOT[b.ot].Metros+=parseFloat(b.metros)||0;
   });
   const data=Object.values(byOT).map(r=>({...r,Peso_Kg:parseFloat(r.Peso_Kg.toFixed(3))}));
-  // build CSV and download as xlsx-compatible
   const cols=Object.keys(data[0]);
   const csv=[cols.join('\t'),...data.map(r=>cols.map(k=>r[k]).join('\t'))].join('\n');
-  const BOM='\uFEFF';
-  const blob=new Blob([BOM+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
+  const blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download=`Produccion_${tab}_${new Date().toISOString().slice(0,10)}.xls`;
-  a.click();URL.revokeObjectURL(url);
+  const a=document.createElement('a');a.href=url;a.download=`Produccion_${tab}_${new Date().toISOString().slice(0,10)}.xls`;a.click();URL.revokeObjectURL(url);
 }
 
-function catHeader(title,type){
-  return`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <span style="font-size:15px;font-weight:600;color:var(--blue)">${title}</span>
-    <button class="btn btn-primary" onclick="openAdd('${type}')">+ Agregar</button>
+function renderAdminOperadores(c){
+  c.innerHTML=`<div class="card"><div class="card-title">👷 Operadores (desde API)</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Los operadores se sincronizan automáticamente desde IBIX vía la API.</p>
+    <div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar operadores</button></div>
   </div>`;
 }
+async function loadAdminOps(){
+  document.getElementById('admin-op-list').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
+  try{
+    const data=await apiFetch('/operators');
+    document.getElementById('admin-op-list').innerHTML=`<table><thead><tr><th>ID</th><th>Nombre</th><th>ID externo</th><th>Sincronizado</th></tr></thead><tbody>
+      ${data.map(o=>`<tr><td>${o.id}</td><td>${o.full_name}</td><td>${o.external_id}</td><td style="font-size:11px">${new Date(o.synced_at).toLocaleString('es-MX')}</td></tr>`).join('')}
+    </tbody></table>`;
+  }catch(e){document.getElementById('admin-op-list').innerHTML=`<p style="color:#b91c1c;font-size:13px">Error: ${e.message}</p>`;}
+}
+
+function renderAdminMaquinas(c){
+  c.innerHTML=`<div class="card"><div class="card-title">⚙ Máquinas (desde API)</div>
+    <div id="admin-maq-list"><button class="btn btn-primary" onclick="loadAdminMaqs()">🔄 Cargar máquinas</button></div>
+  </div>`;
+}
+async function loadAdminMaqs(){
+  try{
+    const data=await apiFetch('/machines');
+    document.getElementById('admin-maq-list').innerHTML=`<table><thead><tr><th>ID</th><th>Nombre</th></tr></thead><tbody>
+      ${data.map(m=>`<tr><td style="font-weight:700">${m.id}</td><td>${m.name}</td></tr>`).join('')}
+    </tbody></table>`;
+  }catch(e){document.getElementById('admin-maq-list').innerHTML=`<p style="color:#b91c1c">${e.message}</p>`;}
+}
+
+function renderAdminOrdenes(c){
+  c.innerHTML=`<div class="card"><div class="card-title">📋 Órdenes de trabajo (desde SAP)</div>
+    <div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar órdenes</button></div>
+  </div>`;
+}
+async function loadAdminOTs(){
+  try{
+    const data=await apiFetch('/work-orders');
+    document.getElementById('admin-ot-list').innerHTML=`<table><thead><tr><th>OT</th><th>Producto</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>
+      ${data.map(o=>`<tr><td style="font-weight:700">${o.ot_number}</td><td style="font-size:11px">${o.product_code}</td><td style="font-size:11px">${o.description}</td><td>${o.measure}</td><td>${o.color}</td>
+      <td><span class="badge ${o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend'}">${o.status}</span></td></tr>`).join('')}
+    </tbody></table>`;
+  }catch(e){document.getElementById('admin-ot-list').innerHTML=`<p style="color:#b91c1c">${e.message}</p>`;}
+}
+
+// ── COORDINADORES (local) ──
 function renderCatCoordinadores(c){
   const rows=catCoordinadores.map(o=>`<tr><td>${o.id}</td><td>${o.nombre}</td>
     <td><span class="badge ${o.activo?'badge-ok':'badge-pend'}">${o.activo?'Activo':'Inactivo'}</span></td>
-    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('coordinadores',${o.id})">✏️</button><button class="icon-btn del" onclick="delItem('coordinadores',${o.id})">🗑</button></div></td></tr>`).join('');
-  c.innerHTML=catHeader('Coordinadores','coordinadores')+`<table><thead><tr><th>ID</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('coordinadores',${o.id})">✏️</button><button class="icon-btn del" onclick="delCoord(${o.id})">🗑</button></div></td></tr>`).join('');
+  c.innerHTML=`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <span style="font-size:15px;font-weight:600;color:var(--blue)">Coordinadores</span>
+    <button class="btn btn-primary" onclick="openAddCoord()">+ Agregar</button>
+  </div><table><thead><tr><th>ID</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
-function renderCatOperadores(c){
-  const rows=catOperadores.map(o=>`<tr><td>${o.id}</td><td>${o.nombre}</td><td>${o.usuario}</td>
-    <td><span class="badge ${o.activo?'badge-ok':'badge-pend'}">${o.activo?'Activo':'Inactivo'}</span></td>
-    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('operadores',${o.id})">✏️</button><button class="icon-btn del" onclick="delItem('operadores',${o.id})">🗑</button></div></td></tr>`).join('');
-  c.innerHTML=catHeader('Operadores','operadores')+`<table><thead><tr><th>ID</th><th>Nombre</th><th>Usuario</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-function renderCatMaquinas(c){
-  const rows=catMaquinas.map(m=>`<tr><td>${m.codigo}</td><td>${m.nombre}</td>
-    <td><span class="badge ${m.activo?'badge-ok':'badge-pend'}">${m.activo?'Activa':'Inactiva'}</span></td>
-    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('maquinas',${m.id})">✏️</button><button class="icon-btn del" onclick="delItem('maquinas',${m.id})">🗑</button></div></td></tr>`).join('');
-  c.innerHTML=catHeader('Máquinas','maquinas')+`<table><thead><tr><th>Código</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-function renderCatOrdenes(c){
-  const rows=catOrdenes.map(o=>{
-    const cls=o.status==='Finalizado'?'badge-fin':o.status==='Iniciado'?'badge-ok':'badge-pend';
-    return`<tr><td>${o.ot}</td><td>${o.maq}</td><td style="font-size:11px">${o.desc}</td><td>${o.med}</td><td>${o.col}</td>
-    <td><span class="badge ${cls}">${o.status}</span></td>
-    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('ordenes',${o.id})">✏️</button><button class="icon-btn del" onclick="delItem('ordenes',${o.id})">🗑</button></div></td></tr>`;
-  }).join('');
-  c.innerHTML=catHeader('Órdenes de trabajo','ordenes')+`<table><thead><tr><th>OT</th><th>Máquina</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-function renderCatProductos(c){
-  const rows=catProductos.map(p=>`<tr><td style="font-size:11px">${p.codigo}</td><td style="font-size:11px">${p.desc}</td><td>${p.med}</td><td>${p.col}</td><td>${p.dep}</td>
-    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('productos',${p.id})">✏️</button><button class="icon-btn del" onclick="delItem('productos',${p.id})">🗑</button></div></td></tr>`).join('');
-  c.innerHTML=catHeader('Productos','productos')+`<table><thead><tr><th>Código</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Depto.</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-function renderCatRemisiones(c){
-  const rows=catRemisiones.map(r=>{
-    const cls=r.status==='Finalizado'?'badge-fin':r.status==='Iniciado'?'badge-ok':'badge-pend';
-    return`<tr><td>${r.num}</td><td style="font-size:11px">${r.prod}</td>
-    <td><span class="badge ${cls}">${r.status}</span></td>
-    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('remisiones',${r.id})">✏️</button><button class="icon-btn del" onclick="delItem('remisiones',${r.id})">🗑</button></div></td></tr>`;
-  }).join('');
-  c.innerHTML=catHeader('Remisiones','remisiones')+`<table><thead><tr><th>Número</th><th>Producto</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
-}
-
-const formDefs={
-  coordinadores:{title:'Coordinador',fields:[{id:'nombre',label:'Nombre completo',type:'text'},{id:'activo',label:'Estatus',type:'select',opts:['true|Activo','false|Inactivo']}]},
-  operadores:{title:'Operador',fields:[{id:'nombre',label:'Nombre completo',type:'text'},{id:'usuario',label:'Usuario',type:'text'},{id:'activo',label:'Estatus',type:'select',opts:['true|Activo','false|Inactivo']}]},
-  maquinas:{title:'Máquina',fields:[{id:'codigo',label:'Código',type:'text'},{id:'nombre',label:'Nombre',type:'text'},{id:'activo',label:'Estatus',type:'select',opts:['true|Activa','false|Inactiva']}]},
-  ordenes:{title:'Orden de trabajo',fields:[
-    {id:'ot',label:'Número de OT',type:'text'},{id:'maq',label:'Máquina',type:'text'},
-    {id:'prod',label:'Código producto',type:'text'},{id:'desc',label:'Descripción',type:'text'},
-    {id:'med',label:'Medida',type:'text'},{id:'col',label:'Color',type:'text'},
-    {id:'rem',label:'Remisión',type:'text'},{id:'sig',label:'Siguiente proceso',type:'text'},
-    {id:'status',label:'Estatus',type:'select',opts:['En espera|En espera','Iniciado|Iniciado','Finalizado|Finalizado']},
-  ]},
-  productos:{title:'Producto',fields:[{id:'codigo',label:'Código',type:'text'},{id:'desc',label:'Descripción',type:'text'},{id:'med',label:'Medida',type:'text'},{id:'col',label:'Color',type:'text'},{id:'dep',label:'Departamento',type:'text'}]},
-  remisiones:{title:'Remisión',fields:[{id:'num',label:'Número',type:'text'},{id:'prod',label:'Producto',type:'text'},{id:'status',label:'Estatus',type:'select',opts:['En espera|En espera','Iniciado|Iniciado','Finalizado|Finalizado']}]},
-};
-
-function openAdd(type){
-  currentModalType=type;editingId=null;
-  const def=formDefs[type];
-  document.getElementById('mf-title').textContent='Agregar '+def.title;
-  document.getElementById('mf-body').innerHTML=buildFormFields(def.fields,{});
+function openAddCoord(){
+  document.getElementById('mf-title').textContent='Agregar Coordinador';
+  document.getElementById('mf-body').innerHTML=`<div class="form-grid">
+    <div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" placeholder="Nombre completo"/></div>
+    <div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
+  </div>`;
+  currentModalType='coord-add';editingId=null;
   document.getElementById('modal-form').classList.add('open');
 }
 function openEdit(type,id){
-  currentModalType=type;editingId=id;
-  const item=getCat(type).find(i=>i.id===id)||{};
-  document.getElementById('mf-title').textContent='Editar '+formDefs[type].title;
-  document.getElementById('mf-body').innerHTML=buildFormFields(formDefs[type].fields,item);
-  document.getElementById('modal-form').classList.add('open');
-}
-function buildFormFields(fields,vals){
-  return'<div class="form-grid">'+fields.map(f=>{
-    let inp='';
-    if(f.type==='select'){
-      inp=`<select id="mfi-${f.id}">`;
-      f.opts.forEach(o=>{const[v,l]=o.split('|');inp+=`<option value="${v}"${String(vals[f.id])===v?' selected':''}>${l}</option>`;});
-      inp+='</select>';
-    }else inp=`<input type="text" id="mfi-${f.id}" value="${vals[f.id]||''}" placeholder="${f.label}"/>`;
-    return`<div class="field"><label>${f.label}</label>${inp}</div>`;
-  }).join('')+'</div>';
+  if(type==='coordinadores'){
+    const item=catCoordinadores.find(c=>c.id===id);
+    document.getElementById('mf-title').textContent='Editar Coordinador';
+    document.getElementById('mf-body').innerHTML=`<div class="form-grid">
+      <div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" value="${item.nombre}"/></div>
+      <div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true"${item.activo?' selected':''}>Activo</option><option value="false"${!item.activo?' selected':''}>Inactivo</option></select></div>
+    </div>`;
+    currentModalType='coord-edit';editingId=id;
+    document.getElementById('modal-form').classList.add('open');
+  }
 }
 function saveModalForm(){
-  const def=formDefs[currentModalType];
-  const cat=getCat(currentModalType);
-  const obj={};
-  def.fields.forEach(f=>{
-    const el=document.getElementById('mfi-'+f.id);
-    obj[f.id]=el.value;
-    if(f.id==='activo')obj[f.id]=el.value==='true';
-  });
-  if(editingId){const idx=cat.findIndex(i=>i.id===editingId);if(idx>-1)cat[idx]={...cat[idx],...obj};}
-  else{obj.id=Date.now();cat.push(obj);}
-  closeModal('modal-form');
-  populateSelects();buildMachTabs();renderAdmin();
-  document.querySelector('#admin-tabs .sec-tab.active').click();
+  const nombre=document.getElementById('mfi-nombre').value.trim();
+  const activo=document.getElementById('mfi-activo').value==='true';
+  if(!nombre){alert('Ingresa el nombre.');return;}
+  if(currentModalType==='coord-add'){catCoordinadores.push({id:Date.now(),nombre,activo});}
+  else if(currentModalType==='coord-edit'){const idx=catCoordinadores.findIndex(c=>c.id===editingId);if(idx>-1)catCoordinadores[idx]={...catCoordinadores[idx],nombre,activo};}
+  closeModal('modal-form');populateCoord();
+  renderCatCoordinadores(document.getElementById('admin-content'));
 }
-function delItem(type,id){
-  if(!confirm('¿Eliminar este registro?'))return;
-  const cat=getCat(type);const idx=cat.findIndex(i=>i.id===id);if(idx>-1)cat.splice(idx,1);
-  populateSelects();buildMachTabs();renderAdmin();
-  document.querySelector('#admin-tabs .sec-tab.active').click();
+function delCoord(id){
+  if(!confirm('¿Eliminar coordinador?'))return;
+  catCoordinadores=catCoordinadores.filter(c=>c.id!==id);
+  populateCoord();renderCatCoordinadores(document.getElementById('admin-content'));
 }
-function getCat(type){return{coordinadores:catCoordinadores,operadores:catOperadores,maquinas:catMaquinas,ordenes:catOrdenes,productos:catProductos,remisiones:catRemisiones}[type];}
 </script>
 </body>
 </html>
