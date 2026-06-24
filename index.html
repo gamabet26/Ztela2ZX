@@ -190,10 +190,7 @@ tr:hover td{background:#f8f9fb}
             <select id="sel-coord"><option value="">— Seleccione —</option></select>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
-            <button class="btn" onclick="revCoord()">✔ Registrar revisión</button>
             <button class="btn btn-primary" onclick="guardarParams()">Guardar parámetros</button>
-            <button class="btn btn-success" onclick="finalizarProceso()">Finalizar proceso</button>
-            <button class="btn" onclick="revCalidad()">Revisión de calidad</button>
             <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir etiqueta</button>
           </div>
         </div>
@@ -467,6 +464,11 @@ function checkForm(){
   if(!op||!ot){document.getElementById('alert-sel').style.display='block';formActive=false;}
   else{document.getElementById('alert-sel').style.display='none';formActive=true;}
 }
+function getNextBobNum(otTexto){
+  const registradas=bobinas.filter(b=>b.ot===otTexto&&b.mach===curMach).length;
+  return registradas+1;
+}
+
 function loadOT(){
   checkForm();
   const stEl=document.getElementById('sel-ot');
@@ -478,10 +480,7 @@ function loadOT(){
   document.getElementById('f-col').value=opt.dataset.col||'';
   document.getElementById('f-sig').value=opt.dataset.sig||'';
   document.getElementById('f-rem').value=opt.dataset.rem||'';
-  // continuar consecutivo por OT — contar bobinas ya registradas para esta OT
-  const otTexto=opt.textContent;
-  const yaRegistradas=bobinas.filter(b=>b.ot===otTexto&&b.mach===curMach).length;
-  bobNum=yaRegistradas+1;
+  bobNum=getNextBobNum(opt.textContent);
   initBobina();
 }
 function initBobina(){
@@ -492,6 +491,7 @@ function initBobina(){
   document.getElementById('f-hora').value=nowTime();
   document.getElementById('f-lote').value=fmtLote(TODAY);
   document.getElementById('f-metros').value='';
+  document.getElementById('f-metros').style.borderColor='';
   document.getElementById('f-peso').value='';
   document.getElementById('f-obs').value='';
 }
@@ -535,9 +535,10 @@ function guardarBobina(){
   bobinas.push(b);lastSavedBobina=b;
   const al=document.getElementById('alert-save');al.style.display='block';
   setTimeout(()=>al.style.display='none',2500);
-  // siguiente bobina — consecutivo por OT
-  const otTexto=document.getElementById('sel-ot').options[document.getElementById('sel-ot').selectedIndex].textContent;
-  bobNum=bobinas.filter(x=>x.ot===otTexto&&x.mach===curMach).length+1;
+  // calcular siguiente número de bobina para esta OT
+  const otElSave=document.getElementById('sel-ot');
+  const otTextoSave=otElSave.options[otElSave.selectedIndex].textContent;
+  bobNum=getNextBobNum(otTextoSave);
   bobID++;
   document.getElementById('f-id').value=bobID;
   document.getElementById('f-num').value=bobNum;
