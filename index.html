@@ -165,12 +165,6 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Peso (Kg)</label><input id="f-peso" type="number" placeholder="0.0" step="0.01"/></div>
           <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Opcional..."></textarea></div>
         </div>
-        <div class="btn-row">
-          <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
-          <button class="btn btn-danger" onclick="cancelarBobina()">Cancelar bobina</button>
-          <button class="btn" onclick="openListModal()">Lista de bobinas</button>
-          <button class="btn btn-success" onclick="guardarBobina()">Guardar bobina</button>
-        </div>
         <div class="sep"></div>
         <div class="card-title">📐 Parámetros de proceso</div>
         <div class="form-grid">
@@ -190,7 +184,10 @@ tr:hover td{background:#f8f9fb}
             <select id="sel-coord"><option value="">— Seleccione —</option></select>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
-            <button class="btn btn-primary" onclick="guardarParams()">Guardar parámetros</button>
+            <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
+            <button class="btn btn-danger" onclick="cancelarBobina()">Cancelar bobina</button>
+            <button class="btn" onclick="openListModal()">Lista de bobinas</button>
+            <button class="btn btn-success" onclick="guardarBobina()">Guardar bobina</button>
             <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir etiqueta</button>
           </div>
         </div>
@@ -995,13 +992,63 @@ function openListModal(){
   const otEl=document.getElementById('sel-ot');
   const ot=otEl.options[otEl.selectedIndex].textContent||'—';
   document.getElementById('ml-ot').textContent=ot;
-  const bobs=bobinas.filter(b=>b.ot===ot&&b.mach===curMach);
-  document.getElementById('ml-body').innerHTML=bobs.length
-    ?`<table><thead><tr><th>ID</th><th>#</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead><tbody>
-      ${bobs.map(b=>`<tr><td>${b.id}</td><td>${b.num}</td><td>${b.fecha}</td><td>${b.hora}</td><td>${b.metros} m</td><td>${b.peso} Kg</td></tr>`).join('')}
-      </tbody></table>`
-    :'<p style="color:var(--muted);font-size:13px;padding:12px 0">No hay bobinas registradas para esta orden.</p>';
+  renderListModal(ot, '');
   document.getElementById('modal-list').classList.add('open');
+}
+
+function renderListModal(ot, filtroOp){
+  const bobs=bobinas.filter(b=>b.ot===ot&&b.mach===curMach);
+  const body=document.getElementById('ml-body');
+  if(!bobs.length){
+    body.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0">No hay bobinas registradas para esta orden.</p>';
+    return;
+  }
+  // operadores únicos
+  const ops=[...new Set(bobs.map(b=>b.operario))];
+  const filtradas=filtroOp?bobs.filter(b=>b.operario===filtroOp):bobs;
+  const totMetros=filtradas.reduce((a,b)=>a+(parseFloat(b.metros)||0),0);
+  const totPeso=filtradas.reduce((a,b)=>a+(parseFloat(b.peso)||0),0);
+
+  body.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <div class="field" style="min-width:200px;margin:0">
+        <label style="font-size:11px;color:var(--muted)">Filtrar por operador</label>
+        <select onchange="renderListModal('${ot}',this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px">
+          <option value="">— Todos los operadores —</option>
+          ${ops.map(o=>`<option value="${o}"${o===filtroOp?' selected':''}>${o}</option>`).join('')}
+        </select>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600">
+        <span style="color:var(--blue)">📏 ${totMetros.toLocaleString()} m</span>
+        <span style="color:var(--muted)">⚖ ${totPeso.toFixed(2)} Kg</span>
+        <span style="color:var(--muted);font-weight:400">${filtradas.length} bobina(s)</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr>
+        <th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th>
+      </tr></thead>
+      <tbody>
+        ${filtradas.map(b=>`<tr>
+          <td>${b.id}</td>
+          <td>${b.num}</td>
+          <td style="font-size:11px">${b.operario}</td>
+          <td>${b.fecha}</td>
+          <td>${b.hora}</td>
+          <td>${b.metros} m</td>
+          <td>${b.peso} Kg</td>
+        </tr>`).join('')}
+      </tbody>
+      <tfoot>
+        <tr style="background:#f8f9fb;font-weight:600">
+          <td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td>
+          <td style="color:var(--blue)">${totMetros.toLocaleString()} m</td>
+          <td>${totPeso.toFixed(2)} Kg</td>
+        </tr>
+      </tfoot>
+    </table>
+    </div>`;
 }
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
