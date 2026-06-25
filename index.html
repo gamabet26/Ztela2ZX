@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Ztela 2 ZX</title>
+<title>Ztela ZX</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
@@ -18,8 +18,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh}
 #app{display:none;flex-direction:column;min-height:100vh}
 header{background:var(--blue);color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:0 2px 8px #0003;flex-wrap:wrap;gap:4px}
 .logo-h{font-size:18px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:8px}
-.logo-h span{color:#5b9bf8}
-nav{display:flex;gap:2px;flex-wrap:wrap}
+.logo-h span{color:#5b9bf8}nav{display:flex;gap:2px;flex-wrap:wrap}
 nav button{background:transparent;border:none;color:#ffffffaa;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:.2s}
 nav button.active,nav button:hover{background:#ffffff1a;color:#fff}
 main{flex:1;padding:20px;max-width:1200px;width:100%;margin:0 auto}
@@ -110,7 +109,7 @@ tr:hover td{background:#f8f9fb}
   <canvas id="circuit"></canvas>
   <div class="zx-logo">
     <div class="zx-text">ZX</div>
-    <div class="zx-sub">ZTELA 2</div>
+    <div class="zx-sub">ZTELA</div>
   </div>
 </div>
 
@@ -119,12 +118,11 @@ tr:hover td{background:#f8f9fb}
     <div class="logo-h">ZX <span>Ztela 2</span></div>
     <nav>
       <button class="active" onclick="showView('operador',this)">Operador</button>
-      <button onclick="showView('produccion',this)">Producción</button>
-      <button onclick="showView('calidad',this)">Calidad</button>
+      <button onclick="showView('consulta',this)">Consulta</button>
       <button onclick="showView('almacen',this)">Almacén</button>
       <button onclick="showView('admin',this)">Administrador</button>
     </nav>
-    <div style="font-size:12px;color:#ffffff66">Ztela 2 ZX</div>
+    <div style="font-size:12px;color:#ffffff66">Ztela ZX</div>
   </header>
   <main>
 
@@ -195,30 +193,14 @@ tr:hover td{background:#f8f9fb}
       </div>
     </div>
 
-    <!-- PRODUCCIÓN -->
-    <div id="view-produccion" style="display:none">
-      <div class="card">
-        <div class="card-title">🏭 Consulta de producción</div>
-        <div class="search-box">
-          <div class="field"><label>ID de bobina</label><input id="prod-search" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')buscarBobinaProd()"/></div>
-          <button class="btn btn-primary" onclick="buscarBobinaProd()" style="height:38px">Buscar</button>
-          <button class="btn" onclick="limpiarProd()" style="height:38px">Limpiar</button>
-        </div>
-        <div id="prod-result"></div>
+    <!-- CONSULTA -->
+    <div id="view-consulta" style="display:none">
+      <div class="sec-tabs">
+        <button class="sec-tab active" onclick="consultaTab('maquina',this)">Por Máquina</button>
+        <button class="sec-tab" onclick="consultaTab('lote',this)">Por Lote</button>
+        <button class="sec-tab" onclick="consultaTab('id',this)">Por ID de bobina</button>
       </div>
-    </div>
-
-    <!-- CALIDAD -->
-    <div id="view-calidad" style="display:none">
-      <div class="card">
-        <div class="card-title">🔬 Consulta de calidad</div>
-        <div class="search-box">
-          <div class="field"><label>ID de bobina</label><input id="cal-search" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')buscarBobinaCalidad()"/></div>
-          <button class="btn btn-primary" onclick="buscarBobinaCalidad()" style="height:38px">Buscar</button>
-          <button class="btn" onclick="limpiarCalidad()" style="height:38px">Limpiar</button>
-        </div>
-        <div id="cal-result"></div>
-      </div>
+      <div id="consulta-content"></div>
     </div>
 
     <!-- ALMACÉN -->
@@ -348,6 +330,8 @@ const FB_ORDERS=[
 
 // ── STATE ──
 let curMach='EXT001', formActive=false, bobinas=[], lastSavedBobina=null, curWOId=null;
+let zxIdCounter=1000;
+function nextZxId(){zxIdCounter++;return'ZX-'+zxIdCounter;}
 let almStock={}, almEntradaLoc='', almEntradaList=[], almSalidaLoc='', almRegresosBobina=null;
 let catCoordinadores=[
   {id:1,nombre:'Gumaro Flores',activo:true},{id:2,nombre:'Joaquin Gonzalez',activo:true},
@@ -433,12 +417,12 @@ function selectMach(m,btn){
 }
 
 function showView(v,btn){
-  ['operador','produccion','calidad','almacen','admin'].forEach(function(id){
+  ['operador','consulta','almacen','admin'].forEach(function(id){
     document.getElementById('view-'+id).style.display=id===v?'block':'none';
   });
   document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-  if(v==='admin')renderAdmin();
+  else if(id==='consulta'){consultaTab('maquina',document.querySelector('#view-consulta .sec-tab'));}
   if(v==='almacen')almacenTab('entradas',document.querySelector('#view-almacen .sec-tab'));
 }
 
@@ -472,7 +456,7 @@ async function loadOT(){
 
 async function initBobina(){
   var hoy=getToday();
-  document.getElementById('f-id').value='Auto';
+  document.getElementById('f-id').value='—';  // se asigna al guardar
   document.getElementById('f-fecha').value=fmtDate(hoy);
   document.getElementById('f-hora').value=nowTime();
   document.getElementById('f-lote').value=fmtLote(hoy);
@@ -713,6 +697,243 @@ function renderLabel(b,esRegreso){
     +'<div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">'+b.id+'</div></div>';
   lp.style.display='flex';
   try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
+}
+
+// ── CONSULTA ──
+function consultaTab(tab,btn){
+  document.querySelectorAll('#view-consulta .sec-tab').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var c=document.getElementById('consulta-content');
+  if(tab==='maquina')renderConsultaMaquina(c);
+  else if(tab==='lote')renderConsultaLote(c);
+  else if(tab==='id')renderConsultaID(c);
+}
+
+function totalesHtml(rows){
+  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
+  var totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  return'<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-bottom:10px;padding:10px 14px;background:#eff6ff;border-radius:8px;border:1px solid var(--border)">'
+    +'<span style="font-size:13px;color:var(--muted)"><strong>'+rows.length+'</strong> registro(s)</span>'
+    +'<span style="font-size:13px;color:var(--blue)">📏 Total metros: <strong>'+totM.toLocaleString()+' m</strong></span>'
+    +'<span style="font-size:13px;color:var(--muted)">⚖ Total peso: <strong>'+totP.toFixed(2)+' Kg</strong></span>'
+    +'</div>';
+}
+
+// ── CONSULTA POR MÁQUINA ──
+function renderConsultaMaquina(c){
+  var machOpts='<option value="">— Todas —</option>'
+    +['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
+  c.innerHTML='<div class="card">'
+    +'<div class="card-title">🔍 Consulta por Máquina</div>'
+    +'<div class="form-grid" style="margin-bottom:12px">'
+    +'<div class="field"><label>Máquina</label><select id="cq-maq">'+machOpts+'</select></div>'
+    +'<div class="field"><label>Lote</label><input id="cq-lote" placeholder="Ej. 062426"/></div>'
+    +'<div class="field"><label>Orden de trabajo</label><input id="cq-ot" placeholder="Ej. 26050163"/></div>'
+    +'<div class="field"><label>Fecha inicio</label><input id="cq-fi" type="date"/></div>'
+    +'<div class="field"><label>Fecha fin</label><input id="cq-ff" type="date"/></div>'
+    +'<div class="field"><label>Hora inicio</label><input id="cq-hi" type="time" value="00:00"/></div>'
+    +'<div class="field"><label>Hora fin</label><input id="cq-hf" type="time" value="23:59"/></div>'
+    +'<div class="field"><label>Metros mín.</label><input id="cq-mmin" type="number" placeholder="0"/></div>'
+    +'<div class="field"><label>Metros máx.</label><input id="cq-mmax" type="number" placeholder="2000"/></div>'
+    +'<div class="field"><label>Peso mín. (Kg)</label><input id="cq-pmin" type="number" placeholder="0"/></div>'
+    +'<div class="field"><label>Peso máx. (Kg)</label><input id="cq-pmax" type="number" placeholder="—"/></div>'
+    +'</div>'
+    +'<div class="btn-row" style="margin-bottom:16px">'
+    +'<button class="btn btn-primary" onclick="ejecutarConsultaMaquina()">🔍 Consultar</button>'
+    +'<button class="btn" onclick="limpiarConsultaMaquina()">Limpiar</button>'
+    +'<button class="btn btn-success" id="cq-xl" style="display:none" onclick="exportarConsulta(\'maquina\')">📥 Exportar Excel</button>'
+    +'</div>'
+    +'<div id="cq-result"></div></div>';
+}
+
+function ejecutarConsultaMaquina(){
+  var maq=document.getElementById('cq-maq').value;
+  var lote=document.getElementById('cq-lote').value.trim();
+  var ot=document.getElementById('cq-ot').value.trim();
+  var fi=document.getElementById('cq-fi').value;
+  var ff=document.getElementById('cq-ff').value;
+  var hi=document.getElementById('cq-hi').value||'00:00';
+  var hf=document.getElementById('cq-hf').value||'23:59';
+  var mmin=document.getElementById('cq-mmin').value;
+  var mmax=document.getElementById('cq-mmax').value;
+  var pmin=document.getElementById('cq-pmin').value;
+  var pmax=document.getElementById('cq-pmax').value;
+  var desde=fi?new Date(fi+'T'+hi+':00'):null;
+  var hasta=ff?new Date(ff+'T'+hf+':00'):null;
+  var rows=bobinas.filter(function(b){
+    if(maq&&b.mach!==maq)return false;
+    if(lote&&b.lote!==lote)return false;
+    if(ot&&b.ot!==ot)return false;
+    if(desde){var t=parseBoDate(b);if(t<desde)return false;}
+    if(hasta){var t2=parseBoDate(b);if(t2>hasta)return false;}
+    if(mmin!==''&&(parseFloat(b.metros)||0)<parseFloat(mmin))return false;
+    if(mmax!==''&&(parseFloat(b.metros)||0)>parseFloat(mmax))return false;
+    if(pmin!==''&&(parseFloat(b.peso)||0)<parseFloat(pmin))return false;
+    if(pmax!==''&&(parseFloat(b.peso)||0)>parseFloat(pmax))return false;
+    return true;
+  });
+  window._lastConsultaMaquina=rows;
+  var r=document.getElementById('cq-result');
+  if(!rows.length){r.innerHTML='<div class="not-found">Sin resultados para los filtros aplicados.</div>';document.getElementById('cq-xl').style.display='none';return;}
+  document.getElementById('cq-xl').style.display='inline-block';
+  r.innerHTML=totalesHtml(rows)
+    +'<div style="overflow-x:auto"><table><thead><tr>'
+    +'<th>ID</th><th>#</th><th>OT</th><th>Máq.</th><th>Operario</th><th>Fecha</th><th>Hora</th><th>Lote</th><th>Metros</th><th>Peso</th><th>Desc.</th>'
+    +'</tr></thead><tbody>'
+    +rows.map(function(b){return'<tr>'
+      +'<td style="font-weight:700;color:var(--blue)">'+b.id+'</td>'
+      +'<td>'+b.num+'</td>'
+      +'<td>'+b.ot+'</td>'
+      +'<td>'+b.mach+'</td>'
+      +'<td style="font-size:11px">'+b.operario+'</td>'
+      +'<td>'+b.fecha+'</td>'
+      +'<td>'+b.hora+'</td>'
+      +'<td>'+b.lote+'</td>'
+      +'<td>'+b.metros+' m</td>'
+      +'<td>'+b.peso+' Kg</td>'
+      +'<td style="font-size:11px">'+b.desc+'</td>'
+      +'</tr>';}).join('')
+    +'</tbody></table></div>';
+}
+
+function limpiarConsultaMaquina(){
+  ['cq-maq','cq-lote','cq-ot','cq-fi','cq-ff','cq-mmin','cq-mmax','cq-pmin','cq-pmax'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('cq-hi').value='00:00';
+  document.getElementById('cq-hf').value='23:59';
+  document.getElementById('cq-result').innerHTML='';
+  document.getElementById('cq-xl').style.display='none';
+}
+
+// ── CONSULTA POR LOTE ──
+function renderConsultaLote(c){
+  c.innerHTML='<div class="card">'
+    +'<div class="card-title">🔍 Consulta por Lote</div>'
+    +'<div class="search-box" style="margin-bottom:12px">'
+    +'<div class="field"><label>Número de lote</label><input id="cl-lote" placeholder="Ej. 062426" onkeydown="if(event.key===\'Enter\')ejecutarConsultaLote()"/></div>'
+    +'<button class="btn btn-primary" onclick="ejecutarConsultaLote()" style="height:38px">Buscar</button>'
+    +'<button class="btn" onclick="limpiarConsultaLote()" style="height:38px">Limpiar</button>'
+    +'<button class="btn btn-success" id="cl-xl" style="display:none" onclick="exportarConsulta(\'lote\')">📥 Exportar Excel</button>'
+    +'</div>'
+    +'<div id="cl-result"></div></div>';
+}
+
+function ejecutarConsultaLote(){
+  var lote=document.getElementById('cl-lote').value.trim();
+  var r=document.getElementById('cl-result');
+  if(!lote){r.innerHTML='<div class="not-found">Ingresa un número de lote.</div>';return;}
+  var rows=bobinas.filter(function(b){return b.lote===lote;});
+  window._lastConsultaLote=rows;
+  if(!rows.length){r.innerHTML='<div class="not-found">⚠ Sin registros para el lote <strong>'+lote+'</strong>.</div>';document.getElementById('cl-xl').style.display='none';return;}
+  document.getElementById('cl-xl').style.display='inline-block';
+  r.innerHTML=totalesHtml(rows)
+    +'<div style="overflow-x:auto"><table><thead><tr>'
+    +'<th>ID</th><th>#</th><th>Máquina</th><th>OT</th><th>Operario</th><th>Fecha</th><th>Metros</th><th>Peso</th>'
+    +'</tr></thead><tbody>'
+    +rows.map(function(b){return'<tr>'
+      +'<td style="font-weight:700;color:var(--blue)">'+b.id+'</td>'
+      +'<td>'+b.num+'</td>'
+      +'<td>'+b.mach+'</td>'
+      +'<td>'+b.ot+'</td>'
+      +'<td style="font-size:11px">'+b.operario+'</td>'
+      +'<td>'+b.fecha+'</td>'
+      +'<td>'+b.metros+' m</td>'
+      +'<td>'+b.peso+' Kg</td>'
+      +'</tr>';}).join('')
+    +'</tbody>'
+    +'<tfoot><tr style="background:#f8f9fb;font-weight:600">'
+    +'<td colspan="6" style="text-align:right;font-size:12px;color:var(--muted)">Total</td>'
+    +'<td style="color:var(--blue)">'+rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0).toLocaleString()+' m</td>'
+    +'<td>'+rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0).toFixed(2)+' Kg</td>'
+    +'</tr></tfoot>'
+    +'</table></div>';
+}
+
+function limpiarConsultaLote(){
+  document.getElementById('cl-lote').value='';
+  document.getElementById('cl-result').innerHTML='';
+  document.getElementById('cl-xl').style.display='none';
+}
+
+// ── CONSULTA POR ID ──
+function renderConsultaID(c){
+  c.innerHTML='<div class="card">'
+    +'<div class="card-title">🔍 Consulta por ID de bobina</div>'
+    +'<div class="search-box" style="margin-bottom:12px">'
+    +'<div class="field"><label>ID de bobina</label><input id="ci-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')ejecutarConsultaID()"/></div>'
+    +'<button class="btn btn-primary" onclick="ejecutarConsultaID()" style="height:38px">Buscar</button>'
+    +'<button class="btn" onclick="limpiarConsultaID()" style="height:38px">Limpiar</button>'
+    +'</div>'
+    +'<div id="ci-result"></div></div>';
+}
+
+function ejecutarConsultaID(){
+  var busq=document.getElementById('ci-id').value.trim();
+  var r=document.getElementById('ci-result');
+  if(!busq){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
+  var b=bobinas.find(function(x){return String(x.id).toUpperCase()===busq.toUpperCase();});
+  if(!b){r.innerHTML='<div class="not-found">⚠ No se encontró la bobina <strong>'+busq+'</strong>.</div>';return;}
+  var p=b.params||{};
+  var totM=parseFloat(b.metros)||0;
+  var totP=parseFloat(b.peso)||0;
+  r.innerHTML='<div class="result-card">'
+    +'<div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">'+b.id+'</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:16px">Detalle completo de bobina</div>'
+    +totalesHtml([b])
+    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div>'
+    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
+    +ri('Número de bobina',b.num)+ri('OT',b.ot)+ri('Máquina',b.mach)
+    +ri('Operario',b.operario)+ri('Coordinador',b.coordinador||'—')
+    +ri('Fecha',b.fecha)+ri('Hora',b.hora)+ri('Lote',b.lote)
+    +ri('Remisión',b.rem)+ri('Color',b.col)
+    +'</div>'
+    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producción</div>'
+    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
+    +ri('Metros',totM.toLocaleString()+' m',true)+ri('Peso',totP.toFixed(2)+' Kg',true)
+    +ri('Descripción',b.desc)+ri('Producto',b.prod)+ri('Medida',b.med)
+    +'</div>'
+    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros de proceso</div>'
+    +'<div class="result-grid" style="margin-top:0">'
+    +ri('Medidas',p.med)+ri('Ancho plano',p.ancho)
+    +ri('Enc. horizontal',p.eh,true)+ri('Enc. vertical',p.ev,true)
+    +ri('Enc. Dir. Máquina',p.edm,true)
+    +ri('Calibre frente',p.cf,true)+ri('Calibre reverso',p.cr,true)
+    +ri('Deslamine',p.des)+ri('Temp. túnel',(p.temp||'—')+' °C')
+    +'</div>'
+    +(b.obs?'<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> '+b.obs+'</div>':'')
+    +'</div>';
+}
+
+function limpiarConsultaID(){
+  document.getElementById('ci-id').value='';
+  document.getElementById('ci-result').innerHTML='';
+}
+
+// ── EXPORTAR EXCEL CONSULTA ──
+function exportarConsulta(tipo){
+  var rows=tipo==='maquina'?window._lastConsultaMaquina:window._lastConsultaLote;
+  if(!rows||!rows.length){alert('Sin datos para exportar.');return;}
+  var cols=tipo==='maquina'
+    ?['ID','Num','OT','Maquina','Operario','Fecha','Hora','Lote','Metros','Peso','Descripcion']
+    :['ID','Num','Maquina','OT','Operario','Fecha','Metros','Peso'];
+  var data=rows.map(function(b){
+    return tipo==='maquina'
+      ?[b.id,b.num,b.ot,b.mach,b.operario,b.fecha,b.hora,b.lote,b.metros,b.peso,b.desc]
+      :[b.id,b.num,b.mach,b.ot,b.operario,b.fecha,b.metros,b.peso];
+  });
+  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
+  var totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  var totalRow=new Array(cols.length).fill('');
+  totalRow[totalRow.length-2]=totM.toFixed(2);
+  totalRow[totalRow.length-1]=totP.toFixed(2);
+  data.push(totalRow);
+  var csv=[cols.join('\t')].concat(data.map(function(r){return r.join('\t');})).join('\n');
+  var blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;
+  a.download='Consulta_'+tipo+'_'+new Date().toISOString().slice(0,10)+'.xls';
+  a.click();URL.revokeObjectURL(url);
 }
 
 // ── ALMACÉN ──
