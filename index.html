@@ -57,7 +57,13 @@ tr:hover td{background:#f8f9fb}
 .alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
-@media print{body *{visibility:hidden}#label-print,#label-print *{visibility:visible}#label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}}
+@media print{
+  body *{visibility:hidden}
+  #label-print,#label-print *{visibility:visible}
+  #label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}
+  .label-wrap{width:15cm;font-size:11pt;border:1px solid #999}
+  @page{size:landscape;margin:0.5cm}
+}
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
 .lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}
