@@ -60,9 +60,7 @@ tr:hover td{background:#f8f9fb}
 @media print{
   body *{visibility:hidden}
   #label-print,#label-print *{visibility:visible}
-  #label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}
-  .label-wrap{width:15cm;font-size:11pt;border:1px solid #999}
-  @page{size:landscape;margin:0.5cm}
+  #label-print{position:fixed;inset:0;background:#fff}
 }
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
@@ -265,13 +263,34 @@ tr:hover td{background:#f8f9fb}
 <div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
   <div class="label-wrap" id="label-content"></div>
   <div style="margin-top:16px;display:flex;gap:10px">
-    <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn btn-primary" onclick="imprimirLabel()">🖨 Imprimir</button>
     <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
   </div>
 </div>
 
 <script>
-// ── CIRCUIT ──
+function imprimirLabel(){
+  var contenido=document.getElementById('label-content').innerHTML;
+  var ventana=window.open('','_blank','width=700,height=500');
+  ventana.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    +'<style>'
+    +'body{margin:20px;font-family:Segoe UI,sans-serif;font-size:12px}'
+    +'.label-wrap{border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px}'
+    +'.lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}'
+    +'.brand{font-size:22px;font-weight:900;color:#0D3B8C}'
+    +'.mach{font-size:16px;font-weight:700}'
+    +'.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}'
+    +'.lf{display:flex;flex-direction:column}'
+    +'.lf span:first-child{font-size:10px;color:#888}'
+    +'.lf span:last-child{font-weight:600;font-size:13px}'
+    +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}'
+    +'</style></head><body>'
+    +'<div class="label-wrap">'+contenido+'</div>'
+    +'</body></html>');
+  ventana.document.close();
+  ventana.focus();
+  setTimeout(function(){ventana.print();ventana.close();},500);
+}
 (function(){
   var cv=document.getElementById('circuit'),cx=cv.getContext('2d');
   var W,H,nd=[];
