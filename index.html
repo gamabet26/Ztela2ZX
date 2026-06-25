@@ -60,7 +60,8 @@ tr:hover td{background:#f8f9fb}
 @media print{
   body *{visibility:hidden}
   #label-print,#label-print *{visibility:visible}
-  #label-print{position:fixed;inset:0;background:#fff}
+  #label-print{position:fixed;inset:0;background:#fff;display:block}
+  .label-wrap{margin:20px auto;max-width:520px}
 }
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
@@ -263,41 +264,13 @@ tr:hover td{background:#f8f9fb}
 <div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
   <div class="label-wrap" id="label-content"></div>
   <div style="margin-top:16px;display:flex;gap:10px">
-    <button class="btn btn-primary" onclick="imprimirLabel()">🖨 Imprimir</button>
-    <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
+    <button class="btn btn-primary" onclick="imprimirLabel()">🖨 Imprimir</button>    <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
   </div>
 </div>
 
 <script>
 function imprimirLabel(){
-  var contenido=document.getElementById('label-content').innerHTML;
-  var estilos='body{margin:20px;font-family:Segoe UI,sans-serif;font-size:12px}'
-    +'.label-wrap{border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px}'
-    +'.lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}'
-    +'.brand{font-size:22px;font-weight:900;color:#0D3B8C}'
-    +'.mach{font-size:16px;font-weight:700}'
-    +'.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}'
-    +'.lf{display:flex;flex-direction:column}'
-    +'.lf span:first-child{font-size:10px;color:#888}'
-    +'.lf span:last-child{font-weight:600;font-size:13px}'
-    +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}'
-    +'@media print{.no-print{display:none}}';
-  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Etiqueta</title>'
-    +'<style>'+estilos+'</style></head><body>'
-    +'<div class="no-print" style="margin-bottom:16px">'
-    +'<button onclick="window.print()" style="padding:10px 24px;background:#0D3B8C;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;margin-right:8px">🖨 Imprimir</button>'
-    +'<button onclick="window.close()" style="padding:10px 24px;background:#f0f2f6;border:1px solid #dde2ea;border-radius:6px;font-size:14px;cursor:pointer">Cerrar</button>'
-    +'</div>'
-    +'<div class="label-wrap">'+contenido+'</div>'
-    +'</body></html>';
-  var blob=new Blob([html],{type:'text/html'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;a.target='_blank';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(function(){URL.revokeObjectURL(url);},5000);
+  window.print();
 }
 (function(){
   var cv=document.getElementById('circuit'),cx=cv.getContext('2d');
