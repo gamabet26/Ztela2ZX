@@ -80,7 +80,7 @@ tr:hover td{background:#f8f9fb}
 .sec-tab{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px;transition:.15s}
 .sec-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .tbl-action{display:flex;gap:6px}
-.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;padding:4px 6px;border-radius:4px}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;padding:4px 6px;border-radius:4px;transition:.15s}
 .icon-btn:hover{background:var(--bg)}
 .icon-btn.del:hover{background:#fee2e2;color:#b91c1c}
 .result-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px;margin-top:16px}
@@ -249,7 +249,7 @@ tr:hover td{background:#f8f9fb}
   </main>
 </div>
 
-<!-- MODAL LISTA BOBINAS -->
+<!-- MODAL LISTA -->
 <div class="modal-bg" id="modal-list">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-list')">×</button>
@@ -309,7 +309,7 @@ tr:hover td{background:#f8f9fb}
 setTimeout(()=>{
   const s=document.getElementById('splash');
   s.style.transition='opacity .6s';s.style.opacity='0';
-  setTimeout(()=>{s.style.display='none';document.getElementById('app').style.display='flex';setTimeout(initApp,100);},600);
+  setTimeout(()=>{s.style.display='none';document.getElementById('app').style.display='flex';initApp();},600);
 },2000);
 
 // ── API ──
@@ -322,7 +322,7 @@ async function apiFetch(path,opts){
   if(jwtToken)headers['Authorization']='Bearer '+jwtToken;
   const res=await fetch(API+path,Object.assign({},opts,{headers:Object.assign(headers,opts.headers||{})}));
   const data=await res.json();
-  if(!res.ok)throw new Error(data.error||'Error '+res.status);
+  if(!res.ok)throw new Error(data.error||('Error '+res.status));
   return data;
 }
 
@@ -347,8 +347,7 @@ const FB_ORDERS=[
 ];
 
 // ── STATE ──
-let curMach='EXT001', formActive=false, curWOId=null;
-let bobinas=[], lastSavedBobina=null;
+let curMach='EXT001', formActive=false, bobinas=[], lastSavedBobina=null, curWOId=null;
 let almStock={}, almEntradaLoc='', almEntradaList=[], almSalidaLoc='', almRegresosBobina=null;
 let catCoordinadores=[
   {id:1,nombre:'Gumaro Flores',activo:true},{id:2,nombre:'Joaquin Gonzalez',activo:true},
@@ -358,10 +357,10 @@ let currentModalType='', editingId=null;
 let prodResultados={bob:[],ext:[],ot:[]};
 const AREAS=['Impresión','Conversión','Barnizado','Corrugado','Empaque','Refilado','Rectificado'];
 const UBICACIONES=(()=>{const l=[];['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'].forEach(x=>{for(let n=1;n<=3;n++)l.push(x+n);});return l;})();
-const TODAY=new Date();
-const fmtDate=d=>`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
-const fmtLote=d=>`${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getFullYear()).slice(2)}`;
-const nowTime=()=>{const n=new Date();return`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`};
+const fmtDate=function(d){return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();};
+const fmtLote=function(d){return String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+String(d.getFullYear()).slice(2);};
+const nowTime=function(){var n=new Date();return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');};
+const getToday=function(){return new Date();};
 
 // ── INIT ──
 async function initApp(){
@@ -380,7 +379,7 @@ async function loadMachines(){
   data.forEach(function(m,i){
     const b=document.createElement('button');
     b.className='mach-tab'+(i===0?' active':'');
-    b.textContent=m.id;b.dataset.id=m.id;
+    b.textContent=m.id;b.dataset.id=m.id;b.dataset.name=m.name;
     b.onclick=function(){selectMach(m.id,b);};
     mt.appendChild(b);
   });
@@ -399,7 +398,7 @@ async function loadOperators(){
 
 async function loadWorkOrders(){
   let data=FB_ORDERS;
-  try{data=await apiFetch('/work-orders');}catch(e){console.warn('Usando órdenes locales');}
+  try{data=await apiFetch('/work-orders');}catch(e){console.warn('Usando OTs locales');}
   const st=document.getElementById('sel-ot');
   if(!st)return;
   st.innerHTML='<option value="">— Seleccione —</option>';
@@ -419,7 +418,7 @@ function populateCoord(){
   el.innerHTML='<option value="">— Seleccione —</option>';
   catCoordinadores.filter(function(c){return c.activo;}).forEach(function(c){
     const opt=document.createElement('option');opt.value=c.id;opt.textContent=c.nombre;
-    if(String(c.id)===prev)opt.selected=true;
+    if(c.id===parseInt(prev))opt.selected=true;
     el.appendChild(opt);
   });
 }
@@ -451,8 +450,7 @@ function resetForm(){
 }
 
 function checkForm(){
-  const op=document.getElementById('sel-op').value;
-  const ot=document.getElementById('sel-ot').value;
+  const op=document.getElementById('sel-op').value,ot=document.getElementById('sel-ot').value;
   if(!op||!ot){document.getElementById('alert-sel').style.display='block';formActive=false;}
   else{document.getElementById('alert-sel').style.display='none';formActive=true;}
 }
@@ -473,25 +471,24 @@ async function loadOT(){
 }
 
 async function initBobina(){
-  document.getElementById('f-fecha').value=fmtDate(TODAY);
+  var hoy=getToday();
+  document.getElementById('f-id').value='Auto';
+  document.getElementById('f-fecha').value=fmtDate(hoy);
   document.getElementById('f-hora').value=nowTime();
-  document.getElementById('f-lote').value=fmtLote(TODAY);
+  document.getElementById('f-lote').value=fmtLote(hoy);
   document.getElementById('f-metros').value='';
   document.getElementById('f-metros').style.borderColor='';
   document.getElementById('f-peso').value='';
   document.getElementById('f-obs').value='';
-  document.getElementById('f-id').value='—';
-  document.getElementById('f-num').value='—';
-  if(!curWOId||!formActive)return;
+  if(!curWOId||!formActive){document.getElementById('f-num').value='—';return;}
   try{
     const res=await apiFetch('/bobbins/next-number?work_order_id='+curWOId+'&machine_id='+curMach);
     document.getElementById('f-num').value=res.next_number;
   }catch(e){
-    const otEl=document.getElementById('sel-ot');
-    const otTxt=otEl.options[otEl.selectedIndex].textContent;
+    const stEl=document.getElementById('sel-ot');
+    const otTxt=stEl.options[stEl.selectedIndex].textContent;
     document.getElementById('f-num').value=bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1;
   }
-  document.getElementById('f-id').value='Auto';
 }
 
 function nuevaBobina(){
@@ -514,15 +511,12 @@ async function guardarBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
   const metros=parseFloat(document.getElementById('f-metros').value)||0;
   if(metros>2000){document.getElementById('alert-metro').style.display='block';return;}
-
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;btn.textContent='⏳ Guardando...';
-
   const opEl=document.getElementById('sel-op');
   const otElS=document.getElementById('sel-ot');
   const coordEl=document.getElementById('sel-coord');
   const otTxt=otElS.options[otElS.selectedIndex].textContent;
-
   const params={
     med:document.getElementById('p-med').value,
     ancho:document.getElementById('p-ancho').value,
@@ -534,7 +528,6 @@ async function guardarBobina(){
     des:document.getElementById('p-des').value==='true'?'Sí':document.getElementById('p-des').value==='false'?'No':'—',
     temp:document.getElementById('p-temp').value
   };
-
   const bobLocal={
     id:Date.now(),
     num:bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1,
@@ -542,8 +535,7 @@ async function guardarBobina(){
     operario:opEl.options[opEl.selectedIndex].textContent,
     mach:curMach,
     fecha:fmtDate(TODAY),hora:nowTime(),lote:fmtLote(TODAY),
-    metros:metros,
-    peso:document.getElementById('f-peso').value,
+    metros:metros,peso:document.getElementById('f-peso').value,
     obs:document.getElementById('f-obs').value,
     prod:document.getElementById('f-prod').value,
     desc:document.getElementById('f-desc').value,
@@ -553,19 +545,17 @@ async function guardarBobina(){
     coordinador:coordEl.options[coordEl.selectedIndex]?coordEl.options[coordEl.selectedIndex].textContent:'—',
     params:params
   };
-
   try{
     const bobRes=await apiFetch('/bobbins',{method:'POST',body:JSON.stringify({
-      work_order_id:curWOId,machine_id:curMach,
-      operator_id:parseInt(opEl.value),
+      work_order_id:curWOId,machine_id:curMach,operator_id:parseInt(opEl.value),
       meters:metros,weight_kg:parseFloat(document.getElementById('f-peso').value)||0,
       observations:document.getElementById('f-obs').value||null
     })});
     bobLocal.id=bobRes.id;
     bobLocal.num=bobRes.bobbin_number;
-    bobLocal.fecha=bobRes.production_date?bobRes.production_date.split('-').reverse().join('-'):fmtDate(TODAY);
-    bobLocal.hora=bobRes.production_time||nowTime();
-    bobLocal.lote=bobRes.lot_code||fmtLote(TODAY);
+    if(bobRes.production_date)bobLocal.fecha=bobRes.production_date.split('-').reverse().join('-');
+    if(bobRes.production_time)bobLocal.hora=bobRes.production_time;
+    if(bobRes.lot_code)bobLocal.lote=bobRes.lot_code;
     await apiFetch('/process-params',{method:'POST',body:JSON.stringify({
       bobbin_id:bobRes.id,measurement_number:1,
       measure:parseFloat(document.getElementById('p-med').value)||null,
@@ -586,11 +576,11 @@ async function guardarBobina(){
   }catch(e){
     console.warn('API no disponible, guardando localmente.');
   }
-
   bobinas.push(bobLocal);
   lastSavedBobina=bobLocal;
-  document.getElementById('alert-save').style.display='block';
-  setTimeout(function(){document.getElementById('alert-save').style.display='none';},2500);
+  const al=document.getElementById('alert-save');
+  al.style.display='block';
+  setTimeout(function(){al.style.display='none';},2500);
   ['p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-temp'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('p-des').value='';
   btn.disabled=false;btn.textContent='Guardar bobina';
@@ -602,50 +592,44 @@ function imprimirEtiqueta(){
   renderLabel(lastSavedBobina,false);
 }
 
-// ── LISTA BOBINAS ──
+// ── LISTA MODAL ──
 async function openListModal(){
   const otEl=document.getElementById('sel-ot');
   const otNum=otEl.options[otEl.selectedIndex].textContent||'—';
   document.getElementById('ml-ot').textContent=otNum;
   document.getElementById('ml-body').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
   document.getElementById('modal-list').classList.add('open');
-  let merged=bobinas.filter(function(b){return b.ot===otNum&&b.mach===curMach;});
+  let bobs=bobinas.filter(function(b){return b.ot===otNum&&b.mach===curMach;});
   try{
-    const apiBobs=await apiFetch('/bobbins?work_order_id='+curWOId+'&machine_id='+curMach);
+    const api=await apiFetch('/bobbins?work_order_id='+curWOId+'&machine_id='+curMach);
     const localIds=new Set(bobinas.map(function(b){return b.id;}));
-    const extra=apiBobs.filter(function(b){return !localIds.has(b.id);}).map(function(b){
-      return{id:b.id,num:b.bobbin_number,operario:b.operator_name,
-        fecha:b.production_date?b.production_date.split('-').reverse().join('-'):'—',
-        hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}};
+    api.forEach(function(b){
+      if(!localIds.has(b.id))bobs.push({id:b.id,num:b.bobbin_number,operario:b.operator_name,fecha:b.production_date?b.production_date.split('-').reverse().join('-'):'—',hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}});
     });
-    merged=merged.concat(extra);
   }catch(e){}
-  renderListModal(otNum,'',merged);
+  renderListModal(otNum,'',bobs);
 }
 
 function renderListModal(ot,filtroOp,bobs){
   const body=document.getElementById('ml-body');
-  if(!bobs||!bobs.length){body.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0">No hay bobinas registradas.</p>';return;}
+  if(!bobs||!bobs.length){body.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0">Sin bobinas registradas.</p>';return;}
   const ops=[...new Set(bobs.map(function(b){return b.operario;}))];
   const filtradas=filtroOp?bobs.filter(function(b){return b.operario===filtroOp;}):bobs;
   const totM=filtradas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
   const totP=filtradas.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
   const optsHtml=ops.map(function(o){return'<option value="'+o+'"'+(o===filtroOp?' selected':'')+'>'+o+'</option>';}).join('');
-  const rows=filtradas.map(function(b){
-    return'<tr><td>'+b.id+'</td><td>'+(b.num||'')+'</td><td style="font-size:11px">'+(b.operario||'')+'</td><td>'+(b.fecha||'')+'</td><td>'+(b.hora||'')+'</td><td>'+(b.metros||0)+' m</td><td>'+parseFloat(b.peso||0).toFixed(2)+' Kg</td></tr>';
-  }).join('');
   body.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">'
     +'<div class="field" style="min-width:200px;margin:0"><label style="font-size:11px;color:var(--muted)">Filtrar por operador</label>'
-    +'<select onchange="renderListModal(\''+ot+'\',this.value,window._listBobs)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px"><option value="">— Todos —</option>'+optsHtml+'</select></div>'
+    +'<select onchange="renderListModal(\''+ot+'\',this.value,currentBobs)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px">'
+    +'<option value="">— Todos —</option>'+optsHtml+'</select></div>'
     +'<div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600">'
     +'<span style="color:var(--blue)">📏 '+totM.toLocaleString()+' m</span>'
     +'<span style="color:var(--muted)">⚖ '+totP.toFixed(2)+' Kg</span>'
     +'<span style="color:var(--muted);font-weight:400">'+filtradas.length+' bobina(s)</span></div></div>'
-    +'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead>'
-    +'<tbody>'+rows+'</tbody>'
-    +'<tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td>'
-    +'<td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
-  window._listBobs=bobs;
+    +'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead><tbody>'
+    +filtradas.map(function(b){return'<tr><td>'+b.id+'</td><td>'+(b.num||'—')+'</td><td style="font-size:11px">'+(b.operario||'—')+'</td><td>'+(b.fecha||'—')+'</td><td>'+(b.hora||'—')+'</td><td>'+(b.metros||0)+' m</td><td>'+parseFloat(b.peso||0).toFixed(2)+' Kg</td></tr>';}).join('')
+    +'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
+  window.currentBobs=bobs;
 }
 
 function closeModal(id){document.getElementById(id).classList.remove('open');}
@@ -662,15 +646,9 @@ function buscarBobinaProd(){
   const p=b.params||{};
   r.innerHTML='<div class="result-card"><div style="font-size:13px;color:var(--muted);margin-bottom:12px">Bobina <strong>#'+b.id+'</strong> — OT: '+b.ot+' — '+b.mach+'</div>'
     +'<div class="result-grid">'
-    +'<div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">'+(p.eh||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">'+(p.ev||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Enc. Dir. Maq.</div><div class="ri-val">'+(p.edm||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">'+(p.cf||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">'+(p.cr||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Medida</div><div class="ri-val">'+(b.med||'—')+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">'+(p.ancho||'—')+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">'+(p.temp||'—')+' °C</div></div>'
-    +'<div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">'+(p.des||'—')+'</div></div>'
+    +ri('Enc. horizontal',p.eh,true)+ri('Enc. vertical',p.ev,true)+ri('Enc. Dir. Máquina',p.edm,true)
+    +ri('Calibre frente',p.cf,true)+ri('Calibre reverso',p.cr,true)+ri('Medida',b.med,true)
+    +ri('Ancho plano',p.ancho)+ri('Temp. túnel',(p.temp||'—')+' °C')+ri('Deslamine',p.des)
     +'</div></div>';
 }
 function limpiarProd(){document.getElementById('prod-search').value='';document.getElementById('prod-result').innerHTML='';}
@@ -684,39 +662,24 @@ function buscarBobinaCalidad(){
   const p=b.params||{};
   r.innerHTML='<div class="result-card">'
     +'<div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">Bobina #'+b.id+'</div>'
-    +'<div style="font-size:12px;color:var(--muted);margin-bottom:16px">Registro completo de calidad</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:16px">Registro completo</div>'
     +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div>'
     +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
-    +'<div class="result-item"><div class="ri-label">OT</div><div class="ri-val">'+b.ot+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Máquina</div><div class="ri-val">'+b.mach+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Operador</div><div class="ri-val" style="font-size:12px">'+b.operario+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Coordinador</div><div class="ri-val" style="font-size:12px">'+(b.coordinador||'—')+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Fecha / Lote</div><div class="ri-val">'+b.fecha+' / '+b.lote+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Remisión</div><div class="ri-val">'+b.rem+'</div></div>'
-    +'</div>'
+    +ri('OT',b.ot)+ri('Máquina',b.mach)+ri('Operador',b.operario)+ri('Coordinador',b.coordinador||'—')
+    +ri('Fecha / Lote',b.fecha+' / '+b.lote)+ri('Remisión',b.rem)+'</div>'
     +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producto</div>'
     +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
-    +'<div class="result-item"><div class="ri-label">Código</div><div class="ri-val" style="font-size:11px">'+b.prod+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:11px">'+b.desc+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">'+b.med+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Color</div><div class="ri-val">'+b.col+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">'+b.metros+' m</div></div>'
-    +'<div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">'+b.peso+' Kg</div></div>'
-    +'</div>'
+    +ri('Código',b.prod)+ri('Descripción',b.desc)+ri('Medida',b.med)+ri('Color',b.col)
+    +ri('Metros',b.metros+' m')+ri('Peso',b.peso+' Kg')+'</div>'
     +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div>'
     +'<div class="result-grid" style="margin-top:0">'
-    +'<div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">'+(p.eh||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">'+(p.ev||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Enc. Dir. Maq.</div><div class="ri-val">'+(p.edm||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">'+(p.cf||'—')+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">'+(p.cr||'—')+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">'+(p.ancho||'—')+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">'+(p.temp||'—')+' °C</div></div>'
-    +'<div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">'+(p.des||'—')+'</div></div>'
-    +'</div>'
+    +ri('Enc. horizontal',p.eh,true)+ri('Enc. vertical',p.ev,true)+ri('Enc. Dir. Máquina',p.edm,true)
+    +ri('Calibre frente',p.cf,true)+ri('Calibre reverso',p.cr,true)
+    +ri('Ancho plano',p.ancho)+ri('Temp. túnel',(p.temp||'—')+' °C')+ri('Deslamine',p.des)+'</div>'
     +(b.obs?'<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> '+b.obs+'</div>':'')
     +'</div>';
 }
+function ri(label,val,hl){return'<div class="result-item'+(hl?' highlight':'')+'"><div class="ri-label">'+label+'</div><div class="ri-val">'+(val||'—')+'</div></div>';}
 function limpiarCalidad(){document.getElementById('cal-search').value='';document.getElementById('cal-result').innerHTML='';}
 
 // ── LABEL ──
@@ -724,7 +687,7 @@ function renderLabel(b,esRegreso){
   const lp=document.getElementById('label-print'),lc=document.getElementById('label-content');
   const p=b.params||{};
   const pesoHtml=esRegreso
-    ?'<div class="lf"><span>Peso original</span><span>'+b.peso+' Kg</span></div><div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso</span><span style="color:#92400e">'+b.nuevoPeso+' Kg</span></div>'
+    ?'<div class="lf"><span>Peso original</span><span>'+b.peso+' Kg</span></div><div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso (regreso)</span><span style="color:#92400e">'+b.nuevoPeso+' Kg</span></div>'
     :'<div class="lf"><span>Peso</span><span>'+b.peso+' Kg</span></div>';
   lc.innerHTML='<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">'+b.mach+(esRegreso?' <span style="font-size:11px;color:#b91c1c">[REGRESO]</span>':'')+'</div></div>'
     +'<div class="label-grid">'
@@ -785,7 +748,7 @@ function confirmarUbicacionEntrada(){
   if(!UBICACIONES.includes(val)){alert('Ubicación "'+val+'" no reconocida.');return;}
   almEntradaLoc=val;
   const ex=(almStock[val]||[]).length;
-  document.getElementById('ent-loc-info').innerHTML='<div class="loc-badge">📍 '+val+' <span style="font-size:12px;font-weight:400;opacity:.8">'+ex+' bobina(s) en stock</span></div>';
+  document.getElementById('ent-loc-info').innerHTML='<div class="loc-badge">📍 '+val+' <span style="font-size:12px;font-weight:400;opacity:.8">'+ex+' bobina(s)</span></div>';
   document.getElementById('ent-scan-bob').style.display='block';
   document.getElementById('ent-bob').focus();
   renderListaEntrada();
@@ -805,22 +768,15 @@ function renderListaEntrada(){
   if(!almEntradaList.length){el.innerHTML='';act.style.display='none';return;}
   act.style.display='flex';
   el.innerHTML='<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">'+almEntradaList.length+' bobina(s) → '+almEntradaLoc+'</div>'
-    +almEntradaList.map(function(b,i){
-      return'<div class="bobina-row"><div class="br-info"><div class="br-id">#'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></div>'
-        +'<button class="icon-btn del" onclick="almEntradaList.splice('+i+',1);renderListaEntrada()">✕</button></div>';
-    }).join('');
+    +almEntradaList.map(function(b,i){return'<div class="bobina-row"><div class="br-info"><div class="br-id">#'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></div><button class="icon-btn del" onclick="almEntradaList.splice('+i+',1);renderListaEntrada()">✕</button></div>';}).join('');
 }
 function guardarEntrada(){
   if(!almStock[almEntradaLoc])almStock[almEntradaLoc]=[];
-  almEntradaList.forEach(function(b){
-    if(!almStock[almEntradaLoc].find(function(x){return Number(x.id)===Number(b.id);}))
-      almStock[almEntradaLoc].push(Object.assign({},b,{fechaEntrada:fmtDate(TODAY)}));
-  });
+  almEntradaList.forEach(function(b){if(!almStock[almEntradaLoc].find(function(x){return Number(x.id)===Number(b.id);}))almStock[almEntradaLoc].push(Object.assign({},b,{fechaEntrada:fmtDate(TODAY)}));});
   alert('✅ '+almEntradaList.length+' bobina(s) en '+almEntradaLoc);
-  almEntradaLoc='';almEntradaList=[];
   renderEntradas(document.getElementById('almacen-content'));
 }
-function cancelarEntrada(){almEntradaLoc='';almEntradaList=[];renderEntradas(document.getElementById('almacen-content'));}
+function cancelarEntrada(){renderEntradas(document.getElementById('almacen-content'));}
 
 function renderStock(c){
   c.innerHTML='<div class="card"><div class="card-title">📦 Stock por ubicación</div>'
@@ -839,9 +795,7 @@ function consultarStock(){
   const totP=bobs.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
   r.innerHTML='<div class="loc-badge" style="margin-top:8px">📍 '+val+'</div>'
     +'<div class="result-grid" style="margin-top:8px;margin-bottom:16px">'
-    +'<div class="result-item highlight"><div class="ri-label">Bobinas</div><div class="ri-val">'+bobs.length+'</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Metros</div><div class="ri-val">'+totM.toLocaleString()+' m</div></div>'
-    +'<div class="result-item highlight"><div class="ri-label">Peso</div><div class="ri-val">'+totP.toFixed(2)+' Kg</div></div></div>'
+    +ri('Bobinas',bobs.length,true)+ri('Metros',totM.toLocaleString()+' m',true)+ri('Peso',totP.toFixed(2)+' Kg',true)+'</div>'
     +'<table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>Fecha entrada</th></tr></thead><tbody>'
     +bobs.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td style="font-size:11px">'+b.desc+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td>'+b.col+'</td><td style="font-size:11px">'+(b.fechaEntrada||'—')+'</td></tr>';}).join('')
     +'</tbody></table>';
@@ -863,15 +817,9 @@ function cargarStockSalida(){
   if(!bobs.length){c.innerHTML='<div class="not-found">📍 <strong>'+val+'</strong> — sin inventario.</div>';return;}
   almSalidaLoc=val;
   const areasOpts=AREAS.map(function(a){return'<option>'+a+'</option>';}).join('');
-  const bobsHtml=bobs.map(function(b,i){
-    return'<div class="bobina-row"><input type="checkbox" id="chk-sal-'+i+'" value="'+i+'"/>'
-      +'<label for="chk-sal-'+i+'" class="br-info" style="cursor:pointer"><div class="br-id">#'+b.id+'</div>'
-      +'<div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg | '+b.col+'</div></label></div>';
-  }).join('');
   c.innerHTML='<div class="loc-badge" style="margin:12px 0">📍 '+val+' — '+bobs.length+' bobina(s)</div>'
-    +'<div id="sal-bobs">'+bobsHtml+'</div>'
-    +'<div class="sep"></div>'
-    +'<div class="form-grid" style="margin-top:12px">'
+    +'<div id="sal-bobs">'+bobs.map(function(b,i){return'<div class="bobina-row"><input type="checkbox" id="chk-sal-'+i+'" value="'+i+'"/><label for="chk-sal-'+i+'" class="br-info" style="cursor:pointer"><div class="br-id">#'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></label></div>';}).join('')+'</div>'
+    +'<div class="sep"></div><div class="form-grid" style="margin-top:12px">'
     +'<div class="field"><label>Área destino</label><select id="sal-area"><option value="">— Seleccione —</option>'+areasOpts+'</select></div>'
     +'<div class="field"><label>Número de pedido</label><input id="sal-pedido" placeholder="Ej. PED-2026-001"/></div>'
     +'<div class="field"><label>Entrega a</label><input id="sal-persona" placeholder="Nombre de quien recibe"/></div></div>'
@@ -889,7 +837,7 @@ function guardarSalida(){
   if(!area||!pedido||!persona){alert('Completa todos los campos.');return;}
   const idxs=checks.map(function(c){return parseInt(c.value);}).sort(function(a,b){return b-a;});
   idxs.forEach(function(i){bobs.splice(i,1);});
-  alert('✅ '+idxs.length+' bobina(s) despachadas a '+area+'\nPedido: '+pedido+' | Recibe: '+persona);
+  alert('✅ '+idxs.length+' bobina(s) a '+area+'\nPedido: '+pedido+' | Recibe: '+persona);
   renderSalidas(document.getElementById('almacen-content'));
 }
 
@@ -909,21 +857,15 @@ function buscarBobinaRegreso(){
   const b=findBobina(id);
   if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   almRegresosBobina=Object.assign({},b);
-  r.innerHTML='<div class="result-card">'
-    +'<div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #'+b.id+' — '+b.mach+'</div>'
+  r.innerHTML='<div class="result-card"><div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #'+b.id+' — '+b.mach+'</div>'
     +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
-    +'<div class="result-item"><div class="ri-label">OT</div><div class="ri-val">'+b.ot+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">'+b.operario+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">'+b.desc+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">'+b.metros+' m</div></div>'
-    +'<div class="result-item"><div class="ri-label">Peso original</div><div class="ri-val">'+b.peso+' Kg</div></div>'
-    +'<div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">'+b.med+'</div></div></div>'
+    +ri('OT',b.ot)+ri('Operario',b.operario)+ri('Descripción',b.desc)
+    +ri('Metros',b.metros+' m')+ri('Peso original',b.peso+' Kg')+ri('Medida',b.med)+'</div>'
     +'<div class="sep"></div>'
     +'<div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap">'
     +'<div class="field" style="min-width:200px"><label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg)</label>'
-    +'<input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Ingresa el nuevo peso" style="border:2px solid var(--blue2);font-size:15px;font-weight:600"/></div>'
-    +'<button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button>'
-    +'</div></div>';
+    +'<input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Nuevo peso" style="border:2px solid var(--blue2);font-size:15px;font-weight:600"/></div>'
+    +'<button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button></div></div>';
 }
 function imprimirEtiquetaRegreso(){
   const np=document.getElementById('reg-nuevo-peso').value.trim();
@@ -934,10 +876,11 @@ function limpiarRegreso(){document.getElementById('reg-id').value='';document.ge
 
 // ── ADMIN ──
 function renderAdmin(){
+  const totM=bobinas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
   document.getElementById('stats-grid').innerHTML=
     '<div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div>'
     +'<div class="stat"><div class="sv">'+bobinas.length+'</div><div class="sl">Bobinas esta sesión</div></div>'
-    +'<div class="stat"><div class="sv">'+bobinas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0).toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div>'
+    +'<div class="stat"><div class="sv">'+totM.toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div>'
     +'<div class="stat"><div class="sv">'+Object.values(almStock).reduce(function(a,v){return a+v.length;},0)+'</div><div class="sl">Bobinas en almacén</div></div>';
   adminTab('produccion',document.querySelector('#admin-tabs .sec-tab'));
 }
@@ -956,8 +899,8 @@ function adminTab(tab,btn){
 
 function renderAdminEtiqueta(c){
   c.innerHTML='<div class="card"><div class="card-title">🖨 Imprimir etiqueta por ID</div>'
-    +'<div class="search-box">'
-    +'<div class="field"><label>ID de bobina</label><input id="adm-etq-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key===\'Enter\')buscarEtiquetaAdmin()"/></div>'
+    +'<div class="search-box"><div class="field"><label>ID de bobina</label>'
+    +'<input id="adm-etq-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key===\'Enter\')buscarEtiquetaAdmin()"/></div>'
     +'<button class="btn btn-primary" onclick="buscarEtiquetaAdmin()" style="height:38px">Buscar</button>'
     +'<button class="btn" onclick="document.getElementById(\'adm-etq-id\').value=\'\';document.getElementById(\'adm-etq-result\').innerHTML=\'\'" style="height:38px">Limpiar</button></div>'
     +'<div id="adm-etq-result"></div></div>';
@@ -969,20 +912,16 @@ function buscarEtiquetaAdmin(){
   const b=findBobina(id);
   if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   const p=b.params||{};
-  r.innerHTML='<div class="result-card">'
-    +'<div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #'+b.id+' — '+b.mach+'</div>'
+  r.innerHTML='<div class="result-card"><div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #'+b.id+' — '+b.mach+'</div>'
     +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
-    +'<div class="result-item"><div class="ri-label">OT</div><div class="ri-val">'+b.ot+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">'+b.operario+'</div></div>'
-    +'<div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">'+b.metros+' m</div></div>'
-    +'<div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">'+b.peso+' Kg</div></div></div>'
+    +ri('OT',b.ot)+ri('Operario',b.operario)+ri('Metros',b.metros+' m')+ri('Peso',b.peso+' Kg')
+    +ri('Calibre frente',p.cf)+ri('Calibre reverso',p.cr)+'</div>'
     +'<button class="btn btn-primary" onclick="renderLabel(findBobina('+b.id+'),false)">🖨 Imprimir etiqueta</button></div>';
 }
 
 function renderProduccion(c){
-  const machOpts=document.querySelectorAll('.mach-tab');
-  let mOpts='<option value="">— Todas —</option>';
-  machOpts.forEach(function(b){mOpts+='<option value="'+b.dataset.id+'">'+b.dataset.id+'</option>';});
+  const machOpts='<option value="">— Todas —</option>'
+    +[...document.querySelectorAll('.mach-tab')].map(function(b){return'<option value="'+b.dataset.id+'">'+b.dataset.id+'</option>';}).join('');
   c.innerHTML='<div class="card"><div class="card-title">📊 Consulta de producción</div>'
     +'<div class="sec-tabs" id="prod-tabs">'
     +'<button class="sec-tab active" onclick="prodSubTab(\'bob\',this)">Por bobina</button>'
@@ -993,7 +932,7 @@ function renderProduccion(c){
     +'<button class="btn btn-primary" onclick="queryBobina()" style="height:38px">Buscar</button>'
     +'<button class="btn" onclick="limpiarProdQuery(\'bob\')" style="height:38px">Limpiar</button></div><div id="pres-bob"></div></div>'
     +'<div id="psub-ext" style="display:none"><div class="form-grid" style="margin-bottom:12px">'
-    +'<div class="field"><label>Extruder</label><select id="pq-ext-maq">'+mOpts+'</select></div>'
+    +'<div class="field"><label>Extruder</label><select id="pq-ext-maq">'+machOpts+'</select></div>'
     +'<div class="field"><label>Fecha inicio</label><input id="pq-ext-di" type="date"/></div>'
     +'<div class="field"><label>Hora inicio</label><input id="pq-ext-hi" type="time" value="00:00"/></div>'
     +'<div class="field"><label>Fecha fin</label><input id="pq-ext-df" type="date"/></div>'
@@ -1010,58 +949,55 @@ function renderProduccion(c){
     +'<button class="btn btn-success" id="btn-xl-ot" style="display:none" onclick="exportarExcel(\'ot\')">📥 Exportar Excel</button></div>'
     +'<div id="pres-ot"></div></div></div>';
 }
-
 function prodSubTab(tab,btn){
   ['bob','ext','ot'].forEach(function(t){document.getElementById('psub-'+t).style.display=t===tab?'block':'none';});
   document.querySelectorAll('#prod-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
 }
-function parseBoDate(b){var parts=b.fecha.split('-'),tp=(b.hora||'00:00:00').split(':');return new Date(parts[2],parts[1]-1,parts[0],tp[0],tp[1],tp[2]||0);}
+function parseBoDate(b){const p=b.fecha.split('-');const t=(b.hora||'00:00:00').split(':');return new Date(p[2],p[1]-1,p[0],t[0],t[1],t[2]||0);}
 function buildProdTable(rows){
   if(!rows.length)return'<div class="not-found">Sin resultados.</div>';
-  var byOT={};
+  const byOT={};
   rows.forEach(function(b){
     if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,prod:b.prod,desc:b.desc,med:b.med,bobinas:0,peso:0,metros:0,fecha:b.fecha};
     byOT[b.ot].bobinas++;byOT[b.ot].peso+=parseFloat(b.peso)||0;byOT[b.ot].metros+=parseFloat(b.metros)||0;
   });
-  var sumRows=Object.values(byOT);
-  var totB=sumRows.reduce(function(a,r){return a+r.bobinas;},0);
-  var totP=sumRows.reduce(function(a,r){return a+r.peso;},0);
-  var totM=sumRows.reduce(function(a,r){return a+r.metros;},0);
+  const sr=Object.values(byOT);
+  const totB=sr.reduce(function(a,r){return a+r.bobinas;},0);
+  const totP=sr.reduce(function(a,r){return a+r.peso;},0);
+  const totM=sr.reduce(function(a,r){return a+r.metros;},0);
   return'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">'
     +'<span style="font-size:13px;color:var(--muted)">'+rows.length+' bobina(s)</span>'
-    +'<div style="display:flex;gap:12px;font-size:13px"><span>🧵 <strong>'+totB+'</strong></span>'
-    +'<span>📏 <strong>'+totM.toLocaleString()+'</strong> m</span>'
-    +'<span>⚖ <strong>'+totP.toFixed(2)+'</strong> Kg</span></div></div>'
+    +'<div style="display:flex;gap:12px;font-size:13px"><span>🧵 <strong>'+totB+'</strong></span><span>📏 <strong>'+totM.toLocaleString()+'</strong> m</span><span>⚖ <strong>'+totP.toFixed(2)+'</strong> Kg</span></div></div>'
     +'<div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th><th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th></tr></thead><tbody>'
-    +sumRows.map(function(r){return'<tr><td>'+r.fecha+'</td><td style="font-weight:600">'+r.ot+'</td><td>'+r.mach+'</td><td style="font-size:11px">'+r.prod+'</td><td style="font-size:11px">'+r.desc+'</td><td style="text-align:center"><strong>'+r.bobinas+'</strong></td><td>'+r.peso.toFixed(3)+'</td><td>'+r.med+'</td><td>'+r.metros.toLocaleString()+' m</td></tr>';}).join('')
+    +sr.map(function(r){return'<tr><td>'+r.fecha+'</td><td style="font-weight:600">'+r.ot+'</td><td>'+r.mach+'</td><td style="font-size:11px">'+r.prod+'</td><td style="font-size:11px">'+r.desc+'</td><td style="text-align:center"><strong>'+r.bobinas+'</strong></td><td>'+r.peso.toFixed(3)+'</td><td>'+r.med+'</td><td>'+r.metros.toLocaleString()+' m</td></tr>';}).join('')
     +'</tbody></table></div>';
 }
 function queryBobina(){
-  var id=parseInt(document.getElementById('pq-bob-id').value.trim());
-  var r=document.getElementById('pres-bob');
+  const id=parseInt(document.getElementById('pq-bob-id').value.trim());
+  const r=document.getElementById('pres-bob');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
-  var b=findBobina(id);
+  const b=findBobina(id);
   if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   prodResultados.bob=[b];
   r.innerHTML=buildProdTable([b])+'<div class="btn-row" style="margin-top:12px"><button class="btn btn-success" onclick="exportarExcel(\'bob\')">📥 Exportar Excel</button></div>';
 }
 function queryExtruder(){
-  var maq=document.getElementById('pq-ext-maq').value;
-  var di=document.getElementById('pq-ext-di').value,hi=document.getElementById('pq-ext-hi').value||'00:00';
-  var df=document.getElementById('pq-ext-df').value,hf=document.getElementById('pq-ext-hf').value||'23:59';
+  const maq=document.getElementById('pq-ext-maq').value;
+  const di=document.getElementById('pq-ext-di').value,hi=document.getElementById('pq-ext-hi').value||'00:00';
+  const df=document.getElementById('pq-ext-df').value,hf=document.getElementById('pq-ext-hf').value||'23:59';
   if(!di||!df){alert('Selecciona el rango de fechas.');return;}
-  var desde=new Date(di+'T'+hi+':00'),hasta=new Date(df+'T'+hf+':00');
-  var rows=bobinas.filter(function(b){var t=parseBoDate(b);return t>=desde&&t<=hasta&&(!maq||b.mach===maq);});
+  const desde=new Date(di+'T'+hi+':00'),hasta=new Date(df+'T'+hf+':00');
+  const rows=bobinas.filter(function(b){const t=parseBoDate(b);return t>=desde&&t<=hasta&&(!maq||b.mach===maq);});
   prodResultados.ext=rows;
   document.getElementById('pres-ext').innerHTML=buildProdTable(rows);
   document.getElementById('btn-xl-ext').style.display=rows.length?'inline-block':'none';
 }
 function queryOT(){
-  var ot=document.getElementById('pq-ot-id').value.trim();
-  var r=document.getElementById('pres-ot');
+  const ot=document.getElementById('pq-ot-id').value.trim();
+  const r=document.getElementById('pres-ot');
   if(!ot){r.innerHTML='<div class="not-found">Ingresa una OT.</div>';return;}
-  var rows=bobinas.filter(function(b){return b.ot===ot;});
+  const rows=bobinas.filter(function(b){return b.ot===ot;});
   prodResultados.ot=rows;
   r.innerHTML=buildProdTable(rows);
   document.getElementById('btn-xl-ot').style.display=rows.length?'inline-block':'none';
@@ -1069,74 +1005,73 @@ function queryOT(){
 function limpiarProdQuery(tab){
   document.getElementById('pres-'+tab).innerHTML='';
   prodResultados[tab]=[];
-  if(tab==='ext'){['pq-ext-maq','pq-ext-di','pq-ext-hi','pq-ext-df','pq-ext-hf'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=id.endsWith('hi')?'00:00':id.endsWith('hf')?'23:59':'';});document.getElementById('btn-xl-ext').style.display='none';}
+  if(tab==='ext'){['pq-ext-maq','pq-ext-di','pq-ext-hi','pq-ext-df','pq-ext-hf'].forEach(function(id){const el=document.getElementById(id);if(el)el.value=id.endsWith('hi')?'00:00':id.endsWith('hf')?'23:59':'';});document.getElementById('btn-xl-ext').style.display='none';}
   if(tab==='ot'){document.getElementById('pq-ot-id').value='';document.getElementById('btn-xl-ot').style.display='none';}
   if(tab==='bob')document.getElementById('pq-bob-id').value='';
 }
 function exportarExcel(tab){
-  var rows=prodResultados[tab];if(!rows||!rows.length){alert('Sin datos.');return;}
-  var byOT={};
+  const rows=prodResultados[tab];if(!rows||!rows.length){alert('Sin datos.');return;}
+  const byOT={};
   rows.forEach(function(b){
     if(!byOT[b.ot])byOT[b.ot]={Fecha:b.fecha,OT:b.ot,Maquina:b.mach,Codigo:b.prod,Descripcion:b.desc,Bobinas:0,Peso_Kg:0,Medida:b.med,Metros:0};
     byOT[b.ot].Bobinas++;byOT[b.ot].Peso_Kg+=parseFloat(b.peso)||0;byOT[b.ot].Metros+=parseFloat(b.metros)||0;
   });
-  var data=Object.values(byOT).map(function(r){return Object.assign({},r,{Peso_Kg:parseFloat(r.Peso_Kg.toFixed(3))});});
-  var cols=Object.keys(data[0]);
-  var csv=[cols.join('\t')].concat(data.map(function(r){return cols.map(function(k){return r[k];}).join('\t');})).join('\n');
-  var blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download='Produccion_'+tab+'_'+new Date().toISOString().slice(0,10)+'.xls';a.click();URL.revokeObjectURL(url);
+  const data=Object.values(byOT).map(function(r){return Object.assign({},r,{Peso_Kg:parseFloat(r.Peso_Kg.toFixed(3))});});
+  const cols=Object.keys(data[0]);
+  const csv=[cols.join('\t')].concat(data.map(function(r){return cols.map(function(k){return r[k];}).join('\t');})).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='Produccion_'+tab+'_'+new Date().toISOString().slice(0,10)+'.xls';a.click();URL.revokeObjectURL(url);
 }
 
 function renderAdminOperadores(c){
-  c.innerHTML='<div class="card"><div class="card-title">👷 Operadores (desde API)</div>'
-    +'<div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar operadores</button></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">👷 Operadores</div>'
+    +'<div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar desde API</button></div></div>';
 }
 async function loadAdminOps(){
   document.getElementById('admin-op-list').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
   try{
-    var data=await apiFetch('/operators');
+    const data=await apiFetch('/operators');
     document.getElementById('admin-op-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th><th>ID externo</th></tr></thead><tbody>'
-      +data.map(function(o){return'<tr><td>'+o.id+'</td><td>'+o.full_name+'</td><td>'+(o.external_id||'—')+'</td></tr>';}).join('')
+      +data.map(function(o){return'<tr><td>'+o.id+'</td><td>'+o.full_name+'</td><td>'+o.external_id+'</td></tr>';}).join('')
       +'</tbody></table>';
   }catch(e){
-    document.getElementById('admin-op-list').innerHTML='<p style="color:#b91c1c;font-size:13px">Error: '+e.message+'</p>';
+    document.getElementById('admin-op-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';
   }
 }
 
 function renderAdminMaquinas(c){
-  c.innerHTML='<div class="card"><div class="card-title">⚙ Máquinas (desde API)</div>'
-    +'<div id="admin-maq-list"><button class="btn btn-primary" onclick="loadAdminMaqs()">🔄 Cargar máquinas</button></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">⚙ Máquinas</div>'
+    +'<div id="admin-maq-list"><button class="btn btn-primary" onclick="loadAdminMaqs()">🔄 Cargar desde API</button></div></div>';
 }
 async function loadAdminMaqs(){
   try{
-    var data=await apiFetch('/machines');
+    const data=await apiFetch('/machines');
     document.getElementById('admin-maq-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th></tr></thead><tbody>'
-      +data.map(function(m){return'<tr><td style="font-weight:700">'+m.id+'</td><td>'+m.name+'</td></tr>';}).join('')+'</tbody></table>';
+      +data.map(function(m){return'<tr><td style="font-weight:700">'+m.id+'</td><td>'+m.name+'</td></tr>';}).join('')
+      +'</tbody></table>';
   }catch(e){
-    document.getElementById('admin-maq-list').innerHTML='<p style="color:#b91c1c">'+e.message+'</p>';
+    document.getElementById('admin-maq-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';
   }
 }
 
 function renderAdminOrdenes(c){
-  c.innerHTML='<div class="card"><div class="card-title">📋 Órdenes de trabajo (desde SAP)</div>'
-    +'<div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar órdenes</button></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">📋 Órdenes de trabajo</div>'
+    +'<div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar desde API</button></div></div>';
 }
 async function loadAdminOTs(){
   try{
-    var data=await apiFetch('/work-orders');
+    const data=await apiFetch('/work-orders');
     document.getElementById('admin-ot-list').innerHTML='<table><thead><tr><th>OT</th><th>Producto</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>'
-      +data.map(function(o){
-        var cls=o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend';
-        return'<tr><td style="font-weight:700">'+o.ot_number+'</td><td style="font-size:11px">'+o.product_code+'</td><td style="font-size:11px">'+o.description+'</td><td>'+o.measure+'</td><td>'+o.color+'</td><td><span class="badge '+cls+'">'+o.status+'</span></td></tr>';
-      }).join('')+'</tbody></table>';
+      +data.map(function(o){return'<tr><td style="font-weight:700">'+o.ot_number+'</td><td style="font-size:11px">'+o.product_code+'</td><td style="font-size:11px">'+o.description+'</td><td>'+o.measure+'</td><td>'+o.color+'</td><td><span class="badge '+(o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend')+'">'+o.status+'</span></td></tr>';}).join('')
+      +'</tbody></table>';
   }catch(e){
-    document.getElementById('admin-ot-list').innerHTML='<p style="color:#b91c1c">'+e.message+'</p>';
+    document.getElementById('admin-ot-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';
   }
 }
 
 function renderCatCoordinadores(c){
-  var rows=catCoordinadores.map(function(o){
+  const rows=catCoordinadores.map(function(o){
     return'<tr><td>'+o.id+'</td><td>'+o.nombre+'</td>'
       +'<td><span class="badge '+(o.activo?'badge-ok':'badge-pend')+'">'+(o.activo?'Activo':'Inactivo')+'</span></td>'
       +'<td><div class="tbl-action">'
@@ -1158,22 +1093,24 @@ function openAddCoord(){
   document.getElementById('modal-form').classList.add('open');
 }
 function openEditCoord(id){
-  var item=catCoordinadores.find(function(c){return c.id===id;});
+  const item=catCoordinadores.find(function(c){return c.id===id;});
   if(!item)return;
   document.getElementById('mf-title').textContent='Editar Coordinador';
+  var selActivo='<option value="true"'+(item.activo?' selected':'')+'>Activo</option>'
+    +'<option value="false"'+(!item.activo?' selected':'')+'>Inactivo</option>';
   document.getElementById('mf-body').innerHTML='<div class="form-grid">'
     +'<div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" value="'+item.nombre+'"/></div>'
-    +'<div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true"'+(item.activo?' selected':'')+'>Activo</option><option value="false"'+(!item.activo?' selected':'')+'>Inactivo</option></select></div></div>';
+    +'<div class="field"><label>Estatus</label><select id="mfi-activo">'+selActivo+'</select></div></div>';
   currentModalType='coord-edit';editingId=id;
   document.getElementById('modal-form').classList.add('open');
 }
 function saveModalForm(){
-  var nombre=document.getElementById('mfi-nombre').value.trim();
-  var activo=document.getElementById('mfi-activo').value==='true';
+  const nombre=document.getElementById('mfi-nombre').value.trim();
+  const activo=document.getElementById('mfi-activo').value==='true';
   if(!nombre){alert('Ingresa el nombre.');return;}
   if(currentModalType==='coord-add'){catCoordinadores.push({id:Date.now(),nombre:nombre,activo:activo});}
   else if(currentModalType==='coord-edit'){
-    var idx=catCoordinadores.findIndex(function(c){return c.id===editingId;});
+    const idx=catCoordinadores.findIndex(function(c){return c.id===editingId;});
     if(idx>-1)catCoordinadores[idx]=Object.assign({},catCoordinadores[idx],{nombre:nombre,activo:activo});
   }
   closeModal('modal-form');
