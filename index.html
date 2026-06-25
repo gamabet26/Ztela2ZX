@@ -9,44 +9,20 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
 :root{--blue:#0D3B8C;--blue2:#1a56c4;--accent:#e63946;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280}
 body{background:var(--bg);color:var(--text);min-height:100vh}
-
-/* SPLASH */
 #splash{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
 #splash canvas{position:absolute;inset:0;opacity:.25}
 .zx-logo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
 .zx-text{font-size:144px;font-weight:900;color:#1a56c4;letter-spacing:-6px;animation:zxpulse 2s ease-in-out infinite}
 .zx-sub{font-size:30px;color:#fff;letter-spacing:8px;font-weight:300;opacity:.8}
 @keyframes zxpulse{0%,100%{text-shadow:0 0 30px #1a56c466;transform:scale(1)}50%{text-shadow:0 0 80px #1a56c4bb;transform:scale(1.06)}}
-
-/* LOGIN */
-#login-screen{display:none;position:fixed;inset:0;background:#000;z-index:8000;align-items:center;justify-content:center}
-#login-screen canvas{position:absolute;inset:0;opacity:.15}
-.login-card{position:relative;z-index:2;background:#fff;border-radius:16px;padding:40px 36px;width:100%;max-width:380px;box-shadow:0 20px 60px #0005}
-.login-card .zx-brand{font-size:36px;font-weight:900;color:var(--blue);letter-spacing:-2px;margin-bottom:4px}
-.login-card .zx-brand span{color:#5b9bf8}
-.login-card h2{font-size:15px;color:var(--muted);font-weight:400;margin-bottom:28px}
-.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.login-field label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.login-field input{padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;transition:.15s}
-.login-field input:focus{outline:none;border-color:var(--blue2);box-shadow:0 0 0 3px #1a56c420}
-.login-btn{width:100%;padding:13px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;transition:.15s}
-.login-btn:hover{background:var(--blue2)}
-.login-btn:disabled{opacity:.6;cursor:not-allowed}
-.login-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c;padding:10px 14px;border-radius:8px;font-size:13px;margin-top:12px;display:none}
-
-/* APP */
 #app{display:none;flex-direction:column;min-height:100vh}
 header{background:var(--blue);color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:56px;box-shadow:0 2px 8px #0003;flex-wrap:wrap;gap:4px}
 .logo-h{font-size:18px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;gap:8px}
 .logo-h span{color:#5b9bf8}
-.header-right{display:flex;align-items:center;gap:12px}
-.user-badge{font-size:12px;color:#ffffff99;display:flex;align-items:center;gap:6px}
-.logout-btn{background:#ffffff15;border:1px solid #ffffff30;color:#fff;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px}
 nav{display:flex;gap:2px;flex-wrap:wrap}
 nav button{background:transparent;border:none;color:#ffffffaa;padding:7px 12px;border-radius:6px;cursor:pointer;font-size:12px;transition:.2s}
 nav button.active,nav button:hover{background:#ffffff1a;color:#fff}
 main{flex:1;padding:20px;max-width:1200px;width:100%;margin:0 auto}
-
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
 .card-title{font-size:15px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--blue)}
 .mach-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
@@ -81,8 +57,6 @@ tr:hover td{background:#f8f9fb}
 .alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
-.spinning{display:inline-block;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
 @media print{body *{visibility:hidden}#label-print,#label-print *{visibility:visible}#label-print{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#fff}}
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
@@ -106,7 +80,7 @@ tr:hover td{background:#f8f9fb}
 .sec-tab{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px;transition:.15s}
 .sec-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .tbl-action{display:flex;gap:6px}
-.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;padding:4px 6px;border-radius:4px;transition:.15s}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;padding:4px 6px;border-radius:4px}
 .icon-btn:hover{background:var(--bg)}
 .icon-btn.del:hover{background:#fee2e2;color:#b91c1c}
 .result-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px;margin-top:16px}
@@ -128,12 +102,10 @@ tr:hover td{background:#f8f9fb}
 .bobina-row .br-info{flex:1;font-size:13px}
 .bobina-row .br-id{font-weight:700;color:var(--blue)}
 .bobina-row .br-sub{font-size:11px;color:var(--muted)}
-.step-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--blue);color:#fff;border-radius:50%;font-size:12px;font-weight:700;margin-right:6px;flex-shrink:0}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
   <canvas id="circuit"></canvas>
   <div class="zx-logo">
@@ -142,9 +114,6 @@ tr:hover td{background:#f8f9fb}
   </div>
 </div>
 
-
-
-<!-- APP -->
 <div id="app">
   <header>
     <div class="logo-h">ZX <span>Ztela 2</span></div>
@@ -155,9 +124,7 @@ tr:hover td{background:#f8f9fb}
       <button onclick="showView('almacen',this)">Almacén</button>
       <button onclick="showView('admin',this)">Administrador</button>
     </nav>
-    <div class="header-right">
-      <div class="user-badge">Ztela 2 ZX</div>
-    </div>
+    <div style="font-size:12px;color:#ffffff66">Ztela 2 ZX</div>
   </header>
   <main>
 
@@ -169,7 +136,6 @@ tr:hover td{background:#f8f9fb}
         <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo para continuar.</div>
         <div id="alert-metro" class="alert alert-err">🚫 Máximo 2,000 metros por bobina. Por favor corrija el valor.</div>
         <div id="alert-save" class="alert alert-ok">✅ Bobina guardada correctamente.</div>
-        <div id="alert-api-err" class="alert alert-err"></div>
         <div class="form-grid">
           <div class="field"><label>Operario</label>
             <select id="sel-op" onchange="checkForm()"><option value="">— Seleccione —</option></select>
@@ -232,7 +198,7 @@ tr:hover td{background:#f8f9fb}
     <!-- PRODUCCIÓN -->
     <div id="view-produccion" style="display:none">
       <div class="card">
-        <div class="card-title">🏭 Consulta de producción — Bobina</div>
+        <div class="card-title">🏭 Consulta de producción</div>
         <div class="search-box">
           <div class="field"><label>ID de bobina</label><input id="prod-search" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')buscarBobinaProd()"/></div>
           <button class="btn btn-primary" onclick="buscarBobinaProd()" style="height:38px">Buscar</button>
@@ -245,7 +211,7 @@ tr:hover td{background:#f8f9fb}
     <!-- CALIDAD -->
     <div id="view-calidad" style="display:none">
       <div class="card">
-        <div class="card-title">🔬 Consulta de calidad — Bobina</div>
+        <div class="card-title">🔬 Consulta de calidad</div>
         <div class="search-box">
           <div class="field"><label>ID de bobina</label><input id="cal-search" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')buscarBobinaCalidad()"/></div>
           <button class="btn btn-primary" onclick="buscarBobinaCalidad()" style="height:38px">Buscar</button>
@@ -315,19 +281,19 @@ tr:hover td{background:#f8f9fb}
 </div>
 
 <script>
-// ── CIRCUIT ANIMATION ──
-function initCircuit(canvasId){
-  const cv=document.getElementById(canvasId),cx=cv.getContext('2d');
-  let w,h,nd=[];
-  function resize(){w=cv.width=window.innerWidth;h=cv.height=window.innerHeight;}
+// ── CIRCUIT ──
+(function(){
+  const cv=document.getElementById('circuit'),cx=cv.getContext('2d');
+  let W,H,nd=[];
+  function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
   resize();window.addEventListener('resize',resize);
   for(let i=0;i<60;i++)nd.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
   function draw(){
-    cx.clearRect(0,0,w,h);cx.strokeStyle='#1a56c4';cx.lineWidth=.8;
+    cx.clearRect(0,0,W,H);cx.strokeStyle='#1a56c4';cx.lineWidth=.8;
     for(let i=0;i<nd.length;i++){
       nd[i].x+=nd[i].vx;nd[i].y+=nd[i].vy;
-      if(nd[i].x<0||nd[i].x>w)nd[i].vx*=-1;
-      if(nd[i].y<0||nd[i].y>h)nd[i].vy*=-1;
+      if(nd[i].x<0||nd[i].x>W)nd[i].vx*=-1;
+      if(nd[i].y<0||nd[i].y>H)nd[i].vy*=-1;
       for(let j=i+1;j<nd.length;j++){
         const dx=nd[i].x-nd[j].x,dy=nd[i].y-nd[j].y,d=Math.sqrt(dx*dx+dy*dy);
         if(d<180){cx.globalAlpha=(1-d/180)*.6;cx.beginPath();cx.moveTo(nd[i].x,nd[i].y);cx.lineTo(nd[j].x,nd[i].y);cx.lineTo(nd[j].x,nd[j].y);cx.stroke();}
@@ -337,116 +303,112 @@ function initCircuit(canvasId){
     cx.globalAlpha=1;requestAnimationFrame(draw);
   }
   draw();
-}
-initCircuit('circuit');
+})();
 
-// ── API ──
-const API='http://192.168.43.170/api';
-let jwtToken=null, currentUser=null;
-
-async function apiFetch(path, opts={}){
-  const headers={'Content-Type':'application/json',...(jwtToken?{Authorization:`Bearer ${jwtToken}`}:{})};
-  const res=await fetch(API+path,{...opts,headers:{...headers,...(opts.headers||{})}});
-  if(res.status===401){doLogout();throw new Error('Sesión expirada');}
-  const data=await res.json();
-  if(!res.ok)throw new Error(data.error||`Error ${res.status}`);
-  return data;
-}
-
-
-
-// ── SPLASH → APP ──
+// ── SPLASH ──
 setTimeout(()=>{
   const s=document.getElementById('splash');
   s.style.transition='opacity .6s';s.style.opacity='0';
-  setTimeout(()=>{
-    s.style.display='none';
-    document.getElementById('app').style.display='flex';
-    initApp();
-  },600);
+  setTimeout(()=>{s.style.display='none';document.getElementById('app').style.display='flex';setTimeout(initApp,100);},600);
 },2000);
 
-// ── STATE ──
-let curMach='EXT001', formActive=false, bobinas=[], lastSavedBobina=null;
-let curWOId=null; // work_order id numérico para API
-const TODAY=new Date();
-const fmtDate=d=>`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
-const fmtLote=d=>`${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getFullYear()).slice(2)}`;
-const nowTime=()=>{const n=new Date();return`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`};
+// ── API ──
+const API='http://192.168.43.170/api';
+let jwtToken=null;
 
-let almStock={}, almEntradaLoc='', almEntradaList=[], almSalidaLoc='', almRegresosBobina=null;
-const AREAS=['Impresión','Conversión','Barnizado','Corrugado','Empaque','Refilado','Rectificado'];
-const UBICACIONES=(()=>{const l=[];['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'].forEach(x=>{for(let n=1;n<=3;n++)l.push(x+n);});return l;})();
-
-let catCoordinadores=[
-  {id:1,nombre:'Gumaro Flores',activo:true},
-  {id:2,nombre:'Joaquin Gonzalez',activo:true},
-  {id:3,nombre:'Erick Presas',activo:true},
-  {id:4,nombre:'Israel Rodriguez',activo:true},
-];
-let currentModalType='', editingId=null;
-let prodResultados={bob:[],ext:[],ot:[]};
-
-// ── INIT ──
-async function initApp(){
-  await Promise.all([loadMachines(), loadOperators(), loadWorkOrders()]);
-  populateCoord();
-  renderAdmin();
+async function apiFetch(path,opts){
+  opts=opts||{};
+  const headers={'Content-Type':'application/json'};
+  if(jwtToken)headers['Authorization']='Bearer '+jwtToken;
+  const res=await fetch(API+path,Object.assign({},opts,{headers:Object.assign(headers,opts.headers||{})}));
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error||'Error '+res.status);
+  return data;
 }
 
-// Fallback data mientras el backend no esté disponible
-const FALLBACK_MACHINES=[
+// ── FALLBACK DATA ──
+const FB_MACHINES=[
   {id:'EXT001',name:'Extrusora 001'},{id:'EXT002',name:'Extrusora 002'},
   {id:'EXT003',name:'Extrusora 003'},{id:'EXT004',name:'Extrusora 004'},
   {id:'EXT005',name:'Extrusora 005'},{id:'EXT006',name:'Extrusora 006'}
 ];
-const FALLBACK_OPERATORS=[
+const FB_OPERATORS=[
   {id:1,full_name:'Juan Quiroz Segovia'},{id:2,full_name:'Roberto Martínez Salazar'},
   {id:3,full_name:'José Alfonso Ochoa Leija'},{id:4,full_name:'Erik Rodrigo Presas Jasso'},
   {id:5,full_name:'Israel Rodríguez Herrera'},{id:6,full_name:'Francisco Abelardo Garza Hernández'},
   {id:7,full_name:'Fabián de León Mejía'},{id:8,full_name:'Erick González Palomo'},
   {id:9,full_name:'Gerardo Martínez Alvarado'},{id:10,full_name:'Josué Rodolfo Gaytán Rodríguez'},
-  {id:11,full_name:'Luis Angel Ochoa Leija'},{id:12,full_name:'Luis Antonio Mendez Martinez'},
+  {id:11,full_name:'Luis Angel Ochoa Leija'},{id:12,full_name:'Luis Antonio Mendez Martinez'}
 ];
-const FALLBACK_ORDERS=[
+const FB_ORDERS=[
   {id:1,ot_number:'26050163',product_code:'20-710901-14085-01',description:'NX300606-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'IMPRESIÓN',remision:'26050179',status:'iniciado'},
   {id:2,ot_number:'26050162',product_code:'20-500901-17512-01',description:'NT250606-GEN-S/I-CLO-390MM',measure:'390MM',color:'CLARO',next_process:'CONVERSIÓN',remision:'26050224',status:'pendiente'},
-  {id:3,ot_number:'20040032',product_code:'20-230901-17468-01',description:'B501518RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'26050179',status:'iniciado'},
+  {id:3,ot_number:'20040032',product_code:'20-230901-17468-01',description:'B501518RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'26050179',status:'iniciado'}
 ];
 
+// ── STATE ──
+let curMach='EXT001', formActive=false, curWOId=null;
+let bobinas=[], lastSavedBobina=null;
+let almStock={}, almEntradaLoc='', almEntradaList=[], almSalidaLoc='', almRegresosBobina=null;
+let catCoordinadores=[
+  {id:1,nombre:'Gumaro Flores',activo:true},{id:2,nombre:'Joaquin Gonzalez',activo:true},
+  {id:3,nombre:'Erick Presas',activo:true},{id:4,nombre:'Israel Rodriguez',activo:true}
+];
+let currentModalType='', editingId=null;
+let prodResultados={bob:[],ext:[],ot:[]};
+const AREAS=['Impresión','Conversión','Barnizado','Corrugado','Empaque','Refilado','Rectificado'];
+const UBICACIONES=(()=>{const l=[];['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'].forEach(x=>{for(let n=1;n<=3;n++)l.push(x+n);});return l;})();
+const TODAY=new Date();
+const fmtDate=d=>`${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`;
+const fmtLote=d=>`${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(d.getFullYear()).slice(2)}`;
+const nowTime=()=>{const n=new Date();return`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`};
+
+// ── INIT ──
+async function initApp(){
+  await loadMachines();
+  await loadOperators();
+  await loadWorkOrders();
+  populateCoord();
+  renderAdmin();
+}
+
 async function loadMachines(){
-  let data=FALLBACK_MACHINES;
-  try{data=await apiFetch('/machines');}catch(e){console.warn('API no disponible, usando datos locales.');}
-  const mt=document.getElementById('mach-tabs');mt.innerHTML='';
-  data.forEach((m,i)=>{
+  let data=FB_MACHINES;
+  try{data=await apiFetch('/machines');}catch(e){console.warn('Usando máquinas locales');}
+  const mt=document.getElementById('mach-tabs');
+  mt.innerHTML='';
+  data.forEach(function(m,i){
     const b=document.createElement('button');
     b.className='mach-tab'+(i===0?' active':'');
-    b.textContent=m.id;b.dataset.id=m.id;b.dataset.name=m.name;
-    b.onclick=()=>selectMach(m.id,b);
+    b.textContent=m.id;b.dataset.id=m.id;
+    b.onclick=function(){selectMach(m.id,b);};
     mt.appendChild(b);
   });
   if(data.length){curMach=data[0].id;document.getElementById('mach-label').textContent=data[0].id;}
 }
 
 async function loadOperators(){
-  let data=FALLBACK_OPERATORS;
-  try{data=await apiFetch('/operators');}catch(e){console.warn('API no disponible, usando datos locales.');}
+  let data=FB_OPERATORS;
+  try{data=await apiFetch('/operators');}catch(e){console.warn('Usando operadores locales');}
   const so=document.getElementById('sel-op');
   so.innerHTML='<option value="">— Seleccione —</option>';
-  data.forEach(o=>{
+  data.forEach(function(o){
     const opt=document.createElement('option');opt.value=o.id;opt.textContent=o.full_name;so.appendChild(opt);
   });
 }
 
 async function loadWorkOrders(){
-  let data=FALLBACK_ORDERS;
-  try{data=await apiFetch('/work-orders');}catch(e){console.warn('API no disponible, usando datos locales.');}
+  let data=FB_ORDERS;
+  try{data=await apiFetch('/work-orders');}catch(e){console.warn('Usando órdenes locales');}
   const st=document.getElementById('sel-ot');
+  if(!st)return;
   st.innerHTML='<option value="">— Seleccione —</option>';
-  data.forEach(o=>{
+  data.forEach(function(o){
     const opt=document.createElement('option');
     opt.value=o.id;opt.textContent=o.ot_number;
-    Object.assign(opt.dataset,{prod:o.product_code,desc:o.description,med:o.measure,col:o.color,rem:o.remision,sig:o.next_process});
+    opt.dataset.prod=o.product_code;opt.dataset.desc=o.description;
+    opt.dataset.med=o.measure;opt.dataset.col=o.color;
+    opt.dataset.rem=o.remision;opt.dataset.sig=o.next_process;
     st.appendChild(opt);
   });
 }
@@ -455,9 +417,9 @@ function populateCoord(){
   const el=document.getElementById('sel-coord');
   const prev=el.value;
   el.innerHTML='<option value="">— Seleccione —</option>';
-  catCoordinadores.filter(c=>c.activo).forEach(c=>{
+  catCoordinadores.filter(function(c){return c.activo;}).forEach(function(c){
     const opt=document.createElement('option');opt.value=c.id;opt.textContent=c.nombre;
-    if(c.id===parseInt(prev))opt.selected=true;
+    if(String(c.id)===prev)opt.selected=true;
     el.appendChild(opt);
   });
 }
@@ -465,29 +427,32 @@ function populateCoord(){
 // ── OPERADOR ──
 function selectMach(m,btn){
   curMach=m;
-  document.querySelectorAll('.mach-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.mach-tab').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   document.getElementById('mach-label').textContent=m;
   resetForm();
 }
 
 function showView(v,btn){
-  ['operador','produccion','calidad','almacen','admin'].forEach(id=>
-    document.getElementById('view-'+id).style.display=id===v?'block':'none');
-  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  ['operador','produccion','calidad','almacen','admin'].forEach(function(id){
+    document.getElementById('view-'+id).style.display=id===v?'block':'none';
+  });
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   if(v==='admin')renderAdmin();
   if(v==='almacen')almacenTab('entradas',document.querySelector('#view-almacen .sec-tab'));
 }
 
 function resetForm(){
-  ['sel-op','sel-ot'].forEach(id=>document.getElementById(id).value='');
-  ['f-desc','f-prod','f-med','f-col','f-sig','f-rem','f-id','f-num','f-fecha','f-hora','f-lote','f-metros','f-peso','f-obs'].forEach(id=>document.getElementById(id).value='');
-  formActive=false;curWOId=null;hideAlerts();
+  ['sel-op','sel-ot'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-desc','f-prod','f-med','f-col','f-sig','f-rem','f-id','f-num','f-fecha','f-hora','f-lote','f-metros','f-peso','f-obs'].forEach(function(id){document.getElementById(id).value='';});
+  formActive=false;curWOId=null;
+  hideAlerts();
 }
 
 function checkForm(){
-  const op=document.getElementById('sel-op').value, ot=document.getElementById('sel-ot').value;
+  const op=document.getElementById('sel-op').value;
+  const ot=document.getElementById('sel-ot').value;
   if(!op||!ot){document.getElementById('alert-sel').style.display='block';formActive=false;}
   else{document.getElementById('alert-sel').style.display='none';formActive=true;}
 }
@@ -517,12 +482,16 @@ async function initBobina(){
   document.getElementById('f-obs').value='';
   document.getElementById('f-id').value='—';
   document.getElementById('f-num').value='—';
-  if(curWOId && formActive){
-    try{
-      const res=await apiFetch(`/bobbins/next-number?work_order_id=${curWOId}&machine_id=${curMach}`);
-      document.getElementById('f-num').value=res.next_number;
-    }catch(e){document.getElementById('f-num').value='?';}
+  if(!curWOId||!formActive)return;
+  try{
+    const res=await apiFetch('/bobbins/next-number?work_order_id='+curWOId+'&machine_id='+curMach);
+    document.getElementById('f-num').value=res.next_number;
+  }catch(e){
+    const otEl=document.getElementById('sel-ot');
+    const otTxt=otEl.options[otEl.selectedIndex].textContent;
+    document.getElementById('f-num').value=bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1;
   }
+  document.getElementById('f-id').value='Auto';
 }
 
 function nuevaBobina(){
@@ -533,41 +502,72 @@ function cancelarBobina(){resetForm();}
 
 function validarMetros(inp){
   const v=parseFloat(inp.value);
-  const al=document.getElementById('alert-metro');
-  if(v>2000){al.style.display='block';inp.style.borderColor='#e63946';}
-  else{al.style.display='none';inp.style.borderColor='';}
+  if(v>2000){document.getElementById('alert-metro').style.display='block';inp.style.borderColor='#e63946';}
+  else{document.getElementById('alert-metro').style.display='none';inp.style.borderColor='';}
 }
 
 function hideAlerts(){
-  ['alert-sel','alert-metro','alert-save','alert-api-err'].forEach(id=>document.getElementById(id).style.display='none');
-}
-
-function showApiErr(msg){
-  const el=document.getElementById('alert-api-err');
-  el.textContent='⚠ '+msg;el.style.display='block';
+  ['alert-sel','alert-metro','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});
 }
 
 async function guardarBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
   const metros=parseFloat(document.getElementById('f-metros').value)||0;
   if(metros>2000){document.getElementById('alert-metro').style.display='block';return;}
-  const opId=parseInt(document.getElementById('sel-op').value);
+
   const btn=document.getElementById('btn-guardar');
   btn.disabled=true;btn.textContent='⏳ Guardando...';
+
+  const opEl=document.getElementById('sel-op');
+  const otElS=document.getElementById('sel-ot');
+  const coordEl=document.getElementById('sel-coord');
+  const otTxt=otElS.options[otElS.selectedIndex].textContent;
+
+  const params={
+    med:document.getElementById('p-med').value,
+    ancho:document.getElementById('p-ancho').value,
+    eh:document.getElementById('p-eh').value,
+    cf:document.getElementById('p-cf').value,
+    ev:document.getElementById('p-ev').value,
+    cr:document.getElementById('p-cr').value,
+    edm:document.getElementById('p-edm').value,
+    des:document.getElementById('p-des').value==='true'?'Sí':document.getElementById('p-des').value==='false'?'No':'—',
+    temp:document.getElementById('p-temp').value
+  };
+
+  const bobLocal={
+    id:Date.now(),
+    num:bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1,
+    ot:otTxt,
+    operario:opEl.options[opEl.selectedIndex].textContent,
+    mach:curMach,
+    fecha:fmtDate(TODAY),hora:nowTime(),lote:fmtLote(TODAY),
+    metros:metros,
+    peso:document.getElementById('f-peso').value,
+    obs:document.getElementById('f-obs').value,
+    prod:document.getElementById('f-prod').value,
+    desc:document.getElementById('f-desc').value,
+    med:document.getElementById('f-med').value,
+    col:document.getElementById('f-col').value,
+    rem:document.getElementById('f-rem').value,
+    coordinador:coordEl.options[coordEl.selectedIndex]?coordEl.options[coordEl.selectedIndex].textContent:'—',
+    params:params
+  };
+
   try{
-    // 1. POST bobina
     const bobRes=await apiFetch('/bobbins',{method:'POST',body:JSON.stringify({
-      work_order_id:curWOId,
-      machine_id:curMach,
-      operator_id:opId,
-      meters:metros,
-      weight_kg:parseFloat(document.getElementById('f-peso').value)||0,
+      work_order_id:curWOId,machine_id:curMach,
+      operator_id:parseInt(opEl.value),
+      meters:metros,weight_kg:parseFloat(document.getElementById('f-peso').value)||0,
       observations:document.getElementById('f-obs').value||null
     })});
-    // 2. POST parámetros
-    const params={
-      bobbin_id:bobRes.id,
-      measurement_number:1,
+    bobLocal.id=bobRes.id;
+    bobLocal.num=bobRes.bobbin_number;
+    bobLocal.fecha=bobRes.production_date?bobRes.production_date.split('-').reverse().join('-'):fmtDate(TODAY);
+    bobLocal.hora=bobRes.production_time||nowTime();
+    bobLocal.lote=bobRes.lot_code||fmtLote(TODAY);
+    await apiFetch('/process-params',{method:'POST',body:JSON.stringify({
+      bobbin_id:bobRes.id,measurement_number:1,
       measure:parseFloat(document.getElementById('p-med').value)||null,
       flat_width:parseFloat(document.getElementById('p-ancho').value)||null,
       horizontal_shrinkage:parseFloat(document.getElementById('p-eh').value)||null,
@@ -577,66 +577,24 @@ async function guardarBobina(){
       machine_direction_shrinkage:parseFloat(document.getElementById('p-edm').value)||null,
       delamination:document.getElementById('p-des').value==='true'?true:document.getElementById('p-des').value==='false'?false:null,
       tunnel_temperature:parseFloat(document.getElementById('p-temp').value)||null
-    };
-    await apiFetch('/process-params',{method:'POST',body:JSON.stringify(params)});
-
-    // 3. POST revisión coordinador si se seleccionó
-    const coordId=document.getElementById('sel-coord').value;
-    const coordName=document.getElementById('sel-coord').options[document.getElementById('sel-coord').selectedIndex].textContent;
-    if(coordId){
-      await apiFetch('/reviews',{method:'POST',body:JSON.stringify({
-        bobbin_id:bobRes.id, review_type:'coordinator', reviewer_id:parseInt(coordId), notes:''
-      })}).catch(()=>{});
+    })});
+    if(coordEl.value){
+      apiFetch('/reviews',{method:'POST',body:JSON.stringify({
+        bobbin_id:bobRes.id,review_type:'coordinator',reviewer_id:parseInt(coordEl.value),notes:''
+      })}).catch(function(){});
     }
-
-    // Guardar localmente para etiqueta e historial
-    const opEl=document.getElementById('sel-op');
-    const stEl=document.getElementById('sel-ot');
-    const b={
-      id:bobRes.id,
-      num:bobRes.bobbin_number,
-      ot:stEl.options[stEl.selectedIndex].textContent,
-      operario:opEl.options[opEl.selectedIndex].textContent,
-      mach:curMach,
-      fecha:bobRes.production_date?bobRes.production_date.split('-').reverse().join('-'):fmtDate(TODAY),
-      hora:bobRes.production_time||nowTime(),
-      lote:bobRes.lot_code||fmtLote(TODAY),
-      metros,
-      peso:document.getElementById('f-peso').value,
-      obs:document.getElementById('f-obs').value,
-      prod:document.getElementById('f-prod').value,
-      desc:document.getElementById('f-desc').value,
-      med:document.getElementById('f-med').value,
-      col:document.getElementById('f-col').value,
-      rem:document.getElementById('f-rem').value,
-      coordinador:coordName||'—',
-      params:{
-        med:document.getElementById('p-med').value,
-        ancho:document.getElementById('p-ancho').value,
-        eh:document.getElementById('p-eh').value,
-        cf:document.getElementById('p-cf').value,
-        ev:document.getElementById('p-ev').value,
-        cr:document.getElementById('p-cr').value,
-        edm:document.getElementById('p-edm').value,
-        des:document.getElementById('p-des').value==='true'?'Sí':document.getElementById('p-des').value==='false'?'No':'—',
-        temp:document.getElementById('p-temp').value,
-      }
-    };
-    bobinas.push(b);lastSavedBobina=b;
-
-    const al=document.getElementById('alert-save');al.style.display='block';
-    setTimeout(()=>al.style.display='none',2500);
-
-    // limpiar para siguiente
-    ['p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-temp'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('p-des').value='';
-    await initBobina();
-
   }catch(e){
-    showApiErr(e.message);
-  }finally{
-    btn.disabled=false;btn.textContent='Guardar bobina';
+    console.warn('API no disponible, guardando localmente.');
   }
+
+  bobinas.push(bobLocal);
+  lastSavedBobina=bobLocal;
+  document.getElementById('alert-save').style.display='block';
+  setTimeout(function(){document.getElementById('alert-save').style.display='none';},2500);
+  ['p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-temp'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('p-des').value='';
+  btn.disabled=false;btn.textContent='Guardar bobina';
+  await initBobina();
 }
 
 function imprimirEtiqueta(){
@@ -644,140 +602,120 @@ function imprimirEtiqueta(){
   renderLabel(lastSavedBobina,false);
 }
 
-function getNextBobNum(otTexto){
-  return bobinas.filter(b=>b.ot===otTexto&&b.mach===curMach).length+1;
-}
-
-// ── LISTA BOBINAS MODAL ──
+// ── LISTA BOBINAS ──
 async function openListModal(){
   const otEl=document.getElementById('sel-ot');
   const otNum=otEl.options[otEl.selectedIndex].textContent||'—';
   document.getElementById('ml-ot').textContent=otNum;
   document.getElementById('ml-body').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
   document.getElementById('modal-list').classList.add('open');
+  let merged=bobinas.filter(function(b){return b.ot===otNum&&b.mach===curMach;});
   try{
-    const apiBobs=await apiFetch(`/bobbins?work_order_id=${curWOId}&machine_id=${curMach}`);
-    // merge API + local (la API puede no tener las recién guardadas aún)
-    const localIds=new Set(bobinas.map(b=>b.id));
-    const merged=[...bobinas.filter(b=>b.ot===otNum&&b.mach===curMach),
-      ...apiBobs.filter(b=>!localIds.has(b.id)).map(b=>({
-        id:b.id,num:b.bobbin_number,operario:b.operator_name,
+    const apiBobs=await apiFetch('/bobbins?work_order_id='+curWOId+'&machine_id='+curMach);
+    const localIds=new Set(bobinas.map(function(b){return b.id;}));
+    const extra=apiBobs.filter(function(b){return !localIds.has(b.id);}).map(function(b){
+      return{id:b.id,num:b.bobbin_number,operario:b.operator_name,
         fecha:b.production_date?b.production_date.split('-').reverse().join('-'):'—',
-        hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}
-      }))
-    ];
-    renderListModal(otNum,'',merged);
-  }catch(e){
-    renderListModal(otNum,'',bobinas.filter(b=>b.ot===otNum&&b.mach===curMach));
-  }
+        hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}};
+    });
+    merged=merged.concat(extra);
+  }catch(e){}
+  renderListModal(otNum,'',merged);
 }
 
 function renderListModal(ot,filtroOp,bobs){
   const body=document.getElementById('ml-body');
   if(!bobs||!bobs.length){body.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0">No hay bobinas registradas.</p>';return;}
-  const ops=[...new Set(bobs.map(b=>b.operario))];
-  const filtradas=filtroOp?bobs.filter(b=>b.operario===filtroOp):bobs;
-  const totM=filtradas.reduce((a,b)=>a+(parseFloat(b.metros)||0),0);
-  const totP=filtradas.reduce((a,b)=>a+(parseFloat(b.peso)||0),0);
-  body.innerHTML=`
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-      <div class="field" style="min-width:200px;margin:0">
-        <label style="font-size:11px;color:var(--muted)">Filtrar por operador</label>
-        <select onchange="renderListModal('${ot}',this.value,${JSON.stringify(bobs).replace(/'/g,'&#39;')})" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px">
-          <option value="">— Todos —</option>
-          ${ops.map(o=>`<option value="${o}"${o===filtroOp?' selected':''}>${o}</option>`).join('')}
-        </select>
-      </div>
-      <div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600">
-        <span style="color:var(--blue)">📏 ${totM.toLocaleString()} m</span>
-        <span style="color:var(--muted)">⚖ ${totP.toFixed(2)} Kg</span>
-        <span style="color:var(--muted);font-weight:400">${filtradas.length} bobina(s)</span>
-      </div>
-    </div>
-    <div style="overflow-x:auto">
-    <table><thead><tr><th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead>
-    <tbody>${filtradas.map(b=>`<tr>
-      <td>${b.id}</td><td>${b.num||b.bobbin_number}</td>
-      <td style="font-size:11px">${b.operario||b.operator_name}</td>
-      <td>${b.fecha||b.production_date}</td><td>${b.hora||b.production_time}</td>
-      <td>${b.metros||b.meters} m</td><td>${parseFloat(b.peso||b.weight_kg||0).toFixed(2)} Kg</td>
-    </tr>`).join('')}</tbody>
-    <tfoot><tr style="background:#f8f9fb;font-weight:600">
-      <td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td>
-      <td style="color:var(--blue)">${totM.toLocaleString()} m</td>
-      <td>${totP.toFixed(2)} Kg</td>
-    </tr></tfoot>
-    </table></div>`;
+  const ops=[...new Set(bobs.map(function(b){return b.operario;}))];
+  const filtradas=filtroOp?bobs.filter(function(b){return b.operario===filtroOp;}):bobs;
+  const totM=filtradas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
+  const totP=filtradas.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  const optsHtml=ops.map(function(o){return'<option value="'+o+'"'+(o===filtroOp?' selected':'')+'>'+o+'</option>';}).join('');
+  const rows=filtradas.map(function(b){
+    return'<tr><td>'+b.id+'</td><td>'+(b.num||'')+'</td><td style="font-size:11px">'+(b.operario||'')+'</td><td>'+(b.fecha||'')+'</td><td>'+(b.hora||'')+'</td><td>'+(b.metros||0)+' m</td><td>'+parseFloat(b.peso||0).toFixed(2)+' Kg</td></tr>';
+  }).join('');
+  body.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">'
+    +'<div class="field" style="min-width:200px;margin:0"><label style="font-size:11px;color:var(--muted)">Filtrar por operador</label>'
+    +'<select onchange="renderListModal(\''+ot+'\',this.value,window._listBobs)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px"><option value="">— Todos —</option>'+optsHtml+'</select></div>'
+    +'<div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600">'
+    +'<span style="color:var(--blue)">📏 '+totM.toLocaleString()+' m</span>'
+    +'<span style="color:var(--muted)">⚖ '+totP.toFixed(2)+' Kg</span>'
+    +'<span style="color:var(--muted);font-weight:400">'+filtradas.length+' bobina(s)</span></div></div>'
+    +'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead>'
+    +'<tbody>'+rows+'</tbody>'
+    +'<tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td>'
+    +'<td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
+  window._listBobs=bobs;
 }
 
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 // ── BÚSQUEDAS ──
-function findBobina(id){return bobinas.find(b=>Number(b.id)===id)||null;}
+function findBobina(id){return bobinas.find(function(b){return Number(b.id)===id;})||null;}
 
 function buscarBobinaProd(){
   const id=parseInt(document.getElementById('prod-search').value.trim());
   const r=document.getElementById('prod-result');
-  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada en esta sesión.</div>`;return;}
+  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   const p=b.params||{};
-  r.innerHTML=`<div class="result-card"><div style="font-size:13px;color:var(--muted);margin-bottom:12px">Bobina <strong>#${b.id}</strong> — OT: ${b.ot} — ${b.mach}</div>
-    <div class="result-grid">
-      <div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Enc. Dir. Máquina</div><div class="ri-val">${p.edm||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Medida</div><div class="ri-val">${b.med||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">${p.ancho||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
-      <div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">${p.des||'—'}</div></div>
-    </div></div>`;
+  r.innerHTML='<div class="result-card"><div style="font-size:13px;color:var(--muted);margin-bottom:12px">Bobina <strong>#'+b.id+'</strong> — OT: '+b.ot+' — '+b.mach+'</div>'
+    +'<div class="result-grid">'
+    +'<div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">'+(p.eh||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">'+(p.ev||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Enc. Dir. Maq.</div><div class="ri-val">'+(p.edm||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">'+(p.cf||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">'+(p.cr||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Medida</div><div class="ri-val">'+(b.med||'—')+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">'+(p.ancho||'—')+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">'+(p.temp||'—')+' °C</div></div>'
+    +'<div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">'+(p.des||'—')+'</div></div>'
+    +'</div></div>';
 }
 function limpiarProd(){document.getElementById('prod-search').value='';document.getElementById('prod-result').innerHTML='';}
 
 function buscarBobinaCalidad(){
   const id=parseInt(document.getElementById('cal-search').value.trim());
   const r=document.getElementById('cal-result');
-  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID de bobina.</div>';return;}
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
+  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   const p=b.params||{};
-  r.innerHTML=`<div class="result-card">
-    <div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">Bobina #${b.id}</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Registro completo de calidad</div>
-    <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div>
-    <div class="result-grid" style="margin-top:0;margin-bottom:16px">
-      <div class="result-item"><div class="ri-label">OT</div><div class="ri-val">${b.ot}</div></div>
-      <div class="result-item"><div class="ri-label">Máquina</div><div class="ri-val">${b.mach}</div></div>
-      <div class="result-item"><div class="ri-label">Operador</div><div class="ri-val" style="font-size:12px">${b.operario}</div></div>
-      <div class="result-item"><div class="ri-label">Coordinador</div><div class="ri-val" style="font-size:12px">${b.coordinador||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Fecha / Lote</div><div class="ri-val">${b.fecha} / ${b.lote}</div></div>
-      <div class="result-item"><div class="ri-label">Remisión</div><div class="ri-val">${b.rem}</div></div>
-    </div>
-    <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producto</div>
-    <div class="result-grid" style="margin-top:0;margin-bottom:16px">
-      <div class="result-item"><div class="ri-label">Código</div><div class="ri-val" style="font-size:11px">${b.prod}</div></div>
-      <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:11px">${b.desc}</div></div>
-      <div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">${b.med}</div></div>
-      <div class="result-item"><div class="ri-label">Color</div><div class="ri-val">${b.col}</div></div>
-      <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
-      <div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">${b.peso} Kg</div></div>
-    </div>
-    <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div>
-    <div class="result-grid" style="margin-top:0">
-      <div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">${p.eh||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">${p.ev||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Enc. Dir. Máquina</div><div class="ri-val">${p.edm||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">${p.ancho||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">${p.temp||'—'} °C</div></div>
-      <div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">${p.des||'—'}</div></div>
-    </div>
-    ${b.obs?`<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> ${b.obs}</div>`:''}
-  </div>`;
+  r.innerHTML='<div class="result-card">'
+    +'<div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">Bobina #'+b.id+'</div>'
+    +'<div style="font-size:12px;color:var(--muted);margin-bottom:16px">Registro completo de calidad</div>'
+    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div>'
+    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
+    +'<div class="result-item"><div class="ri-label">OT</div><div class="ri-val">'+b.ot+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Máquina</div><div class="ri-val">'+b.mach+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Operador</div><div class="ri-val" style="font-size:12px">'+b.operario+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Coordinador</div><div class="ri-val" style="font-size:12px">'+(b.coordinador||'—')+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Fecha / Lote</div><div class="ri-val">'+b.fecha+' / '+b.lote+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Remisión</div><div class="ri-val">'+b.rem+'</div></div>'
+    +'</div>'
+    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producto</div>'
+    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
+    +'<div class="result-item"><div class="ri-label">Código</div><div class="ri-val" style="font-size:11px">'+b.prod+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:11px">'+b.desc+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">'+b.med+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Color</div><div class="ri-val">'+b.col+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">'+b.metros+' m</div></div>'
+    +'<div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">'+b.peso+' Kg</div></div>'
+    +'</div>'
+    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div>'
+    +'<div class="result-grid" style="margin-top:0">'
+    +'<div class="result-item highlight"><div class="ri-label">Enc. horizontal</div><div class="ri-val">'+(p.eh||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Enc. vertical</div><div class="ri-val">'+(p.ev||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Enc. Dir. Maq.</div><div class="ri-val">'+(p.edm||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Calibre frente</div><div class="ri-val">'+(p.cf||'—')+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Calibre reverso</div><div class="ri-val">'+(p.cr||'—')+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Ancho plano</div><div class="ri-val">'+(p.ancho||'—')+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Temp. túnel</div><div class="ri-val">'+(p.temp||'—')+' °C</div></div>'
+    +'<div class="result-item"><div class="ri-label">Deslamine</div><div class="ri-val">'+(p.des||'—')+'</div></div>'
+    +'</div>'
+    +(b.obs?'<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> '+b.obs+'</div>':'')
+    +'</div>';
 }
 function limpiarCalidad(){document.getElementById('cal-search').value='';document.getElementById('cal-result').innerHTML='';}
 
@@ -786,38 +724,37 @@ function renderLabel(b,esRegreso){
   const lp=document.getElementById('label-print'),lc=document.getElementById('label-content');
   const p=b.params||{};
   const pesoHtml=esRegreso
-    ?`<div class="lf"><span>Peso original</span><span>${b.peso} Kg</span></div>
-       <div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso (regreso)</span><span style="color:#92400e">${b.nuevoPeso} Kg</span></div>`
-    :`<div class="lf"><span>Peso</span><span>${b.peso} Kg</span></div>`;
-  lc.innerHTML=`<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">${b.mach}${esRegreso?' <span style="font-size:11px;color:#b91c1c">[REGRESO]</span>':''}</div></div>
-    <div class="label-grid">
-      <div class="lf"><span>ID bobina</span><span>${b.id}</span></div>
-      <div class="lf"><span>Remisión</span><span>${b.rem}</span></div>
-      <div class="lf"><span>Num bobina</span><span>${b.num}</span></div>
-      <div class="lf"><span>Fecha</span><span>${b.fecha}</span></div>
-      <div class="lf"><span>Lote</span><span>${b.lote}</span></div>
-      <div class="lf"><span>Medida</span><span>${b.med}</span></div>
-      ${pesoHtml}
-      <div class="lf"><span>Calibre frente</span><span>${p.cf||'—'}</span></div>
-      <div class="lf"><span>Color</span><span>${b.col}</span></div>
-      <div class="lf"><span>Calibre reverso</span><span>${p.cr||'—'}</span></div>
-      <div class="lf"><span>Enc. ancho plano</span><span>${p.ancho||'—'}</span></div>
-      <div class="lf"><span>Enc. Dir. Maq.</span><span>${p.edm||'—'}</span></div>
-      <div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>${b.desc}</span></div>
-      <div class="lf"><span>Turno</span><span>${b.hora}</span></div>
-      <div class="lf"><span>Cod. prod.</span><span>${b.prod}</span></div>
-      <div class="lf"><span>Metros</span><span>${b.metros} m</span></div>
-      <div class="lf" style="grid-column:1/-1"><span>Operario</span><span>${b.operario}</span></div>
-      ${b.obs?`<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>${b.obs}</span></div>`:''}
-    </div>
-    <div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">${b.id}</div></div>`;
+    ?'<div class="lf"><span>Peso original</span><span>'+b.peso+' Kg</span></div><div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso</span><span style="color:#92400e">'+b.nuevoPeso+' Kg</span></div>'
+    :'<div class="lf"><span>Peso</span><span>'+b.peso+' Kg</span></div>';
+  lc.innerHTML='<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">'+b.mach+(esRegreso?' <span style="font-size:11px;color:#b91c1c">[REGRESO]</span>':'')+'</div></div>'
+    +'<div class="label-grid">'
+    +'<div class="lf"><span>ID bobina</span><span>'+b.id+'</span></div>'
+    +'<div class="lf"><span>Remisión</span><span>'+b.rem+'</span></div>'
+    +'<div class="lf"><span>Num bobina</span><span>'+b.num+'</span></div>'
+    +'<div class="lf"><span>Fecha</span><span>'+b.fecha+'</span></div>'
+    +'<div class="lf"><span>Lote</span><span>'+b.lote+'</span></div>'
+    +'<div class="lf"><span>Medida</span><span>'+b.med+'</span></div>'
+    +pesoHtml
+    +'<div class="lf"><span>Calibre frente</span><span>'+(p.cf||'—')+'</span></div>'
+    +'<div class="lf"><span>Color</span><span>'+b.col+'</span></div>'
+    +'<div class="lf"><span>Calibre reverso</span><span>'+(p.cr||'—')+'</span></div>'
+    +'<div class="lf"><span>Enc. ancho plano</span><span>'+(p.ancho||'—')+'</span></div>'
+    +'<div class="lf"><span>Enc. Dir. Maq.</span><span>'+(p.edm||'—')+'</span></div>'
+    +'<div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>'+b.desc+'</span></div>'
+    +'<div class="lf"><span>Turno</span><span>'+b.hora+'</span></div>'
+    +'<div class="lf"><span>Cod. prod.</span><span>'+b.prod+'</span></div>'
+    +'<div class="lf"><span>Metros</span><span>'+b.metros+' m</span></div>'
+    +'<div class="lf" style="grid-column:1/-1"><span>Operario</span><span>'+b.operario+'</span></div>'
+    +(b.obs?'<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>'+b.obs+'</span></div>':'')
+    +'</div>'
+    +'<div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">'+b.id+'</div></div>';
   lp.style.display='flex';
   try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
 }
 
 // ── ALMACÉN ──
 function almacenTab(tab,btn){
-  document.querySelectorAll('#view-almacen .sec-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#view-almacen .sec-tab').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   const c=document.getElementById('almacen-content');
   if(tab==='entradas')renderEntradas(c);
@@ -827,39 +764,28 @@ function almacenTab(tab,btn){
 }
 
 function renderEntradas(c){
-  c.innerHTML=`<div class="card">
-    <div class="card-title">📥 Entradas</div>
-    <div class="scan-box">
-      <div class="field"><label>📍 Escanear ubicación</label>
-        <input id="ent-loc" placeholder="Ej. A1" onkeydown="if(event.key==='Enter')confirmarUbicacionEntrada()" oninput="this.value=this.value.toUpperCase()"/>
-      </div>
-      <button class="btn btn-primary" onclick="confirmarUbicacionEntrada()" style="height:38px">Confirmar</button>
-    </div>
-    <div id="ent-loc-info"></div>
-    <div id="ent-scan-bob" style="display:none">
-      <div class="scan-box">
-        <div class="field"><label>🧵 Escanear ID de bobina</label>
-          <input id="ent-bob" type="number" placeholder="Escanea etiqueta" onkeydown="if(event.key==='Enter')agregarBobinaEntrada()"/>
-        </div>
-        <button class="btn btn-success" onclick="agregarBobinaEntrada()" style="height:38px">+ Agregar</button>
-      </div>
-      <div id="ent-list"></div>
-      <div class="btn-row" id="ent-actions" style="display:none">
-        <button class="btn btn-primary" onclick="guardarEntrada()">💾 Guardar entrada</button>
-        <button class="btn btn-danger" onclick="cancelarEntrada()">Cancelar</button>
-      </div>
-    </div>
-  </div>`;
   almEntradaLoc='';almEntradaList=[];
+  c.innerHTML='<div class="card"><div class="card-title">📥 Entradas</div>'
+    +'<div class="scan-box"><div class="field"><label>📍 Escanear ubicación</label>'
+    +'<input id="ent-loc" placeholder="Ej. A1" onkeydown="if(event.key===\'Enter\')confirmarUbicacionEntrada()" oninput="this.value=this.value.toUpperCase()"/></div>'
+    +'<button class="btn btn-primary" onclick="confirmarUbicacionEntrada()" style="height:38px">Confirmar</button></div>'
+    +'<div id="ent-loc-info"></div>'
+    +'<div id="ent-scan-bob" style="display:none">'
+    +'<div class="scan-box"><div class="field"><label>🧵 Escanear ID de bobina</label>'
+    +'<input id="ent-bob" type="number" placeholder="Escanea etiqueta" onkeydown="if(event.key===\'Enter\')agregarBobinaEntrada()"/></div>'
+    +'<button class="btn btn-success" onclick="agregarBobinaEntrada()" style="height:38px">+ Agregar</button></div>'
+    +'<div id="ent-list"></div>'
+    +'<div class="btn-row" id="ent-actions" style="display:none">'
+    +'<button class="btn btn-primary" onclick="guardarEntrada()">💾 Guardar entrada</button>'
+    +'<button class="btn btn-danger" onclick="cancelarEntrada()">Cancelar</button></div></div></div>';
 }
-
 function confirmarUbicacionEntrada(){
   const val=document.getElementById('ent-loc').value.trim().toUpperCase();
   if(!val){alert('Ingresa una ubicación.');return;}
-  if(!UBICACIONES.includes(val)){alert(`Ubicación "${val}" no reconocida.`);return;}
+  if(!UBICACIONES.includes(val)){alert('Ubicación "'+val+'" no reconocida.');return;}
   almEntradaLoc=val;
   const ex=(almStock[val]||[]).length;
-  document.getElementById('ent-loc-info').innerHTML=`<div class="loc-badge">📍 ${val} <span style="font-size:12px;font-weight:400;opacity:.8">${ex} bobina(s) en stock</span></div>`;
+  document.getElementById('ent-loc-info').innerHTML='<div class="loc-badge">📍 '+val+' <span style="font-size:12px;font-weight:400;opacity:.8">'+ex+' bobina(s) en stock</span></div>';
   document.getElementById('ent-scan-bob').style.display='block';
   document.getElementById('ent-bob').focus();
   renderListaEntrada();
@@ -867,9 +793,9 @@ function confirmarUbicacionEntrada(){
 function agregarBobinaEntrada(){
   const id=parseInt(document.getElementById('ent-bob').value);
   if(!id)return;
-  if(almEntradaList.find(b=>Number(b.id)===id)){alert('Ya agregada.');return;}
+  if(almEntradaList.find(function(b){return Number(b.id)===id;})){alert('Ya agregada.');return;}
   const b=findBobina(id);
-  almEntradaList.push(b?{...b}:{id,desc:'Sin datos',ot:'—',metros:'—',peso:'—',med:'—',col:'—'});
+  almEntradaList.push(b?Object.assign({},b):{id:id,desc:'Sin datos',ot:'—',metros:'—',peso:'—',med:'—',col:'—'});
   document.getElementById('ent-bob').value='';
   document.getElementById('ent-bob').focus();
   renderListaEntrada();
@@ -878,91 +804,80 @@ function renderListaEntrada(){
   const el=document.getElementById('ent-list'),act=document.getElementById('ent-actions');
   if(!almEntradaList.length){el.innerHTML='';act.style.display='none';return;}
   act.style.display='flex';
-  el.innerHTML=`<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">${almEntradaList.length} bobina(s) → ${almEntradaLoc}</div>`+
-    almEntradaList.map((b,i)=>`<div class="bobina-row">
-      <div class="br-info"><div class="br-id">#${b.id}</div><div class="br-sub">${b.desc} | ${b.metros} m | ${b.peso} Kg</div></div>
-      <button class="icon-btn del" onclick="almEntradaList.splice(${i},1);renderListaEntrada()">✕</button>
-    </div>`).join('');
+  el.innerHTML='<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">'+almEntradaList.length+' bobina(s) → '+almEntradaLoc+'</div>'
+    +almEntradaList.map(function(b,i){
+      return'<div class="bobina-row"><div class="br-info"><div class="br-id">#'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></div>'
+        +'<button class="icon-btn del" onclick="almEntradaList.splice('+i+',1);renderListaEntrada()">✕</button></div>';
+    }).join('');
 }
 function guardarEntrada(){
   if(!almStock[almEntradaLoc])almStock[almEntradaLoc]=[];
-  almEntradaList.forEach(b=>{if(!almStock[almEntradaLoc].find(x=>Number(x.id)===Number(b.id)))almStock[almEntradaLoc].push({...b,fechaEntrada:fmtDate(TODAY)});});
-  alert(`✅ ${almEntradaList.length} bobina(s) en ${almEntradaLoc}`);
+  almEntradaList.forEach(function(b){
+    if(!almStock[almEntradaLoc].find(function(x){return Number(x.id)===Number(b.id);}))
+      almStock[almEntradaLoc].push(Object.assign({},b,{fechaEntrada:fmtDate(TODAY)}));
+  });
+  alert('✅ '+almEntradaList.length+' bobina(s) en '+almEntradaLoc);
   almEntradaLoc='';almEntradaList=[];
   renderEntradas(document.getElementById('almacen-content'));
 }
 function cancelarEntrada(){almEntradaLoc='';almEntradaList=[];renderEntradas(document.getElementById('almacen-content'));}
 
 function renderStock(c){
-  c.innerHTML=`<div class="card">
-    <div class="card-title">📦 Stock por ubicación</div>
-    <div class="scan-box">
-      <div class="field"><label>📍 Escanear ubicación</label>
-        <input id="stk-loc" placeholder="Ej. B2" onkeydown="if(event.key==='Enter')consultarStock()" oninput="this.value=this.value.toUpperCase()"/>
-      </div>
-      <button class="btn btn-primary" onclick="consultarStock()" style="height:38px">Consultar</button>
-      <button class="btn" onclick="limpiarStock()" style="height:38px">Limpiar</button>
-    </div>
-    <div id="stk-result"></div>
-  </div>`;
+  c.innerHTML='<div class="card"><div class="card-title">📦 Stock por ubicación</div>'
+    +'<div class="scan-box"><div class="field"><label>📍 Escanear ubicación</label>'
+    +'<input id="stk-loc" placeholder="Ej. B2" onkeydown="if(event.key===\'Enter\')consultarStock()" oninput="this.value=this.value.toUpperCase()"/></div>'
+    +'<button class="btn btn-primary" onclick="consultarStock()" style="height:38px">Consultar</button>'
+    +'<button class="btn" onclick="limpiarStock()" style="height:38px">Limpiar</button></div>'
+    +'<div id="stk-result"></div></div>';
 }
 function consultarStock(){
   const val=document.getElementById('stk-loc').value.trim().toUpperCase();
   const r=document.getElementById('stk-result');
   const bobs=almStock[val]||[];
-  if(!bobs.length){r.innerHTML=`<div class="not-found">📍 <strong>${val}</strong> — sin inventario.</div>`;return;}
-  const totM=bobs.reduce((a,b)=>a+(parseFloat(b.metros)||0),0);
-  const totP=bobs.reduce((a,b)=>a+(parseFloat(b.peso)||0),0);
-  r.innerHTML=`<div class="loc-badge" style="margin-top:8px">📍 ${val}</div>
-    <div class="result-grid" style="margin-top:8px;margin-bottom:16px">
-      <div class="result-item highlight"><div class="ri-label">Bobinas</div><div class="ri-val">${bobs.length}</div></div>
-      <div class="result-item highlight"><div class="ri-label">Metros</div><div class="ri-val">${totM.toLocaleString()} m</div></div>
-      <div class="result-item highlight"><div class="ri-label">Peso</div><div class="ri-val">${totP.toFixed(2)} Kg</div></div>
-    </div>
-    <table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>Fecha entrada</th></tr></thead><tbody>
-      ${bobs.map(b=>`<tr><td style="font-weight:700;color:var(--blue)">${b.id}</td><td style="font-size:11px">${b.desc}</td><td>${b.metros} m</td><td>${b.peso} Kg</td><td>${b.col}</td><td style="font-size:11px">${b.fechaEntrada||'—'}</td></tr>`).join('')}
-    </tbody></table>`;
+  if(!bobs.length){r.innerHTML='<div class="not-found">📍 <strong>'+val+'</strong> — sin inventario.</div>';return;}
+  const totM=bobs.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
+  const totP=bobs.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  r.innerHTML='<div class="loc-badge" style="margin-top:8px">📍 '+val+'</div>'
+    +'<div class="result-grid" style="margin-top:8px;margin-bottom:16px">'
+    +'<div class="result-item highlight"><div class="ri-label">Bobinas</div><div class="ri-val">'+bobs.length+'</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Metros</div><div class="ri-val">'+totM.toLocaleString()+' m</div></div>'
+    +'<div class="result-item highlight"><div class="ri-label">Peso</div><div class="ri-val">'+totP.toFixed(2)+' Kg</div></div></div>'
+    +'<table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>Fecha entrada</th></tr></thead><tbody>'
+    +bobs.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td style="font-size:11px">'+b.desc+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td>'+b.col+'</td><td style="font-size:11px">'+(b.fechaEntrada||'—')+'</td></tr>';}).join('')
+    +'</tbody></table>';
 }
 function limpiarStock(){document.getElementById('stk-loc').value='';document.getElementById('stk-result').innerHTML='';}
 
 function renderSalidas(c){
-  c.innerHTML=`<div class="card">
-    <div class="card-title">📤 Salidas</div>
-    <div class="scan-box">
-      <div class="field"><label>📍 Escanear ubicación</label>
-        <input id="sal-loc" placeholder="Ej. C1" onkeydown="if(event.key==='Enter')cargarStockSalida()" oninput="this.value=this.value.toUpperCase()"/>
-      </div>
-      <button class="btn btn-primary" onclick="cargarStockSalida()" style="height:38px">Cargar inventario</button>
-    </div>
-    <div id="sal-content"></div>
-  </div>`;
   almSalidaLoc='';
+  c.innerHTML='<div class="card"><div class="card-title">📤 Salidas</div>'
+    +'<div class="scan-box"><div class="field"><label>📍 Escanear ubicación</label>'
+    +'<input id="sal-loc" placeholder="Ej. C1" onkeydown="if(event.key===\'Enter\')cargarStockSalida()" oninput="this.value=this.value.toUpperCase()"/></div>'
+    +'<button class="btn btn-primary" onclick="cargarStockSalida()" style="height:38px">Cargar inventario</button></div>'
+    +'<div id="sal-content"></div></div>';
 }
 function cargarStockSalida(){
   const val=document.getElementById('sal-loc').value.trim().toUpperCase();
   const bobs=almStock[val]||[];
   const c=document.getElementById('sal-content');
-  if(!bobs.length){c.innerHTML=`<div class="not-found">📍 <strong>${val}</strong> — sin inventario.</div>`;return;}
+  if(!bobs.length){c.innerHTML='<div class="not-found">📍 <strong>'+val+'</strong> — sin inventario.</div>';return;}
   almSalidaLoc=val;
-  const areasOpts=AREAS.map(a=>`<option>${a}</option>`).join('');
-  c.innerHTML=`<div class="loc-badge" style="margin:12px 0">📍 ${val} — ${bobs.length} bobina(s)</div>
-    <div style="margin-bottom:12px;font-size:13px;font-weight:600;color:var(--muted)">Selecciona las bobinas a despachar:</div>
-    <div id="sal-bobs">${bobs.map((b,i)=>`<div class="bobina-row">
-      <input type="checkbox" id="chk-sal-${i}" value="${i}"/>
-      <label for="chk-sal-${i}" class="br-info" style="cursor:pointer">
-        <div class="br-id">#${b.id}</div>
-        <div class="br-sub">${b.desc} | ${b.metros} m | ${b.peso} Kg | ${b.col}</div>
-      </label></div>`).join('')}</div>
-    <div class="sep"></div>
-    <div class="form-grid" style="margin-top:12px">
-      <div class="field"><label>Área destino</label><select id="sal-area"><option value="">— Seleccione —</option>${areasOpts}</select></div>
-      <div class="field"><label>Número de pedido</label><input id="sal-pedido" placeholder="Ej. PED-2026-001"/></div>
-      <div class="field"><label>Entrega a</label><input id="sal-persona" placeholder="Nombre de quien recibe"/></div>
-    </div>
-    <div class="btn-row" style="margin-top:16px">
-      <button class="btn btn-primary" onclick="guardarSalida()">💾 Registrar salida</button>
-      <button class="btn" onclick="renderSalidas(document.getElementById('almacen-content'))">Cancelar</button>
-    </div>`;
+  const areasOpts=AREAS.map(function(a){return'<option>'+a+'</option>';}).join('');
+  const bobsHtml=bobs.map(function(b,i){
+    return'<div class="bobina-row"><input type="checkbox" id="chk-sal-'+i+'" value="'+i+'"/>'
+      +'<label for="chk-sal-'+i+'" class="br-info" style="cursor:pointer"><div class="br-id">#'+b.id+'</div>'
+      +'<div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg | '+b.col+'</div></label></div>';
+  }).join('');
+  c.innerHTML='<div class="loc-badge" style="margin:12px 0">📍 '+val+' — '+bobs.length+' bobina(s)</div>'
+    +'<div id="sal-bobs">'+bobsHtml+'</div>'
+    +'<div class="sep"></div>'
+    +'<div class="form-grid" style="margin-top:12px">'
+    +'<div class="field"><label>Área destino</label><select id="sal-area"><option value="">— Seleccione —</option>'+areasOpts+'</select></div>'
+    +'<div class="field"><label>Número de pedido</label><input id="sal-pedido" placeholder="Ej. PED-2026-001"/></div>'
+    +'<div class="field"><label>Entrega a</label><input id="sal-persona" placeholder="Nombre de quien recibe"/></div></div>'
+    +'<div class="btn-row" style="margin-top:16px">'
+    +'<button class="btn btn-primary" onclick="guardarSalida()">💾 Registrar salida</button>'
+    +'<button class="btn" onclick="renderSalidas(document.getElementById(\'almacen-content\'))">Cancelar</button></div>';
 }
 function guardarSalida(){
   const bobs=almStock[almSalidaLoc]||[];
@@ -972,72 +887,63 @@ function guardarSalida(){
   const pedido=document.getElementById('sal-pedido').value.trim();
   const persona=document.getElementById('sal-persona').value.trim();
   if(!area||!pedido||!persona){alert('Completa todos los campos.');return;}
-  const idxs=checks.map(c=>parseInt(c.value)).sort((a,b)=>b-a);
-  idxs.forEach(i=>bobs.splice(i,1));
-  alert(`✅ ${idxs.length} bobina(s) despachadas a ${area}\nPedido: ${pedido} | Recibe: ${persona}`);
+  const idxs=checks.map(function(c){return parseInt(c.value);}).sort(function(a,b){return b-a;});
+  idxs.forEach(function(i){bobs.splice(i,1);});
+  alert('✅ '+idxs.length+' bobina(s) despachadas a '+area+'\nPedido: '+pedido+' | Recibe: '+persona);
   renderSalidas(document.getElementById('almacen-content'));
 }
 
 function renderRegresos(c){
-  c.innerHTML=`<div class="card">
-    <div class="card-title">🔄 Regresos — Reimprimir etiqueta</div>
-    <div class="scan-box">
-      <div class="field"><label>🧵 ID de bobina</label>
-        <input id="reg-id" type="number" placeholder="Escanea o ingresa ID" onkeydown="if(event.key==='Enter')buscarBobinaRegreso()"/>
-      </div>
-      <button class="btn btn-primary" onclick="buscarBobinaRegreso()" style="height:38px">Buscar</button>
-      <button class="btn" onclick="limpiarRegreso()" style="height:38px">Limpiar</button>
-    </div>
-    <div id="reg-result"></div>
-  </div>`;
   almRegresosBobina=null;
+  c.innerHTML='<div class="card"><div class="card-title">🔄 Regresos — Reimprimir etiqueta</div>'
+    +'<div class="scan-box"><div class="field"><label>🧵 ID de bobina</label>'
+    +'<input id="reg-id" type="number" placeholder="Escanea o ingresa ID" onkeydown="if(event.key===\'Enter\')buscarBobinaRegreso()"/></div>'
+    +'<button class="btn btn-primary" onclick="buscarBobinaRegreso()" style="height:38px">Buscar</button>'
+    +'<button class="btn" onclick="limpiarRegreso()" style="height:38px">Limpiar</button></div>'
+    +'<div id="reg-result"></div></div>';
 }
 function buscarBobinaRegreso(){
   const id=parseInt(document.getElementById('reg-id').value.trim());
   const r=document.getElementById('reg-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
-  almRegresosBobina={...b};
-  r.innerHTML=`<div class="result-card">
-    <div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #${b.id} — ${b.mach}</div>
-    <div class="result-grid" style="margin-top:0;margin-bottom:16px">
-      <div class="result-item"><div class="ri-label">OT</div><div class="ri-val">${b.ot}</div></div>
-      <div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">${b.operario}</div></div>
-      <div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">${b.desc}</div></div>
-      <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
-      <div class="result-item"><div class="ri-label">Peso original</div><div class="ri-val">${b.peso} Kg</div></div>
-      <div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">${b.med}</div></div>
-    </div>
-    <div class="sep"></div>
-    <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap">
-      <div class="field" style="min-width:200px">
-        <label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg)</label>
-        <input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Ingresa el nuevo peso" style="border:2px solid var(--blue2);font-size:15px;font-weight:600"/>
-      </div>
-      <button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button>
-    </div>
-  </div>`;
+  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
+  almRegresosBobina=Object.assign({},b);
+  r.innerHTML='<div class="result-card">'
+    +'<div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #'+b.id+' — '+b.mach+'</div>'
+    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
+    +'<div class="result-item"><div class="ri-label">OT</div><div class="ri-val">'+b.ot+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">'+b.operario+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Descripción</div><div class="ri-val" style="font-size:12px">'+b.desc+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">'+b.metros+' m</div></div>'
+    +'<div class="result-item"><div class="ri-label">Peso original</div><div class="ri-val">'+b.peso+' Kg</div></div>'
+    +'<div class="result-item"><div class="ri-label">Medida</div><div class="ri-val">'+b.med+'</div></div></div>'
+    +'<div class="sep"></div>'
+    +'<div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap">'
+    +'<div class="field" style="min-width:200px"><label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg)</label>'
+    +'<input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Ingresa el nuevo peso" style="border:2px solid var(--blue2);font-size:15px;font-weight:600"/></div>'
+    +'<button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button>'
+    +'</div></div>';
 }
 function imprimirEtiquetaRegreso(){
   const np=document.getElementById('reg-nuevo-peso').value.trim();
   if(!np){alert('Ingresa el nuevo peso.');return;}
-  renderLabel({...almRegresosBobina,nuevoPeso:np},true);
+  renderLabel(Object.assign({},almRegresosBobina,{nuevoPeso:np}),true);
 }
 function limpiarRegreso(){document.getElementById('reg-id').value='';document.getElementById('reg-result').innerHTML='';almRegresosBobina=null;}
 
 // ── ADMIN ──
 function renderAdmin(){
-  document.getElementById('stats-grid').innerHTML=`
-    <div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div>
-    <div class="stat"><div class="sv">${bobinas.length}</div><div class="sl">Bobinas esta sesión</div></div>
-    <div class="stat"><div class="sv">${bobinas.reduce((a,b)=>a+(parseFloat(b.metros)||0),0).toLocaleString()} m</div><div class="sl">Metros esta sesión</div></div>
-    <div class="stat"><div class="sv">${Object.values(almStock).reduce((a,v)=>a+v.length,0)}</div><div class="sl">Bobinas en almacén</div></div>`;
+  document.getElementById('stats-grid').innerHTML=
+    '<div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div>'
+    +'<div class="stat"><div class="sv">'+bobinas.length+'</div><div class="sl">Bobinas esta sesión</div></div>'
+    +'<div class="stat"><div class="sv">'+bobinas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0).toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div>'
+    +'<div class="stat"><div class="sv">'+Object.values(almStock).reduce(function(a,v){return a+v.length;},0)+'</div><div class="sl">Bobinas en almacén</div></div>';
   adminTab('produccion',document.querySelector('#admin-tabs .sec-tab'));
 }
 
 function adminTab(tab,btn){
-  document.querySelectorAll('#admin-tabs .sec-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#admin-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   const c=document.getElementById('admin-content');
   if(tab==='produccion')renderProduccion(c);
@@ -1049,135 +955,113 @@ function adminTab(tab,btn){
 }
 
 function renderAdminEtiqueta(c){
-  c.innerHTML=`<div class="card">
-    <div class="card-title">🖨 Imprimir etiqueta por ID</div>
-    <div class="search-box">
-      <div class="field"><label>ID de bobina</label>
-        <input id="adm-etq-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')buscarEtiquetaAdmin()"/>
-      </div>
-      <button class="btn btn-primary" onclick="buscarEtiquetaAdmin()" style="height:38px">Buscar</button>
-      <button class="btn" onclick="document.getElementById('adm-etq-id').value='';document.getElementById('adm-etq-result').innerHTML=''" style="height:38px">Limpiar</button>
-    </div>
-    <div id="adm-etq-result"></div>
-  </div>`;
+  c.innerHTML='<div class="card"><div class="card-title">🖨 Imprimir etiqueta por ID</div>'
+    +'<div class="search-box">'
+    +'<div class="field"><label>ID de bobina</label><input id="adm-etq-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key===\'Enter\')buscarEtiquetaAdmin()"/></div>'
+    +'<button class="btn btn-primary" onclick="buscarEtiquetaAdmin()" style="height:38px">Buscar</button>'
+    +'<button class="btn" onclick="document.getElementById(\'adm-etq-id\').value=\'\';document.getElementById(\'adm-etq-result\').innerHTML=\'\'" style="height:38px">Limpiar</button></div>'
+    +'<div id="adm-etq-result"></div></div>';
 }
 function buscarEtiquetaAdmin(){
   const id=parseInt(document.getElementById('adm-etq-id').value.trim());
   const r=document.getElementById('adm-etq-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
+  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   const p=b.params||{};
-  r.innerHTML=`<div class="result-card">
-    <div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #${b.id} — ${b.mach}</div>
-    <div class="result-grid" style="margin-top:0;margin-bottom:16px">
-      <div class="result-item"><div class="ri-label">OT</div><div class="ri-val">${b.ot}</div></div>
-      <div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">${b.operario}</div></div>
-      <div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">${b.metros} m</div></div>
-      <div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">${b.peso} Kg</div></div>
-      <div class="result-item"><div class="ri-label">Calibre frente</div><div class="ri-val">${p.cf||'—'}</div></div>
-      <div class="result-item"><div class="ri-label">Calibre reverso</div><div class="ri-val">${p.cr||'—'}</div></div>
-    </div>
-    <button class="btn btn-primary" onclick="renderLabel(findBobina(${b.id}),false)">🖨 Imprimir etiqueta</button>
-  </div>`;
+  r.innerHTML='<div class="result-card">'
+    +'<div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">Bobina #'+b.id+' — '+b.mach+'</div>'
+    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'
+    +'<div class="result-item"><div class="ri-label">OT</div><div class="ri-val">'+b.ot+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Operario</div><div class="ri-val" style="font-size:12px">'+b.operario+'</div></div>'
+    +'<div class="result-item"><div class="ri-label">Metros</div><div class="ri-val">'+b.metros+' m</div></div>'
+    +'<div class="result-item"><div class="ri-label">Peso</div><div class="ri-val">'+b.peso+' Kg</div></div></div>'
+    +'<button class="btn btn-primary" onclick="renderLabel(findBobina('+b.id+'),false)">🖨 Imprimir etiqueta</button></div>';
 }
 
 function renderProduccion(c){
-  const machOpts=`<option value="">— Todas —</option>`+
-    [...document.querySelectorAll('.mach-tab')].map(b=>`<option value="${b.dataset.id}">${b.dataset.id}</option>`).join('');
-  c.innerHTML=`<div class="card">
-    <div class="card-title">📊 Consulta de producción</div>
-    <div class="sec-tabs" id="prod-tabs">
-      <button class="sec-tab active" onclick="prodSubTab('bob',this)">Por bobina</button>
-      <button class="sec-tab" onclick="prodSubTab('ext',this)">Por extruder</button>
-      <button class="sec-tab" onclick="prodSubTab('ot',this)">Por OT</button>
-    </div>
-    <div id="psub-bob">
-      <div class="search-box" style="margin-bottom:12px">
-        <div class="field"><label>ID de bobina</label><input id="pq-bob-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key==='Enter')queryBobina()"/></div>
-        <button class="btn btn-primary" onclick="queryBobina()" style="height:38px">Buscar</button>
-        <button class="btn" onclick="limpiarProdQuery('bob')" style="height:38px">Limpiar</button>
-      </div><div id="pres-bob"></div>
-    </div>
-    <div id="psub-ext" style="display:none">
-      <div class="form-grid" style="margin-bottom:12px">
-        <div class="field"><label>Extruder</label><select id="pq-ext-maq">${machOpts}</select></div>
-        <div class="field"><label>Fecha inicio</label><input id="pq-ext-di" type="date"/></div>
-        <div class="field"><label>Hora inicio</label><input id="pq-ext-hi" type="time" value="00:00"/></div>
-        <div class="field"><label>Fecha fin</label><input id="pq-ext-df" type="date"/></div>
-        <div class="field"><label>Hora fin</label><input id="pq-ext-hf" type="time" value="23:59"/></div>
-      </div>
-      <div class="btn-row" style="margin-bottom:12px">
-        <button class="btn btn-primary" onclick="queryExtruder()">🔍 Consultar</button>
-        <button class="btn" onclick="limpiarProdQuery('ext')">Limpiar</button>
-        <button class="btn btn-success" id="btn-xl-ext" style="display:none" onclick="exportarExcel('ext')">📥 Exportar Excel</button>
-      </div><div id="pres-ext"></div>
-    </div>
-    <div id="psub-ot" style="display:none">
-      <div class="search-box" style="margin-bottom:12px">
-        <div class="field"><label>Número de OT</label><input id="pq-ot-id" placeholder="Ej. 26050163" onkeydown="if(event.key==='Enter')queryOT()"/></div>
-        <button class="btn btn-primary" onclick="queryOT()" style="height:38px">Buscar</button>
-        <button class="btn" onclick="limpiarProdQuery('ot')" style="height:38px">Limpiar</button>
-        <button class="btn btn-success" id="btn-xl-ot" style="display:none" onclick="exportarExcel('ot')">📥 Exportar Excel</button>
-      </div><div id="pres-ot"></div>
-    </div>
-  </div>`;
+  const machOpts=document.querySelectorAll('.mach-tab');
+  let mOpts='<option value="">— Todas —</option>';
+  machOpts.forEach(function(b){mOpts+='<option value="'+b.dataset.id+'">'+b.dataset.id+'</option>';});
+  c.innerHTML='<div class="card"><div class="card-title">📊 Consulta de producción</div>'
+    +'<div class="sec-tabs" id="prod-tabs">'
+    +'<button class="sec-tab active" onclick="prodSubTab(\'bob\',this)">Por bobina</button>'
+    +'<button class="sec-tab" onclick="prodSubTab(\'ext\',this)">Por extruder</button>'
+    +'<button class="sec-tab" onclick="prodSubTab(\'ot\',this)">Por OT</button></div>'
+    +'<div id="psub-bob"><div class="search-box" style="margin-bottom:12px">'
+    +'<div class="field"><label>ID de bobina</label><input id="pq-bob-id" type="number" placeholder="Ej. 500423" onkeydown="if(event.key===\'Enter\')queryBobina()"/></div>'
+    +'<button class="btn btn-primary" onclick="queryBobina()" style="height:38px">Buscar</button>'
+    +'<button class="btn" onclick="limpiarProdQuery(\'bob\')" style="height:38px">Limpiar</button></div><div id="pres-bob"></div></div>'
+    +'<div id="psub-ext" style="display:none"><div class="form-grid" style="margin-bottom:12px">'
+    +'<div class="field"><label>Extruder</label><select id="pq-ext-maq">'+mOpts+'</select></div>'
+    +'<div class="field"><label>Fecha inicio</label><input id="pq-ext-di" type="date"/></div>'
+    +'<div class="field"><label>Hora inicio</label><input id="pq-ext-hi" type="time" value="00:00"/></div>'
+    +'<div class="field"><label>Fecha fin</label><input id="pq-ext-df" type="date"/></div>'
+    +'<div class="field"><label>Hora fin</label><input id="pq-ext-hf" type="time" value="23:59"/></div></div>'
+    +'<div class="btn-row" style="margin-bottom:12px">'
+    +'<button class="btn btn-primary" onclick="queryExtruder()">🔍 Consultar</button>'
+    +'<button class="btn" onclick="limpiarProdQuery(\'ext\')">Limpiar</button>'
+    +'<button class="btn btn-success" id="btn-xl-ext" style="display:none" onclick="exportarExcel(\'ext\')">📥 Exportar Excel</button></div>'
+    +'<div id="pres-ext"></div></div>'
+    +'<div id="psub-ot" style="display:none"><div class="search-box" style="margin-bottom:12px">'
+    +'<div class="field"><label>Número de OT</label><input id="pq-ot-id" placeholder="Ej. 26050163" onkeydown="if(event.key===\'Enter\')queryOT()"/></div>'
+    +'<button class="btn btn-primary" onclick="queryOT()" style="height:38px">Buscar</button>'
+    +'<button class="btn" onclick="limpiarProdQuery(\'ot\')" style="height:38px">Limpiar</button>'
+    +'<button class="btn btn-success" id="btn-xl-ot" style="display:none" onclick="exportarExcel(\'ot\')">📥 Exportar Excel</button></div>'
+    +'<div id="pres-ot"></div></div></div>';
 }
 
 function prodSubTab(tab,btn){
-  ['bob','ext','ot'].forEach(t=>document.getElementById('psub-'+t).style.display=t===tab?'block':'none');
-  document.querySelectorAll('#prod-tabs .sec-tab').forEach(b=>b.classList.remove('active'));
+  ['bob','ext','ot'].forEach(function(t){document.getElementById('psub-'+t).style.display=t===tab?'block':'none';});
+  document.querySelectorAll('#prod-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
 }
-function allBobinas(){return[...bobinas];}
-function parseBoDate(b){const[d,m,y]=b.fecha.split('-');const[hh,mm,ss]=(b.hora||'00:00:00').split(':');return new Date(y,m-1,d,hh,mm,ss||0);}
+function parseBoDate(b){var parts=b.fecha.split('-'),tp=(b.hora||'00:00:00').split(':');return new Date(parts[2],parts[1]-1,parts[0],tp[0],tp[1],tp[2]||0);}
 function buildProdTable(rows){
   if(!rows.length)return'<div class="not-found">Sin resultados.</div>';
-  const byOT={};
-  rows.forEach(b=>{
+  var byOT={};
+  rows.forEach(function(b){
     if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,prod:b.prod,desc:b.desc,med:b.med,bobinas:0,peso:0,metros:0,fecha:b.fecha};
     byOT[b.ot].bobinas++;byOT[b.ot].peso+=parseFloat(b.peso)||0;byOT[b.ot].metros+=parseFloat(b.metros)||0;
   });
-  const sumRows=Object.values(byOT);
-  const totB=sumRows.reduce((a,r)=>a+r.bobinas,0);
-  const totP=sumRows.reduce((a,r)=>a+r.peso,0);
-  const totM=sumRows.reduce((a,r)=>a+r.metros,0);
-  return`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
-    <span style="font-size:13px;color:var(--muted)">${rows.length} bobina(s)</span>
-    <div style="display:flex;gap:12px;font-size:13px">
-      <span>🧵 <strong>${totB}</strong></span>
-      <span>📏 <strong>${totM.toLocaleString()}</strong> m</span>
-      <span>⚖ <strong>${totP.toFixed(2)}</strong> Kg</span>
-    </div></div>
-    <div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th><th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th></tr></thead>
-    <tbody>${sumRows.map(r=>`<tr><td>${r.fecha}</td><td style="font-weight:600">${r.ot}</td><td>${r.mach}</td><td style="font-size:11px">${r.prod}</td><td style="font-size:11px">${r.desc}</td><td style="text-align:center"><strong>${r.bobinas}</strong></td><td>${r.peso.toFixed(3)}</td><td>${r.med}</td><td>${r.metros.toLocaleString()} m</td></tr>`).join('')}
-    </tbody></table></div>`;
+  var sumRows=Object.values(byOT);
+  var totB=sumRows.reduce(function(a,r){return a+r.bobinas;},0);
+  var totP=sumRows.reduce(function(a,r){return a+r.peso;},0);
+  var totM=sumRows.reduce(function(a,r){return a+r.metros;},0);
+  return'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">'
+    +'<span style="font-size:13px;color:var(--muted)">'+rows.length+' bobina(s)</span>'
+    +'<div style="display:flex;gap:12px;font-size:13px"><span>🧵 <strong>'+totB+'</strong></span>'
+    +'<span>📏 <strong>'+totM.toLocaleString()+'</strong> m</span>'
+    +'<span>⚖ <strong>'+totP.toFixed(2)+'</strong> Kg</span></div></div>'
+    +'<div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th><th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th></tr></thead><tbody>'
+    +sumRows.map(function(r){return'<tr><td>'+r.fecha+'</td><td style="font-weight:600">'+r.ot+'</td><td>'+r.mach+'</td><td style="font-size:11px">'+r.prod+'</td><td style="font-size:11px">'+r.desc+'</td><td style="text-align:center"><strong>'+r.bobinas+'</strong></td><td>'+r.peso.toFixed(3)+'</td><td>'+r.med+'</td><td>'+r.metros.toLocaleString()+' m</td></tr>';}).join('')
+    +'</tbody></table></div>';
 }
 function queryBobina(){
-  const id=parseInt(document.getElementById('pq-bob-id').value.trim());
-  const r=document.getElementById('pres-bob');
+  var id=parseInt(document.getElementById('pq-bob-id').value.trim());
+  var r=document.getElementById('pres-bob');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
-  const b=findBobina(id);
-  if(!b){r.innerHTML=`<div class="not-found">⚠ Bobina <strong>${id}</strong> no encontrada.</div>`;return;}
+  var b=findBobina(id);
+  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   prodResultados.bob=[b];
-  r.innerHTML=buildProdTable([b])+`<div class="btn-row" style="margin-top:12px"><button class="btn btn-success" onclick="exportarExcel('bob')">📥 Exportar Excel</button></div>`;
+  r.innerHTML=buildProdTable([b])+'<div class="btn-row" style="margin-top:12px"><button class="btn btn-success" onclick="exportarExcel(\'bob\')">📥 Exportar Excel</button></div>';
 }
 function queryExtruder(){
-  const maq=document.getElementById('pq-ext-maq').value;
-  const di=document.getElementById('pq-ext-di').value,hi=document.getElementById('pq-ext-hi').value||'00:00';
-  const df=document.getElementById('pq-ext-df').value,hf=document.getElementById('pq-ext-hf').value||'23:59';
+  var maq=document.getElementById('pq-ext-maq').value;
+  var di=document.getElementById('pq-ext-di').value,hi=document.getElementById('pq-ext-hi').value||'00:00';
+  var df=document.getElementById('pq-ext-df').value,hf=document.getElementById('pq-ext-hf').value||'23:59';
   if(!di||!df){alert('Selecciona el rango de fechas.');return;}
-  const desde=new Date(`${di}T${hi}:00`),hasta=new Date(`${df}T${hf}:00`);
-  const rows=allBobinas().filter(b=>{const t=parseBoDate(b);return t>=desde&&t<=hasta&&(!maq||b.mach===maq);});
+  var desde=new Date(di+'T'+hi+':00'),hasta=new Date(df+'T'+hf+':00');
+  var rows=bobinas.filter(function(b){var t=parseBoDate(b);return t>=desde&&t<=hasta&&(!maq||b.mach===maq);});
   prodResultados.ext=rows;
   document.getElementById('pres-ext').innerHTML=buildProdTable(rows);
   document.getElementById('btn-xl-ext').style.display=rows.length?'inline-block':'none';
 }
 function queryOT(){
-  const ot=document.getElementById('pq-ot-id').value.trim();
-  const r=document.getElementById('pres-ot');
+  var ot=document.getElementById('pq-ot-id').value.trim();
+  var r=document.getElementById('pres-ot');
   if(!ot){r.innerHTML='<div class="not-found">Ingresa una OT.</div>';return;}
-  const rows=allBobinas().filter(b=>b.ot===ot);
+  var rows=bobinas.filter(function(b){return b.ot===ot;});
   prodResultados.ot=rows;
   r.innerHTML=buildProdTable(rows);
   document.getElementById('btn-xl-ot').style.display=rows.length?'inline-block':'none';
@@ -1185,114 +1069,122 @@ function queryOT(){
 function limpiarProdQuery(tab){
   document.getElementById('pres-'+tab).innerHTML='';
   prodResultados[tab]=[];
-  if(tab==='ext'){['pq-ext-maq','pq-ext-di','pq-ext-hi','pq-ext-df','pq-ext-hf'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=id.endsWith('hi')?'00:00':id.endsWith('hf')?'23:59':'';}); document.getElementById('btn-xl-ext').style.display='none';}
+  if(tab==='ext'){['pq-ext-maq','pq-ext-di','pq-ext-hi','pq-ext-df','pq-ext-hf'].forEach(function(id){var el=document.getElementById(id);if(el)el.value=id.endsWith('hi')?'00:00':id.endsWith('hf')?'23:59':'';});document.getElementById('btn-xl-ext').style.display='none';}
   if(tab==='ot'){document.getElementById('pq-ot-id').value='';document.getElementById('btn-xl-ot').style.display='none';}
   if(tab==='bob')document.getElementById('pq-bob-id').value='';
 }
 function exportarExcel(tab){
-  const rows=prodResultados[tab];if(!rows||!rows.length){alert('Sin datos.');return;}
-  const byOT={};
-  rows.forEach(b=>{
+  var rows=prodResultados[tab];if(!rows||!rows.length){alert('Sin datos.');return;}
+  var byOT={};
+  rows.forEach(function(b){
     if(!byOT[b.ot])byOT[b.ot]={Fecha:b.fecha,OT:b.ot,Maquina:b.mach,Codigo:b.prod,Descripcion:b.desc,Bobinas:0,Peso_Kg:0,Medida:b.med,Metros:0};
     byOT[b.ot].Bobinas++;byOT[b.ot].Peso_Kg+=parseFloat(b.peso)||0;byOT[b.ot].Metros+=parseFloat(b.metros)||0;
   });
-  const data=Object.values(byOT).map(r=>({...r,Peso_Kg:parseFloat(r.Peso_Kg.toFixed(3))}));
-  const cols=Object.keys(data[0]);
-  const csv=[cols.join('\t'),...data.map(r=>cols.map(k=>r[k]).join('\t'))].join('\n');
-  const blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download=`Produccion_${tab}_${new Date().toISOString().slice(0,10)}.xls`;a.click();URL.revokeObjectURL(url);
+  var data=Object.values(byOT).map(function(r){return Object.assign({},r,{Peso_Kg:parseFloat(r.Peso_Kg.toFixed(3))});});
+  var cols=Object.keys(data[0]);
+  var csv=[cols.join('\t')].concat(data.map(function(r){return cols.map(function(k){return r[k];}).join('\t');})).join('\n');
+  var blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='Produccion_'+tab+'_'+new Date().toISOString().slice(0,10)+'.xls';a.click();URL.revokeObjectURL(url);
 }
 
 function renderAdminOperadores(c){
-  c.innerHTML=`<div class="card"><div class="card-title">👷 Operadores (desde API)</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Los operadores se sincronizan automáticamente desde IBIX vía la API.</p>
-    <div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar operadores</button></div>
-  </div>`;
+  c.innerHTML='<div class="card"><div class="card-title">👷 Operadores (desde API)</div>'
+    +'<div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar operadores</button></div></div>';
 }
 async function loadAdminOps(){
   document.getElementById('admin-op-list').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
   try{
-    const data=await apiFetch('/operators');
-    document.getElementById('admin-op-list').innerHTML=`<table><thead><tr><th>ID</th><th>Nombre</th><th>ID externo</th><th>Sincronizado</th></tr></thead><tbody>
-      ${data.map(o=>`<tr><td>${o.id}</td><td>${o.full_name}</td><td>${o.external_id}</td><td style="font-size:11px">${new Date(o.synced_at).toLocaleString('es-MX')}</td></tr>`).join('')}
-    </tbody></table>`;
-  }catch(e){document.getElementById('admin-op-list').innerHTML=`<p style="color:#b91c1c;font-size:13px">Error: ${e.message}</p>`;}
+    var data=await apiFetch('/operators');
+    document.getElementById('admin-op-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th><th>ID externo</th></tr></thead><tbody>'
+      +data.map(function(o){return'<tr><td>'+o.id+'</td><td>'+o.full_name+'</td><td>'+(o.external_id||'—')+'</td></tr>';}).join('')
+      +'</tbody></table>';
+  }catch(e){
+    document.getElementById('admin-op-list').innerHTML='<p style="color:#b91c1c;font-size:13px">Error: '+e.message+'</p>';
+  }
 }
 
 function renderAdminMaquinas(c){
-  c.innerHTML=`<div class="card"><div class="card-title">⚙ Máquinas (desde API)</div>
-    <div id="admin-maq-list"><button class="btn btn-primary" onclick="loadAdminMaqs()">🔄 Cargar máquinas</button></div>
-  </div>`;
+  c.innerHTML='<div class="card"><div class="card-title">⚙ Máquinas (desde API)</div>'
+    +'<div id="admin-maq-list"><button class="btn btn-primary" onclick="loadAdminMaqs()">🔄 Cargar máquinas</button></div></div>';
 }
 async function loadAdminMaqs(){
   try{
-    const data=await apiFetch('/machines');
-    document.getElementById('admin-maq-list').innerHTML=`<table><thead><tr><th>ID</th><th>Nombre</th></tr></thead><tbody>
-      ${data.map(m=>`<tr><td style="font-weight:700">${m.id}</td><td>${m.name}</td></tr>`).join('')}
-    </tbody></table>`;
-  }catch(e){document.getElementById('admin-maq-list').innerHTML=`<p style="color:#b91c1c">${e.message}</p>`;}
+    var data=await apiFetch('/machines');
+    document.getElementById('admin-maq-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th></tr></thead><tbody>'
+      +data.map(function(m){return'<tr><td style="font-weight:700">'+m.id+'</td><td>'+m.name+'</td></tr>';}).join('')+'</tbody></table>';
+  }catch(e){
+    document.getElementById('admin-maq-list').innerHTML='<p style="color:#b91c1c">'+e.message+'</p>';
+  }
 }
 
 function renderAdminOrdenes(c){
-  c.innerHTML=`<div class="card"><div class="card-title">📋 Órdenes de trabajo (desde SAP)</div>
-    <div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar órdenes</button></div>
-  </div>`;
+  c.innerHTML='<div class="card"><div class="card-title">📋 Órdenes de trabajo (desde SAP)</div>'
+    +'<div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar órdenes</button></div></div>';
 }
 async function loadAdminOTs(){
   try{
-    const data=await apiFetch('/work-orders');
-    document.getElementById('admin-ot-list').innerHTML=`<table><thead><tr><th>OT</th><th>Producto</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>
-      ${data.map(o=>`<tr><td style="font-weight:700">${o.ot_number}</td><td style="font-size:11px">${o.product_code}</td><td style="font-size:11px">${o.description}</td><td>${o.measure}</td><td>${o.color}</td>
-      <td><span class="badge ${o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend'}">${o.status}</span></td></tr>`).join('')}
-    </tbody></table>`;
-  }catch(e){document.getElementById('admin-ot-list').innerHTML=`<p style="color:#b91c1c">${e.message}</p>`;}
+    var data=await apiFetch('/work-orders');
+    document.getElementById('admin-ot-list').innerHTML='<table><thead><tr><th>OT</th><th>Producto</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>'
+      +data.map(function(o){
+        var cls=o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend';
+        return'<tr><td style="font-weight:700">'+o.ot_number+'</td><td style="font-size:11px">'+o.product_code+'</td><td style="font-size:11px">'+o.description+'</td><td>'+o.measure+'</td><td>'+o.color+'</td><td><span class="badge '+cls+'">'+o.status+'</span></td></tr>';
+      }).join('')+'</tbody></table>';
+  }catch(e){
+    document.getElementById('admin-ot-list').innerHTML='<p style="color:#b91c1c">'+e.message+'</p>';
+  }
 }
 
-// ── COORDINADORES (local) ──
 function renderCatCoordinadores(c){
-  const rows=catCoordinadores.map(o=>`<tr><td>${o.id}</td><td>${o.nombre}</td>
-    <td><span class="badge ${o.activo?'badge-ok':'badge-pend'}">${o.activo?'Activo':'Inactivo'}</span></td>
-    <td><div class="tbl-action"><button class="icon-btn" onclick="openEdit('coordinadores',${o.id})">✏️</button><button class="icon-btn del" onclick="delCoord(${o.id})">🗑</button></div></td></tr>`).join('');
-  c.innerHTML=`<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-    <span style="font-size:15px;font-weight:600;color:var(--blue)">Coordinadores</span>
-    <button class="btn btn-primary" onclick="openAddCoord()">+ Agregar</button>
-  </div><table><thead><tr><th>ID</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  var rows=catCoordinadores.map(function(o){
+    return'<tr><td>'+o.id+'</td><td>'+o.nombre+'</td>'
+      +'<td><span class="badge '+(o.activo?'badge-ok':'badge-pend')+'">'+(o.activo?'Activo':'Inactivo')+'</span></td>'
+      +'<td><div class="tbl-action">'
+      +'<button class="icon-btn" onclick="openEditCoord('+o.id+')">✏️</button>'
+      +'<button class="icon-btn del" onclick="delCoord('+o.id+')">🗑</button>'
+      +'</div></td></tr>';
+  }).join('');
+  c.innerHTML='<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">'
+    +'<span style="font-size:15px;font-weight:600;color:var(--blue)">Coordinadores</span>'
+    +'<button class="btn btn-primary" onclick="openAddCoord()">+ Agregar</button></div>'
+    +'<table><thead><tr><th>ID</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 function openAddCoord(){
   document.getElementById('mf-title').textContent='Agregar Coordinador';
-  document.getElementById('mf-body').innerHTML=`<div class="form-grid">
-    <div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" placeholder="Nombre completo"/></div>
-    <div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
-  </div>`;
+  document.getElementById('mf-body').innerHTML='<div class="form-grid">'
+    +'<div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" placeholder="Nombre completo"/></div>'
+    +'<div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true">Activo</option><option value="false">Inactivo</option></select></div></div>';
   currentModalType='coord-add';editingId=null;
   document.getElementById('modal-form').classList.add('open');
 }
-function openEdit(type,id){
-  if(type==='coordinadores'){
-    const item=catCoordinadores.find(c=>c.id===id);
-    document.getElementById('mf-title').textContent='Editar Coordinador';
-    document.getElementById('mf-body').innerHTML=`<div class="form-grid">
-      <div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" value="${item.nombre}"/></div>
-      <div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true"${item.activo?' selected':''}>Activo</option><option value="false"${!item.activo?' selected':''}>Inactivo</option></select></div>
-    </div>`;
-    currentModalType='coord-edit';editingId=id;
-    document.getElementById('modal-form').classList.add('open');
-  }
+function openEditCoord(id){
+  var item=catCoordinadores.find(function(c){return c.id===id;});
+  if(!item)return;
+  document.getElementById('mf-title').textContent='Editar Coordinador';
+  document.getElementById('mf-body').innerHTML='<div class="form-grid">'
+    +'<div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" value="'+item.nombre+'"/></div>'
+    +'<div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true"'+(item.activo?' selected':'')+'>Activo</option><option value="false"'+(!item.activo?' selected':'')+'>Inactivo</option></select></div></div>';
+  currentModalType='coord-edit';editingId=id;
+  document.getElementById('modal-form').classList.add('open');
 }
 function saveModalForm(){
-  const nombre=document.getElementById('mfi-nombre').value.trim();
-  const activo=document.getElementById('mfi-activo').value==='true';
+  var nombre=document.getElementById('mfi-nombre').value.trim();
+  var activo=document.getElementById('mfi-activo').value==='true';
   if(!nombre){alert('Ingresa el nombre.');return;}
-  if(currentModalType==='coord-add'){catCoordinadores.push({id:Date.now(),nombre,activo});}
-  else if(currentModalType==='coord-edit'){const idx=catCoordinadores.findIndex(c=>c.id===editingId);if(idx>-1)catCoordinadores[idx]={...catCoordinadores[idx],nombre,activo};}
-  closeModal('modal-form');populateCoord();
+  if(currentModalType==='coord-add'){catCoordinadores.push({id:Date.now(),nombre:nombre,activo:activo});}
+  else if(currentModalType==='coord-edit'){
+    var idx=catCoordinadores.findIndex(function(c){return c.id===editingId;});
+    if(idx>-1)catCoordinadores[idx]=Object.assign({},catCoordinadores[idx],{nombre:nombre,activo:activo});
+  }
+  closeModal('modal-form');
+  populateCoord();
   renderCatCoordinadores(document.getElementById('admin-content'));
 }
 function delCoord(id){
   if(!confirm('¿Eliminar coordinador?'))return;
-  catCoordinadores=catCoordinadores.filter(c=>c.id!==id);
-  populateCoord();renderCatCoordinadores(document.getElementById('admin-content'));
+  catCoordinadores=catCoordinadores.filter(function(c){return c.id!==id;});
+  populateCoord();
+  renderCatCoordinadores(document.getElementById('admin-content'));
 }
 </script>
 </body>
