@@ -167,13 +167,22 @@ tr:hover td{background:#f8f9fb}
             <span style="font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px">Peso producido</span>
             <span id="av-producido" style="font-size:32px;font-weight:800;color:#16a34a;line-height:1.1">—</span>
           </div>
-          <div style="flex:1;min-width:160px">
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:110px">
+            <span style="font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px">Diferencia</span>
+            <span id="av-diff" style="font-size:28px;font-weight:800;line-height:1.1">—</span>
+            <span id="av-diff-label" style="font-size:11px;font-weight:600;margin-top:2px">—</span>
+          </div>
+          <div style="flex:1;min-width:180px">
             <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px">
-              <span>Avance</span><span id="av-pct" style="font-weight:700;color:var(--blue)">0%</span>
+              <span>Avance</span><span id="av-pct" style="font-weight:700">0%</span>
             </div>
-            <div style="height:12px;background:#dde2ea;border-radius:6px;overflow:hidden">
-              <div id="av-bar-fill" style="height:100%;border-radius:6px;transition:width .4s;width:0%"></div>
+            <div style="height:14px;background:#dde2ea;border-radius:7px;overflow:hidden;position:relative">
+              <div id="av-bar-fill" style="height:100%;border-radius:7px;transition:width .4s;width:0%;max-width:100%"></div>
             </div>
+            <div id="av-bar-extra" style="display:none;margin-top:4px;height:8px;background:#fee2e2;border-radius:4px;overflow:hidden">
+              <div id="av-bar-extra-fill" style="height:100%;background:#e63946;border-radius:4px;transition:width .4s"></div>
+            </div>
+            <div id="av-status-msg" style="font-size:11px;margin-top:4px;font-weight:600"></div>
           </div>
         </div>
         <div class="sep"></div>
@@ -552,15 +561,64 @@ function loadOT(){
   var stdqty=parseFloat(opt.dataset.stdqty)||0;
   var otTxt=opt.textContent;
   var pesoAcum=bobinas.filter(function(b){return b.ot===otTxt;}).reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  var pct=stdqty>0?Math.min(100,(pesoAcum/stdqty*100)).toFixed(1):0;
   var avanceEl=document.getElementById('ot-avance');
   if(stdqty>0){
     avanceEl.style.display='flex';
+    var pct=pesoAcum/stdqty*100;
+    var diff=pesoAcum-stdqty;
+    var excedente=diff>0;
+    var completo=pct>=100;
     document.getElementById('av-stdqty').textContent=stdqty.toLocaleString()+' Kg';
     document.getElementById('av-producido').textContent=pesoAcum.toFixed(2)+' Kg';
-    document.getElementById('av-pct').textContent=pct+'%';
-    document.getElementById('av-bar-fill').style.width=pct+'%';
-    document.getElementById('av-bar-fill').style.background=pct>=100?'#16a34a':pct>=50?'#d97706':'var(--blue2)';
+    // diferencia
+    var diffEl=document.getElementById('av-diff');
+    var diffLbl=document.getElementById('av-diff-label');
+    if(excedente){
+      diffEl.textContent='+'+diff.toFixed(2)+' Kg';
+      diffEl.style.color='#e63946';
+      diffLbl.textContent='⚠ EXCEDENTE';
+      diffLbl.style.color='#e63946';
+    }else if(completo){
+      diffEl.textContent='✓ Completo';
+      diffEl.style.color='#16a34a';
+      diffLbl.textContent='SIN FALTANTE';
+      diffLbl.style.color='#16a34a';
+    }else{
+      var faltante=stdqty-pesoAcum;
+      diffEl.textContent='-'+faltante.toFixed(2)+' Kg';
+      diffEl.style.color='#d97706';
+      diffLbl.textContent='FALTANTE';
+      diffLbl.style.color='#d97706';
+    }
+    // barra principal (máx 100%)
+    var barPct=Math.min(100,pct).toFixed(1);
+    var barFill=document.getElementById('av-bar-fill');
+    barFill.style.width=barPct+'%';
+    barFill.style.background=excedente?'#16a34a':pct>=100?'#16a34a':pct>=75?'#22c55e':pct>=50?'#d97706':'var(--blue2)';
+    // barra excedente
+    var extraBar=document.getElementById('av-bar-extra');
+    var extraFill=document.getElementById('av-bar-extra-fill');
+    if(excedente){
+      var extraPct=Math.min(100,(diff/stdqty*100)).toFixed(1);
+      extraBar.style.display='block';
+      extraFill.style.width=extraPct+'%';
+    }else{
+      extraBar.style.display='none';
+    }
+    // mensaje
+    var msg=document.getElementById('av-status-msg');
+    if(excedente){
+      msg.textContent='Producción al '+pct.toFixed(1)+'% — excede lo programado en '+diff.toFixed(2)+' Kg';
+      msg.style.color='#e63946';
+    }else if(completo){
+      msg.textContent='✅ Orden completada al 100%';
+      msg.style.color='#16a34a';
+    }else{
+      msg.textContent='En progreso — '+pct.toFixed(1)+'% completado';
+      msg.style.color='#d97706';
+    }
+    document.getElementById('av-pct').textContent=pct.toFixed(1)+'%';
+    document.getElementById('av-pct').style.color=excedente?'#e63946':completo?'#16a34a':'var(--blue)';
   }else{
     avanceEl.style.display='none';
   }
