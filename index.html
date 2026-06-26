@@ -157,8 +157,26 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Siguiente proceso</label><input id="f-sig" readonly class="auto" placeholder="—"/></div>
           <div class="field"><label>Remisión</label><input id="f-rem" readonly class="auto" placeholder="—"/></div>
         </div>
+        <div id="ot-avance" style="display:none;gap:16px;align-items:center;flex-wrap:wrap;background:#f0f7ff;border:1.5px solid var(--blue2);border-radius:10px;padding:16px;margin-top:12px">
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:120px">
+            <span style="font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px">Cantidad programada</span>
+            <span id="av-stdqty" style="font-size:32px;font-weight:800;color:var(--blue);line-height:1.1">—</span>
+          </div>
+          <div style="font-size:28px;color:var(--muted)">→</div>
+          <div style="display:flex;flex-direction:column;align-items:center;min-width:120px">
+            <span style="font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.5px">Peso producido</span>
+            <span id="av-producido" style="font-size:32px;font-weight:800;color:#16a34a;line-height:1.1">—</span>
+          </div>
+          <div style="flex:1;min-width:160px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px">
+              <span>Avance</span><span id="av-pct" style="font-weight:700;color:var(--blue)">0%</span>
+            </div>
+            <div style="height:12px;background:#dde2ea;border-radius:6px;overflow:hidden">
+              <div id="av-bar-fill" style="height:100%;border-radius:6px;transition:width .4s;width:0%"></div>
+            </div>
+          </div>
+        </div>
         <div class="sep"></div>
-        <div class="card-title">🧵 Bobina actual</div>
         <div class="form-grid">
           <div class="field"><label>ID de bobina</label><input id="f-id" readonly class="auto"/></div>
           <div class="field"><label>Número de bobina</label><input id="f-num" readonly class="auto"/></div>
@@ -316,7 +334,94 @@ function apiFetch(path,opts){
 // ── FALLBACK ──
 var FB_MACHINES=[{id:'EXT001',name:'Extrusora 001'},{id:'EXT002',name:'Extrusora 002'},{id:'EXT003',name:'Extrusora 003'},{id:'EXT004',name:'Extrusora 004'},{id:'EXT005',name:'Extrusora 005'},{id:'EXT006',name:'Extrusora 006'}];
 var FB_OPERATORS=[{id:1,full_name:'Juan Quiroz Segovia'},{id:2,full_name:'Roberto Martínez Salazar'},{id:3,full_name:'José Alfonso Ochoa Leija'},{id:4,full_name:'Erik Rodrigo Presas Jasso'},{id:5,full_name:'Israel Rodríguez Herrera'},{id:6,full_name:'Francisco Abelardo Garza Hernández'},{id:7,full_name:'Fabián de León Mejía'},{id:8,full_name:'Erick González Palomo'},{id:9,full_name:'Gerardo Martínez Alvarado'},{id:10,full_name:'Josué Rodolfo Gaytán Rodríguez'},{id:11,full_name:'Luis Angel Ochoa Leija'},{id:12,full_name:'Luis Antonio Mendez Martinez'}];
-var FB_ORDERS=[{id:1,ot_number:'26050163',product_code:'20-710901-14085-01',description:'NX300606-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'IMPRESIÓN',remision:'26050179',status:'iniciado'},{id:2,ot_number:'26050162',product_code:'20-500901-17512-01',description:'NT250606-GEN-S/I-CLO-390MM',measure:'390MM',color:'CLARO',next_process:'CONVERSIÓN',remision:'26050224',status:'pendiente'},{id:3,ot_number:'20040032',product_code:'20-230901-17468-01',description:'B501518RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'26050179',status:'iniciado'}];
+var FB_ORDERS=[
+  {id:1,ot_number:'26010005',product_code:'20-010901-02275-01',description:'B202828-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.24291',status:'pendiente',stdqty:100},
+  {id:2,ot_number:'26010006',product_code:'20-840901-13231-01',description:'B353030-GEN-S/I-CLO-11.5',measure:'11.5',color:'CLARO',next_process:'',remision:'',status:'pendiente',stdqty:100},
+  {id:3,ot_number:'26010073',product_code:'20-350901-08406-01',description:'FM1710-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25083',status:'pendiente',stdqty:28.56},
+  {id:4,ot_number:'26010115',product_code:'20-840901-08764-01',description:'B353030-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.24984',status:'pendiente',stdqty:2145},
+  {id:5,ot_number:'26010127',product_code:'20-840901-09901-01',description:'B353030-GEN-S/I-CLO-8',measure:'8',color:'CLARO',next_process:'',remision:'H.24981',status:'pendiente',stdqty:81.6},
+  {id:6,ot_number:'26010134',product_code:'20-110901-16851-01',description:'BX7620-GEN-S/I-CLO-220MM',measure:'220MM',color:'CLARO',next_process:'',remision:'H.24956',status:'pendiente',stdqty:41.69},
+  {id:7,ot_number:'26010153',product_code:'20-310901-02320-01',description:'F2010-GEN-S/I-CLO-190MM',measure:'190MM',color:'CLARO',next_process:'',remision:'',status:'pendiente',stdqty:1400},
+  {id:8,ot_number:'26010190',product_code:'20-310901-04036-01',description:'F2010-GEN-S/I-MRN-170MM',measure:'170MM',color:'MARRON',next_process:'',remision:'H.25124-1',status:'pendiente',stdqty:3249},
+  {id:9,ot_number:'26010218',product_code:'20-370901-10040-01',description:'B452530-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.24934-1',status:'pendiente',stdqty:1000},
+  {id:10,ot_number:'26010232',product_code:'20-360901-07884-01',description:'FM2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BLANCO',next_process:'',remision:'',status:'pendiente',stdqty:1000},
+  {id:11,ot_number:'26010240',product_code:'20-310901-03761-01',description:'F2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BLANCO',next_process:'',remision:'H.24897-1',status:'pendiente',stdqty:100},
+  {id:12,ot_number:'26010308',product_code:'20-330901-07712-01',description:'B203737-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25042',status:'pendiente',stdqty:68.4},
+  {id:13,ot_number:'26010380',product_code:'30-841103-11311-05',description:'CX8535-GDL135-CHU AHU NAYAR-CLO-9X11 SCS BR',measure:'9X11',color:'CLARO',next_process:'',remision:'102579',status:'pendiente',stdqty:8},
+  {id:14,ot_number:'26010440',product_code:'20-010901-02245-01',description:'B202828-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25036',status:'pendiente',stdqty:847.09},
+  {id:15,ot_number:'26010441',product_code:'20-010901-02273-01',description:'B202828-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25040',status:'pendiente',stdqty:63.5},
+  {id:16,ot_number:'26010445',product_code:'20-320901-10744-01',description:'B163737-GENERICO-S/I-CLO-17',measure:'17',color:'CLARO',next_process:'',remision:'H.25218',status:'pendiente',stdqty:77.73},
+  {id:17,ot_number:'26010446',product_code:'20-320901-10595-01',description:'B163737-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25033',status:'pendiente',stdqty:585.82},
+  {id:18,ot_number:'26010447',product_code:'20-320901-10595-01',description:'B163737-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25221',status:'pendiente',stdqty:366.14},
+  {id:19,ot_number:'26010448',product_code:'20-320901-10593-01',description:'B163737-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25217',status:'pendiente',stdqty:32.11},
+  {id:20,ot_number:'26010449',product_code:'20-320901-10591-01',description:'B163737-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25030',status:'pendiente',stdqty:149.27},
+  {id:21,ot_number:'26010450',product_code:'20-320901-10591-01',description:'B163737-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25222',status:'pendiente',stdqty:149.27},
+  {id:22,ot_number:'26010451',product_code:'20-320901-10713-01',description:'B163737-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25216',status:'pendiente',stdqty:358.82},
+  {id:23,ot_number:'26010452',product_code:'20-320901-11278-01',description:'B163737-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25032',status:'pendiente',stdqty:715.94},
+  {id:24,ot_number:'26010453',product_code:'20-330901-07712-01',description:'B203737-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25213',status:'pendiente',stdqty:102.6},
+  {id:25,ot_number:'26010454',product_code:'20-330901-07713-01',description:'B203737-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25034',status:'pendiente',stdqty:147},
+  {id:26,ot_number:'26010455',product_code:'20-330901-12446-01',description:'B203737-GEN-S/I-CLO-285MM',measure:'285MM',color:'CLARO',next_process:'',remision:'H.25215',status:'pendiente',stdqty:837.13},
+  {id:27,ot_number:'26010476',product_code:'20-490901-16842-01',description:'FSD2010N-GEN-S/I-CLO-160MM',measure:'160MM',color:'CLARO',next_process:'',remision:'H.25180',status:'pendiente',stdqty:240.54},
+  {id:28,ot_number:'26010509',product_code:'20-330901-08090-01',description:'B203737-GEN-S/I-CLO-20',measure:'20',color:'CLARO',next_process:'',remision:'H.25025-1',status:'pendiente',stdqty:486},
+  {id:29,ot_number:'26010534',product_code:'20-310901-02261-01',description:'F2010-GEN-S/I-CLO-7.5',measure:'7.5',color:'CLARO',next_process:'',remision:'H.25175',status:'pendiente',stdqty:102},
+  {id:30,ot_number:'26010540',product_code:'20-700901-15445-01',description:'FR1710-GEN-S/I-AZK-210MM',measure:'210MM',color:'AZUL K',next_process:'',remision:'H.25158',status:'pendiente',stdqty:1085.27},
+  {id:31,ot_number:'26010541',product_code:'20-700901-15430-01',description:'FR1710-GEN-S/I-AZK-186MM',measure:'186MM',color:'AZUL K',next_process:'',remision:'H.25159',status:'pendiente',stdqty:1160.25},
+  {id:32,ot_number:'26010542',product_code:'20-680901-15416-01',description:'FMXR1704-GEN-S/I-AZK-206MM',measure:'206MM',color:'AZUL K',next_process:'',remision:'H.25156',status:'pendiente',stdqty:774.25},
+  {id:33,ot_number:'26010543',product_code:'20-300901-17211-01',description:'F1710-GEN-S/I-DOR-170MM',measure:'170MM',color:'DORADO',next_process:'',remision:'H.25288',status:'pendiente',stdqty:159.74},
+  {id:34,ot_number:'26010544',product_code:'20-350901-16718-01',description:'FM1710-GEN-S/I-RJO-220MM',measure:'220MM',color:'ROJO',next_process:'',remision:'H.25249',status:'pendiente',stdqty:833.82},
+  {id:35,ot_number:'26010551',product_code:'20-780901-13814-01',description:'FN2010-GEN-S/I-CLO-195MM',measure:'195MM',color:'CLARO',next_process:'',remision:'H.25285',status:'pendiente',stdqty:858.55},
+  {id:36,ot_number:'26010553',product_code:'20-310901-02320-01',description:'F2010-GEN-S/I-CLO-190MM',measure:'190MM',color:'CLARO',next_process:'',remision:'H.25276',status:'pendiente',stdqty:91.51},
+  {id:37,ot_number:'26010554',product_code:'20-310901-02353-01',description:'F2010-GENERICO-S/I-CLO-280MM',measure:'280MM',color:'CLARO',next_process:'',remision:'H.25284',status:'pendiente',stdqty:511.16},
+  {id:38,ot_number:'26010557',product_code:'20-680901-15417-01',description:'FMXR1704-GEN-S/I-CLO-260MM',measure:'260MM',color:'CLARO',next_process:'',remision:'H.25274',status:'pendiente',stdqty:1099.36},
+  {id:39,ot_number:'26010558',product_code:'20-680901-15418-01',description:'FMXR1704-GEN-S/I-CLO-206MM',measure:'206MM',color:'CLARO',next_process:'',remision:'H.25268',status:'pendiente',stdqty:1935.63},
+  {id:40,ot_number:'26010559',product_code:'20-680901-15418-01',description:'FMXR1704-GEN-S/I-CLO-206MM',measure:'206MM',color:'CLARO',next_process:'',remision:'H.25269',status:'pendiente',stdqty:1548.50},
+  {id:41,ot_number:'26010561',product_code:'20-330901-07857-01',description:'B203737-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25261',status:'pendiente',stdqty:147.6},
+  {id:42,ot_number:'26010562',product_code:'20-320901-10573-01',description:'B163737-GEN-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25213',status:'pendiente',stdqty:83.37},
+  {id:43,ot_number:'26010563',product_code:'20-320901-10740-01',description:'B163737-GEN-S/I-CLO-8',measure:'8',color:'CLARO',next_process:'',remision:'H.25220',status:'pendiente',stdqty:167.3},
+  {id:44,ot_number:'26010564',product_code:'20-320901-12731-01',description:'B163737-GEN-S/I-CLO-7.5',measure:'7.5',color:'CLARO',next_process:'',remision:'H.25292',status:'pendiente',stdqty:90.13},
+  {id:45,ot_number:'26010565',product_code:'20-320901-10605-01',description:'B163737-GEN-S/I-CLO-7',measure:'7',color:'CLARO',next_process:'',remision:'H.25212',status:'pendiente',stdqty:130.68},
+  {id:46,ot_number:'26010566',product_code:'20-320901-10669-01',description:'B163737-GEN-S/I-CLO-6',measure:'6',color:'CLARO',next_process:'',remision:'H.25219',status:'pendiente',stdqty:14.08},
+  {id:47,ot_number:'26010567',product_code:'20-430901-11556-01',description:'BX203737-GEN-S/I-CLO-7',measure:'7',color:'CLARO',next_process:'',remision:'H.25259',status:'pendiente',stdqty:121.8},
+  {id:48,ot_number:'26010568',product_code:'20-330901-14123-01',description:'B203737-GEN-S/I-CLO-5.5',measure:'5.5',color:'CLARO',next_process:'',remision:'H.25031',status:'pendiente',stdqty:165.6},
+  {id:49,ot_number:'26010569',product_code:'20-770901-12719-01',description:'TP251010-GENERICO-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25326',status:'pendiente',stdqty:92.13},
+  {id:50,ot_number:'26010570',product_code:'20-770901-08128-01',description:'TP251010-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25204',status:'pendiente',stdqty:1230.06},
+  {id:51,ot_number:'26010571',product_code:'20-580901-15664-01',description:'BNT81520-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25323',status:'pendiente',stdqty:41.91},
+  {id:52,ot_number:'26010572',product_code:'20-580901-15298-01',description:'BNT81520-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25139',status:'pendiente',stdqty:220.98},
+  {id:53,ot_number:'26010573',product_code:'20-580901-15117-01',description:'BNT81520-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25142',status:'pendiente',stdqty:160.02},
+  {id:54,ot_number:'26010574',product_code:'20-500901-03792-01',description:'NT250606-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25019',status:'pendiente',stdqty:425.79},
+  {id:55,ot_number:'26010575',product_code:'20-500901-03791-01',description:'NT250606-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25209',status:'pendiente',stdqty:879.8},
+  {id:56,ot_number:'26010576',product_code:'20-500901-03790-01',description:'NT250606-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25208',status:'pendiente',stdqty:813.4},
+  {id:57,ot_number:'26010577',product_code:'20-500901-03790-01',description:'NT250606-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25206',status:'pendiente',stdqty:325.36},
+  {id:58,ot_number:'26010578',product_code:'20-500901-03787-01',description:'NT250606-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25203',status:'pendiente',stdqty:136.12},
+  {id:59,ot_number:'26010579',product_code:'20-540901-06266-01',description:'TC250303-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25205',status:'pendiente',stdqty:284.69},
+  {id:60,ot_number:'26010581',product_code:'20-150901-14564-01',description:'B353030RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25058',status:'pendiente',stdqty:1960.40},
+  {id:61,ot_number:'26010582',product_code:'20-010901-02245-01',description:'B202828-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25233',status:'pendiente',stdqty:2320.29},
+  {id:62,ot_number:'26010583',product_code:'20-010901-02242-01',description:'B202828-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25235',status:'pendiente',stdqty:274.32},
+  {id:63,ot_number:'26010584',product_code:'20-010901-02275-01',description:'B202828-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25237',status:'pendiente',stdqty:1226.82},
+  {id:64,ot_number:'26010585',product_code:'20-010901-02227-01',description:'B202828-GEN-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25234',status:'pendiente',stdqty:530.86},
+  {id:65,ot_number:'26010586',product_code:'20-320901-10713-01',description:'B163737-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25224',status:'pendiente',stdqty:662.43},
+  {id:66,ot_number:'26010587',product_code:'20-410901-16283-01',description:'B203333RT-GEN ABRE FACIL-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25263',status:'pendiente',stdqty:2993.65},
+  {id:67,ot_number:'26010592',product_code:'20-840901-08816-01',description:'B353030-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25197',status:'pendiente',stdqty:710.02},
+  {id:68,ot_number:'26010593',product_code:'20-840901-08874-01',description:'B353030-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25140',status:'pendiente',stdqty:648},
+  {id:69,ot_number:'26010594',product_code:'20-840901-08813-01',description:'B353030-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25198',status:'pendiente',stdqty:2925.60},
+  {id:70,ot_number:'26010603',product_code:'20-880901-12669-01',description:'FX1312-GEN-S/I-CLO-58MM',measure:'58MM',color:'CLARO',next_process:'',remision:'H.25177',status:'pendiente',stdqty:208.16},
+  {id:71,ot_number:'26010604',product_code:'20-880901-17175-01',description:'FX1312-GEN-S/I-NTS-84MM',measure:'84MM',color:'NARANJA TRASLUCIDO',next_process:'',remision:'H.25166',status:'pendiente',stdqty:96.97},
+  {id:72,ot_number:'26010605',product_code:'20-700901-16209-01',description:'FR1710-GEN-S/I-BCO-90MM',measure:'90MM',color:'BLANCO',next_process:'',remision:'H.25165',status:'pendiente',stdqty:202.96},
+  {id:73,ot_number:'26010606',product_code:'20-300901-13046-01',description:'F1710-GEN-S/I-BCO-102MM',measure:'102MM',color:'BLANCO',next_process:'',remision:'H.25167',status:'pendiente',stdqty:2731.49},
+  {id:74,ot_number:'26010613',product_code:'20-150901-14564-01',description:'B353030RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25055-1',status:'pendiente',stdqty:3468.40},
+  {id:75,ot_number:'26010618',product_code:'20-010901-02227-01',description:'B202828-GEN-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25041-1',status:'pendiente',stdqty:386.08},
+  {id:76,ot_number:'26020018',product_code:'20-330901-08167-01',description:'B203737-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25227',status:'pendiente',stdqty:135},
+  {id:77,ot_number:'26020019',product_code:'20-900901-14179-01',description:'B8203333RT-GEN ABRE FACIL-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25309',status:'pendiente',stdqty:24},
+  {id:78,ot_number:'26020020',product_code:'20-430901-12772-01',description:'BX203737-GEN ABRE FACIL-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25223',status:'pendiente',stdqty:2140},
+  {id:79,ot_number:'26020021',product_code:'20-880901-12697-01',description:'FX1312-GEN-S/I-NTS-58MM',measure:'58MM',color:'NARANJA TRASLUCIDO',next_process:'',remision:'H.25109',status:'pendiente',stdqty:3.93},
+  {id:80,ot_number:'26020022',product_code:'20-670901-15412-01',description:'FMR1710-GEN-S/I-AZK-240MM',measure:'240MM',color:'AZUL K',next_process:'',remision:'H.25256',status:'pendiente',stdqty:811},
+  {id:81,ot_number:'26020029',product_code:'20-720901-15476-01',description:'FXR1710-GEN-S/I-AZL-260MM',measure:'260MM',color:'AZUL TRANSLUCIDO',next_process:'',remision:'H.25290-1',status:'pendiente',stdqty:1343.66},
+  {id:82,ot_number:'26020030',product_code:'20-780901-13814-01',description:'FN2010-GEN-S/I-CLO-195MM',measure:'195MM',color:'CLARO',next_process:'',remision:'H.24781-1',status:'pendiente',stdqty:1654.28},
+  {id:83,ot_number:'26020031',product_code:'20-010901-02250-01',description:'B202828-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25035-1',status:'pendiente',stdqty:586.74},
+  {id:84,ot_number:'26020032',product_code:'20-150901-14697-01',description:'B353030RT-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25050-1',status:'pendiente',stdqty:6075.68},
+  {id:85,ot_number:'26020033',product_code:'20-150901-15703-01',description:'B353030RT-GEN ABRE FACIL-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25195-1',status:'pendiente',stdqty:527.8},
+  {id:86,ot_number:'26020034',product_code:'20-700901-15422-01',description:'FR1710-GEN S/I-CLO-170MM',measure:'170MM',color:'CLARO',next_process:'',remision:'H.24953-1',status:'pendiente',stdqty:2396.04}
+];
 
 // ── STATE ──
 var curMach='EXT001',formActive=false,bobinas=[],lastSavedBobina=null,curWOId=null;
@@ -378,7 +483,8 @@ function fillOTs(data){
   data.forEach(function(o){
     var opt=document.createElement('option');opt.value=o.id;opt.textContent=o.ot_number;
     opt.dataset.prod=o.product_code;opt.dataset.desc=o.description;opt.dataset.med=o.measure;
-    opt.dataset.col=o.color;opt.dataset.rem=o.remision;opt.dataset.sig=o.next_process;
+    opt.dataset.col=o.color;opt.dataset.rem=o.remision;opt.dataset.sig=o.next_process||'';
+    opt.dataset.stdqty=o.stdqty||0;
     st.appendChild(opt);
   });
 }
@@ -442,6 +548,22 @@ function loadOT(){
   document.getElementById('f-col').value=opt.dataset.col||'';
   document.getElementById('f-sig').value=opt.dataset.sig||'';
   document.getElementById('f-rem').value=opt.dataset.rem||'';
+  // avance de producción
+  var stdqty=parseFloat(opt.dataset.stdqty)||0;
+  var otTxt=opt.textContent;
+  var pesoAcum=bobinas.filter(function(b){return b.ot===otTxt;}).reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  var pct=stdqty>0?Math.min(100,(pesoAcum/stdqty*100)).toFixed(1):0;
+  var avanceEl=document.getElementById('ot-avance');
+  if(stdqty>0){
+    avanceEl.style.display='flex';
+    document.getElementById('av-stdqty').textContent=stdqty.toLocaleString()+' Kg';
+    document.getElementById('av-producido').textContent=pesoAcum.toFixed(2)+' Kg';
+    document.getElementById('av-pct').textContent=pct+'%';
+    document.getElementById('av-bar-fill').style.width=pct+'%';
+    document.getElementById('av-bar-fill').style.background=pct>=100?'#16a34a':pct>=50?'#d97706':'var(--blue2)';
+  }else{
+    avanceEl.style.display='none';
+  }
   initBobina();
 }
 function initBobina(){
