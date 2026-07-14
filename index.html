@@ -60,8 +60,7 @@ tr:hover td{background:#f8f9fb}
 @media print{
   @page{size:auto;margin:8mm}
   html,body{height:auto !important;background:#fff !important}
-  body *{visibility:hidden}
-  #label-content,#label-content *{visibility:visible}
+  body>*:not(#label-print){display:none !important}
   #label-print{position:static !important;display:block !important;inset:auto;background:#fff;padding:0 !important;height:auto !important;width:auto !important}
   #label-content{position:static;margin:0 auto}
   .label-print-actions{display:none !important}
