@@ -58,7 +58,7 @@ tr:hover td{background:#f8f9fb}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
 @media print{
-  @page{size:auto;margin:8mm}
+  @page{margin:8mm}
   html,body{height:auto !important;background:#fff !important}
   body>*:not(#label-print){display:none !important}
   #label-print{position:static !important;display:block !important;inset:auto;background:#fff;padding:0 !important;height:auto !important;width:auto !important}
@@ -263,7 +263,7 @@ tr:hover td{background:#f8f9fb}
 <div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
   <div class="label-wrap" id="label-content"></div>
   <div class="label-print-actions" style="margin-top:16px;display:flex;gap:10px">
-    <button class="btn btn-primary" onclick="setTimeout(function(){window.print();},50)">🖨 Imprimir</button>
+    <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir</button>
     <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
   </div>
 </div>
@@ -519,6 +519,35 @@ function guardarBobina(){
       var opt=otElS.options[otElS.selectedIndex];if(opt)updateAvance(opt);
       initBobina();
     });
+}
+function imprimirEtiqueta(){
+  var lc=document.getElementById('label-content');
+  if(!lc||!lc.innerHTML.trim()){alert('Primero muestra una etiqueta.');return;}
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Etiqueta</title><style>'
+    +'*{box-sizing:border-box;margin:0;padding:0;font-family:\'Segoe UI\',Arial,sans-serif}'
+    +'body{padding:14px}'
+    +'.label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}'
+    +'.lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}'
+    +'.lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}'
+    +'.lh .mach{font-size:16px;font-weight:700}'
+    +'.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}'
+    +'.label-grid .lf{display:flex;flex-direction:column}'
+    +'.label-grid .lf span:first-child{font-size:10px;color:#888}'
+    +'.label-grid .lf span:last-child{font-weight:600;font-size:13px}'
+    +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}'
+    +'@page{margin:8mm}'
+    +'@media print{html,body{height:auto}}'
+    +'</style></head><body><div class="label-wrap">'+lc.innerHTML+'</div>'
+    +'<script>'
+    +'window.onafterprint=function(){window.close();};'
+    +'window.onload=function(){setTimeout(function(){window.focus();window.print();},200);};'
+    +'<\/script>'
+    +'</body></html>';
+  var blob=new Blob([html],{type:'text/html'});
+  var url=URL.createObjectURL(blob);
+  var w=window.open(url,'_blank','width=650,height=850');
+  if(!w){alert('Permite ventanas emergentes en este sitio para poder imprimir la etiqueta.');return;}
+  setTimeout(function(){URL.revokeObjectURL(url);},20000);
 }
 function renderLabel(b,esRegreso){
   var lp=document.getElementById('label-print'),lc=document.getElementById('label-content');
