@@ -57,7 +57,11 @@ tr:hover td{background:#f8f9fb}
 .alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
-@media print{body *{visibility:hidden}#label-print,#label-print *{visibility:visible}#label-print{position:fixed;inset:0;background:#fff;display:block}.label-wrap{margin:20px auto;max-width:520px}}
+@media print{
+  body *{visibility:hidden}
+  #label-print,#label-print *{visibility:visible}
+  #label-print{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center}
+}
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
 .lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}
@@ -672,33 +676,10 @@ function guardarEImprimir(){
     if(opt)updateAvance(opt);
     initBobina();
     renderLabel(bobLocal,false);
-    setTimeout(function(){imprimirLabel();},300);
   });
 }
 
-function imprimirLabel(){
-  var contenido=document.getElementById('label-content').innerHTML;
-  var estilos='body{margin:10px;font-family:Segoe UI,sans-serif;font-size:12px}'
-    +'.label-wrap{border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px}'
-    +'.lh{display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}'
-    +'.brand{font-size:22px;font-weight:900;color:#0D3B8C}'
-    +'.mach{font-size:16px;font-weight:700}'
-    +'.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}'
-    +'.lf{display:flex;flex-direction:column}'
-    +'.lf span:first-child{font-size:10px;color:#888}'
-    +'.lf span:last-child{font-weight:600;font-size:13px}'
-    +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}';
-  var ifr=document.getElementById('print-frame');
-  if(!ifr){ifr=document.createElement('iframe');ifr.id='print-frame';ifr.style.cssText='position:fixed;top:-9999px;left:-9999px;width:600px;height:400px;border:none';document.body.appendChild(ifr);}
-  var doc=ifr.contentDocument||ifr.contentWindow.document;
-  doc.open();
-  doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'+estilos+'</style></head><body><div class="label-wrap">'+contenido+'</div></body></html>');
-  doc.close();
-  setTimeout(function(){
-    try{ifr.contentWindow.focus();ifr.contentWindow.print();}
-    catch(e){alert('Error al imprimir: '+e.message);}
-  },400);
-}
+function imprimirLabel(){window.print();}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 function openListModal(){
