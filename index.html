@@ -57,7 +57,15 @@ tr:hover td{background:#f8f9fb}
 .alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
-@media print{body *{visibility:hidden}#label-print,#label-print *{visibility:visible}#label-print{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center}}
+@media print{
+  @page{size:auto;margin:8mm}
+  html,body{height:auto !important;background:#fff !important}
+  body *{visibility:hidden}
+  #label-content,#label-content *{visibility:visible}
+  #label-print{position:static !important;display:block !important;inset:auto;background:#fff;padding:0 !important;height:auto !important;width:auto !important}
+  #label-content{position:static;margin:0 auto}
+  .label-print-actions{display:none !important}
+}
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
 .lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}
@@ -255,7 +263,7 @@ tr:hover td{background:#f8f9fb}
 </div>
 <div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
   <div class="label-wrap" id="label-content"></div>
-  <div style="margin-top:16px;display:flex;gap:10px">
+  <div class="label-print-actions" style="margin-top:16px;display:flex;gap:10px">
     <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir</button>
     <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
   </div>
