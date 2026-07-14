@@ -263,18 +263,19 @@ tr:hover td{background:#f8f9fb}
 <div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
   <div class="label-wrap" id="label-content"></div>
   <div class="label-print-actions" style="margin-top:16px;display:flex;gap:10px">
-    <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn btn-primary" onclick="setTimeout(function(){window.print();},50)">🖨 Imprimir</button>
     <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
   </div>
 </div>
 
 <script>
 (function(){
-  var cv=document.getElementById('circuit'),cx=cv.getContext('2d'),W,H,nd=[];
+  var cv=document.getElementById('circuit'),cx=cv.getContext('2d'),W,H,nd=[],rafId=null,stopped=false;
   function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
   resize();window.addEventListener('resize',resize);
   for(var i=0;i<60;i++)nd.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
   function draw(){
+    if(stopped)return;
     cx.clearRect(0,0,W,H);cx.strokeStyle='#1a56c4';cx.lineWidth=.8;
     for(var i=0;i<nd.length;i++){
       nd[i].x+=nd[i].vx;nd[i].y+=nd[i].vy;
@@ -285,15 +286,16 @@ tr:hover td{background:#f8f9fb}
       }
       cx.globalAlpha=.8;cx.fillStyle='#1a56c4';cx.beginPath();cx.arc(nd[i].x,nd[i].y,2,0,Math.PI*2);cx.fill();
     }
-    cx.globalAlpha=1;requestAnimationFrame(draw);
+    cx.globalAlpha=1;rafId=requestAnimationFrame(draw);
   }
   draw();
+  window.stopCircuitAnim=function(){stopped=true;if(rafId)cancelAnimationFrame(rafId);};
 })();
 
 setTimeout(function(){
   var s=document.getElementById('splash');
   s.style.transition='opacity .6s';s.style.opacity='0';
-  setTimeout(function(){s.style.display='none';document.getElementById('app').style.display='flex';initApp();},600);
+  setTimeout(function(){s.style.display='none';document.getElementById('app').style.display='flex';initApp();if(window.stopCircuitAnim)window.stopCircuitAnim();},600);
 },2000);
 
 var API='http://192.168.43.170/api';
