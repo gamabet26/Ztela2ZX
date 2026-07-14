@@ -218,10 +218,9 @@ tr:hover td{background:#f8f9fb}
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
             <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
-            <button class="btn btn-danger" onclick="cancelarBobina()">Cancelar bobina</button>
+            <button class="btn" onclick="limpiarPantalla()">🗑 Limpiar</button>
             <button class="btn" onclick="openListModal()">Lista de bobinas</button>
-            <button class="btn btn-success" id="btn-guardar" onclick="guardarBobina()">Guardar bobina</button>
-            <button class="btn btn-primary" onclick="imprimirEtiqueta()">🖨 Imprimir etiqueta</button>
+            <button class="btn btn-primary" id="btn-guardar" onclick="guardarEImprimir()">🖨 Guardar e Imprimir</button>
           </div>
         </div>
       </div>
@@ -714,7 +713,81 @@ function guardarBobina(){
   });
 }
 
-function imprimirEtiqueta(){if(!lastSavedBobina){alert('Primero guarde una bobina.');return;}renderLabel(lastSavedBobina,false);}
+function limpiarPantalla(){
+  ['f-metros','f-peso','f-obs'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('f-metros').style.borderColor='';
+  ['p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-temp'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('p-des').value='';
+  document.getElementById('sel-coord').value='';
+  hideAlerts();
+}
+
+async function guardarEImprimir(){
+  if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
+  var metros=parseFloat(document.getElementById('f-metros').value)||0;
+  if(metros>2000){document.getElementById('alert-metro').style.display='block';return;}
+  var btn=document.getElementById('btn-guardar');
+  btn.disabled=true;btn.textContent='⏳ Guardando...';
+  var opEl=document.getElementById('sel-op');
+  var otElS=document.getElementById('sel-ot');
+  var coordEl=document.getElementById('sel-coord');
+  var otTxt=otElS.options[otElS.selectedIndex].textContent;
+  var hoy=getToday();
+  var params={
+    med:document.getElementById('p-med').value,ancho:document.getElementById('p-ancho').value,
+    eh:document.getElementById('p-eh').value,cf:document.getElementById('p-cf').value,
+    ev:document.getElementById('p-ev').value,cr:document.getElementById('p-cr').value,
+    edm:document.getElementById('p-edm').value,
+    des:document.getElementById('p-des').value==='true'?'Sí':document.getElementById('p-des').value==='false'?'No':'—',
+    temp:document.getElementById('p-temp').value
+  };
+  var bobLocal={
+    id:nextZxId(),
+    num:bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1,
+    ot:otTxt,operario:opEl.options[opEl.selectedIndex].textContent,mach:curMach,
+    fecha:fmtDate(hoy),hora:nowTime(),lote:fmtLote(hoy),
+    metros:metros,peso:document.getElementById('f-peso').value,
+    obs:document.getElementById('f-obs').value,
+    prod:document.getElementById('f-prod').value,desc:document.getElementById('f-desc').value,
+    med:document.getElementById('f-med').value,col:document.getElementById('f-col').value,
+    rem:document.getElementById('f-rem').value,
+    coordinador:coordEl.options[coordEl.selectedIndex]?coordEl.options[coordEl.selectedIndex].textContent:'—',
+    params:params
+  };
+  apiFetch('/bobbins',{method:'POST',body:JSON.stringify({
+    work_order_id:curWOId,machine_id:curMach,operator_id:parseInt(opEl.value),
+    meters:metros,weight_kg:parseFloat(document.getElementById('f-peso').value)||0,
+    observations:document.getElementById('f-obs').value||null
+  })}).then(function(bobRes){
+    bobLocal.id='ZX-'+bobRes.id;
+    bobLocal.num=bobRes.bobbin_number;
+    if(bobRes.production_date)bobLocal.fecha=bobRes.production_date.split('-').reverse().join('-');
+    if(bobRes.production_time)bobLocal.hora=bobRes.production_time;
+    if(bobRes.lot_code)bobLocal.lote=bobRes.lot_code;
+    return apiFetch('/process-params',{method:'POST',body:JSON.stringify({
+      bobbin_id:bobRes.id,measurement_number:1,
+      measure:parseFloat(document.getElementById('p-med').value)||null,
+      flat_width:parseFloat(document.getElementById('p-ancho').value)||null,
+      horizontal_shrinkage:parseFloat(document.getElementById('p-eh').value)||null,
+      front_gauge:parseFloat(document.getElementById('p-cf').value)||null,
+      vertical_shrinkage:parseFloat(document.getElementById('p-ev').value)||null,
+      back_gauge:parseFloat(document.getElementById('p-cr').value)||null,
+      machine_direction_shrinkage:parseFloat(document.getElementById('p-edm').value)||null,
+      delamination:document.getElementById('p-des').value==='true'?true:document.getElementById('p-des').value==='false'?false:null,
+      tunnel_temperature:parseFloat(document.getElementById('p-temp').value)||null
+    })});
+  }).catch(function(){console.warn('API no disponible, guardando localmente.');})
+  .then(function(){
+    bobinas.push(bobLocal);lastSavedBobina=bobLocal;
+    var al=document.getElementById('alert-save');al.style.display='block';
+    setTimeout(function(){al.style.display='none';},2500);
+    limpiarPantalla();
+    btn.disabled=false;btn.textContent='🖨 Guardar e Imprimir';
+    initBobina();
+    // imprimir etiqueta
+    renderLabel(bobLocal,false);
+  });
+}
 function findBobina(id){return bobinas.find(function(b){return String(b.id).toUpperCase()===String(id).toUpperCase();})||null;}
 
 // ── LISTA MODAL ──
