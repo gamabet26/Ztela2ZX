@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
-:root{--blue:#0D3B8C;--blue2:#1a56c4;--accent:#e63946;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280}
+:root{--blue:#0D3B8C;--blue2:#1a56c4;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280}
 body{background:var(--bg);color:var(--text);min-height:100vh}
 #splash{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
 #splash canvas{position:absolute;inset:0;opacity:.25}
@@ -57,11 +57,7 @@ tr:hover td{background:#f8f9fb}
 .alert-warn{background:#fef3c7;border:1px solid #fcd34d;color:#92400e}
 .alert-err{background:#fee2e2;border:1px solid #fca5a5;color:#b91c1c}
 .alert-ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
-@media print{
-  body *{visibility:hidden}
-  #label-print,#label-print *{visibility:visible}
-  #label-print{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center}
-}
+@media print{body *{visibility:hidden}#label-print,#label-print *{visibility:visible}#label-print{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center}}
 .label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
 .lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
 .lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}
@@ -84,8 +80,7 @@ tr:hover td{background:#f8f9fb}
 .sec-tab{padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-size:13px;transition:.15s}
 .sec-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
 .tbl-action{display:flex;gap:6px}
-.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;padding:4px 6px;border-radius:4px;transition:.15s}
-.icon-btn:hover{background:var(--bg)}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;padding:4px 6px;border-radius:4px}
 .icon-btn.del:hover{background:#fee2e2;color:#b91c1c}
 .result-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px;margin-top:16px}
 .result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
@@ -110,15 +105,10 @@ tr:hover td{background:#f8f9fb}
 </style>
 </head>
 <body>
-
 <div id="splash">
   <canvas id="circuit"></canvas>
-  <div class="zx-logo">
-    <div class="zx-text">ZX</div>
-    <div class="zx-sub">ZTELA</div>
-  </div>
+  <div class="zx-logo"><div class="zx-text">ZX</div><div class="zx-sub">ZTELA</div></div>
 </div>
-
 <div id="app">
   <header>
     <div class="logo-h">ZX <span>Ztela</span></div>
@@ -131,22 +121,16 @@ tr:hover td{background:#f8f9fb}
     <div style="font-size:12px;color:#ffffff66">Ztela ZX</div>
   </header>
   <main>
-
-    <!-- OPERADOR -->
     <div id="view-operador">
       <div class="mach-tabs" id="mach-tabs"></div>
       <div class="card">
         <div class="card-title">📋 Registro de producción — <span id="mach-label">EXT001</span></div>
-        <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo para continuar.</div>
-        <div id="alert-metro" class="alert alert-err">🚫 Máximo 2,000 metros por bobina. Por favor corrija el valor.</div>
+        <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo.</div>
+        <div id="alert-metro" class="alert alert-err">🚫 Máximo 2,000 metros por bobina.</div>
         <div id="alert-save" class="alert alert-ok">✅ Bobina guardada correctamente.</div>
         <div class="form-grid">
-          <div class="field"><label>Operario</label>
-            <select id="sel-op" onchange="checkForm()"><option value="">— Seleccione —</option></select>
-          </div>
-          <div class="field"><label>Orden de trabajo</label>
-            <select id="sel-ot" onchange="loadOT()"><option value="">— Seleccione —</option></select>
-          </div>
+          <div class="field"><label>Operario</label><select id="sel-op" onchange="checkForm()"><option value="">— Seleccione —</option></select></div>
+          <div class="field"><label>Orden de trabajo</label><select id="sel-ot" onchange="loadOT()"><option value="">— Seleccione —</option></select></div>
         </div>
         <div class="form-grid" style="margin-top:12px">
           <div class="field"><label>Descripción</label><input id="f-desc" readonly class="auto" placeholder="—"/></div>
@@ -172,15 +156,9 @@ tr:hover td{background:#f8f9fb}
             <span id="av-diff-label" style="font-size:11px;font-weight:600;margin-top:2px">—</span>
           </div>
           <div style="flex:1;min-width:180px">
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px">
-              <span>Avance</span><span id="av-pct" style="font-weight:700">0%</span>
-            </div>
-            <div style="height:14px;background:#dde2ea;border-radius:7px;overflow:hidden">
-              <div id="av-bar-fill" style="height:100%;border-radius:7px;transition:width .4s;width:0%;max-width:100%"></div>
-            </div>
-            <div id="av-bar-extra" style="display:none;margin-top:4px;height:8px;background:#fee2e2;border-radius:4px;overflow:hidden">
-              <div id="av-bar-extra-fill" style="height:100%;background:#e63946;border-radius:4px;transition:width .4s"></div>
-            </div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px"><span>Avance</span><span id="av-pct" style="font-weight:700">0%</span></div>
+            <div style="height:14px;background:#dde2ea;border-radius:7px;overflow:hidden"><div id="av-bar-fill" style="height:100%;border-radius:7px;transition:width .4s;width:0%"></div></div>
+            <div id="av-bar-extra" style="display:none;margin-top:4px;height:8px;background:#fee2e2;border-radius:4px;overflow:hidden"><div id="av-bar-extra-fill" style="height:100%;background:#e63946;border-radius:4px"></div></div>
             <div id="av-status-msg" style="font-size:11px;margin-top:4px;font-weight:600"></div>
           </div>
         </div>
@@ -206,27 +184,22 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Encogimiento vertical</label><input id="p-ev" type="number" placeholder="—"/></div>
           <div class="field"><label>Calibre reverso</label><input id="p-cr" type="number" placeholder="—"/></div>
           <div class="field"><label>Enc. Dir. Máquina</label><input id="p-edm" type="number" placeholder="—"/></div>
-          <div class="field"><label>Deslamine</label>
-            <select id="p-des"><option value="">— Seleccione —</option><option value="si">Sí</option><option value="no">No</option></select>
-          </div>
+          <div class="field"><label>Deslamine</label><select id="p-des"><option value="">— Seleccione —</option><option value="si">Sí</option><option value="no">No</option></select></div>
           <div class="field"><label>Temperatura de túnel</label><input id="p-temp" type="number" placeholder="—"/></div>
         </div>
         <div class="btn-row" style="margin-top:16px">
-          <div class="field" style="min-width:210px">
-            <label>Coordinador</label>
-            <select id="sel-coord"><option value="">— Seleccione —</option></select>
-          </div>
+          <div class="field" style="min-width:210px"><label>Coordinador</label><select id="sel-coord"><option value="">— Seleccione —</option></select></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
             <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
             <button class="btn" onclick="limpiarPantalla()">🗑 Limpiar</button>
             <button class="btn" onclick="openListModal()">Lista de bobinas</button>
-            <button class="btn btn-primary" id="btn-guardar" onclick="guardarEImprimir()">🖨 Guardar e Imprimir</button>
+            <button class="btn btn-success" id="btn-guardar" onclick="guardarBobina()">💾 Guardar bobina</button>
+            <button class="btn btn-primary" id="btn-imprimir" onclick="soloImprimir()" disabled>🖨 Imprimir etiqueta</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- CONSULTA -->
     <div id="view-consulta" style="display:none">
       <div class="sec-tabs" id="consulta-tabs">
         <button class="sec-tab active" onclick="consultaTab('maquina',this)">Por Máquina</button>
@@ -237,7 +210,6 @@ tr:hover td{background:#f8f9fb}
       <div id="consulta-content"></div>
     </div>
 
-    <!-- ALMACÉN -->
     <div id="view-almacen" style="display:none">
       <div class="sec-tabs" id="almacen-tabs">
         <button class="sec-tab active" onclick="almacenTab('entradas',this)">📥 Entradas</button>
@@ -248,7 +220,6 @@ tr:hover td{background:#f8f9fb}
       <div id="almacen-content"></div>
     </div>
 
-    <!-- ADMIN -->
     <div id="view-admin" style="display:none">
       <div class="stat-grid" id="stats-grid"></div>
       <div class="sec-tabs" id="admin-tabs">
@@ -261,11 +232,9 @@ tr:hover td{background:#f8f9fb}
       </div>
       <div id="admin-content"></div>
     </div>
-
   </main>
 </div>
 
-<!-- MODAL LISTA -->
 <div class="modal-bg" id="modal-list">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-list')">×</button>
@@ -273,8 +242,6 @@ tr:hover td{background:#f8f9fb}
     <div id="ml-body"></div>
   </div>
 </div>
-
-<!-- MODAL FORM -->
 <div class="modal-bg" id="modal-form">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-form')">×</button>
@@ -286,30 +253,25 @@ tr:hover td{background:#f8f9fb}
     </div>
   </div>
 </div>
-
-<!-- LABEL PRINT -->
 <div id="label-print" style="display:none;position:fixed;inset:0;background:#fff;z-index:200;align-items:center;justify-content:center;flex-direction:column;padding:20px">
   <div class="label-wrap" id="label-content"></div>
-  <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
-    <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir (Ctrl+P)</button>
+  <div style="margin-top:16px;display:flex;gap:10px">
+    <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir</button>
     <button class="btn" onclick="document.getElementById('label-print').style.display='none'">Cerrar</button>
-    <span style="font-size:12px;color:var(--muted)">Si falla, usa <strong>Ctrl+P</strong></span>
   </div>
 </div>
 
 <script>
 (function(){
-  var cv=document.getElementById('circuit'),cx=cv.getContext('2d');
-  var W,H,nd=[];
+  var cv=document.getElementById('circuit'),cx=cv.getContext('2d'),W,H,nd=[];
   function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
   resize();window.addEventListener('resize',resize);
-  for(var i=0;i<60;i++){nd.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});}
+  for(var i=0;i<60;i++)nd.push({x:Math.random()*2000,y:Math.random()*1200,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4});
   function draw(){
     cx.clearRect(0,0,W,H);cx.strokeStyle='#1a56c4';cx.lineWidth=.8;
     for(var i=0;i<nd.length;i++){
       nd[i].x+=nd[i].vx;nd[i].y+=nd[i].vy;
-      if(nd[i].x<0||nd[i].x>W)nd[i].vx*=-1;
-      if(nd[i].y<0||nd[i].y>H)nd[i].vy*=-1;
+      if(nd[i].x<0||nd[i].x>W)nd[i].vx*=-1;if(nd[i].y<0||nd[i].y>H)nd[i].vy*=-1;
       for(var j=i+1;j<nd.length;j++){
         var dx=nd[i].x-nd[j].x,dy=nd[i].y-nd[j].y,d=Math.sqrt(dx*dx+dy*dy);
         if(d<180){cx.globalAlpha=(1-d/180)*.6;cx.beginPath();cx.moveTo(nd[i].x,nd[i].y);cx.lineTo(nd[j].x,nd[i].y);cx.lineTo(nd[j].x,nd[j].y);cx.stroke();}
@@ -328,108 +290,44 @@ setTimeout(function(){
 },2000);
 
 var API='http://192.168.43.170/api';
-var jwtToken=null;
 function apiFetch(path,opts){
   opts=opts||{};
-  var headers={'Content-Type':'application/json'};
-  if(jwtToken)headers['Authorization']='Bearer '+jwtToken;
-  return fetch(API+path,Object.assign({},opts,{headers:Object.assign(headers,opts.headers||{})}))
-    .then(function(res){
-      return res.json().then(function(data){
-        if(!res.ok)throw new Error(data.error||'Error '+res.status);
-        return data;
-      });
-    });
+  var h={'Content-Type':'application/json'};
+  return fetch(API+path,Object.assign({},opts,{headers:Object.assign(h,opts.headers||{})}))
+    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Error');return d;});});
 }
 
-var FB_MACHINES=[{id:'EXT001',name:'Extrusora 001'},{id:'EXT002',name:'Extrusora 002'},{id:'EXT003',name:'Extrusora 003'},{id:'EXT004',name:'Extrusora 004'},{id:'EXT005',name:'Extrusora 005'},{id:'EXT006',name:'Extrusora 006'}];
+var FB_MACHINES=[{id:'EXT001'},{id:'EXT002'},{id:'EXT003'},{id:'EXT004'},{id:'EXT005'},{id:'EXT006'}];
 var FB_OPERATORS=[{id:1,full_name:'Juan Quiroz Segovia'},{id:2,full_name:'Roberto Martínez Salazar'},{id:3,full_name:'José Alfonso Ochoa Leija'},{id:4,full_name:'Erik Rodrigo Presas Jasso'},{id:5,full_name:'Israel Rodríguez Herrera'},{id:6,full_name:'Francisco Abelardo Garza Hernández'},{id:7,full_name:'Fabián de León Mejía'},{id:8,full_name:'Erick González Palomo'},{id:9,full_name:'Gerardo Martínez Alvarado'},{id:10,full_name:'Josué Rodolfo Gaytán Rodríguez'},{id:11,full_name:'Luis Angel Ochoa Leija'},{id:12,full_name:'Luis Antonio Mendez Martinez'}];
 var FB_ORDERS=[
-  {id:1,ot_number:'26010005',product_code:'20-010901-02275-01',description:'B202828-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.24291',status:'pendiente',stdqty:100},
-  {id:2,ot_number:'26010006',product_code:'20-840901-13231-01',description:'B353030-GEN-S/I-CLO-11.5',measure:'11.5',color:'CLARO',next_process:'',remision:'',status:'pendiente',stdqty:100},
-  {id:3,ot_number:'26010073',product_code:'20-350901-08406-01',description:'FM1710-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25083',status:'pendiente',stdqty:28.56},
-  {id:4,ot_number:'26010115',product_code:'20-840901-08764-01',description:'B353030-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.24984',status:'pendiente',stdqty:2145},
-  {id:5,ot_number:'26010127',product_code:'20-840901-09901-01',description:'B353030-GEN-S/I-CLO-8',measure:'8',color:'CLARO',next_process:'',remision:'H.24981',status:'pendiente',stdqty:81.6},
-  {id:6,ot_number:'26010134',product_code:'20-110901-16851-01',description:'BX7620-GEN-S/I-CLO-220MM',measure:'220MM',color:'CLARO',next_process:'',remision:'H.24956',status:'pendiente',stdqty:41.69},
-  {id:7,ot_number:'26010153',product_code:'20-310901-02320-01',description:'F2010-GEN-S/I-CLO-190MM',measure:'190MM',color:'CLARO',next_process:'',remision:'',status:'pendiente',stdqty:1400},
-  {id:8,ot_number:'26010190',product_code:'20-310901-04036-01',description:'F2010-GEN-S/I-MRN-170MM',measure:'170MM',color:'MARRON',next_process:'',remision:'H.25124-1',status:'pendiente',stdqty:3249},
-  {id:9,ot_number:'26010218',product_code:'20-370901-10040-01',description:'B452530-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.24934-1',status:'pendiente',stdqty:1000},
-  {id:10,ot_number:'26010232',product_code:'20-360901-07884-01',description:'FM2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BLANCO',next_process:'',remision:'',status:'pendiente',stdqty:1000},
-  {id:11,ot_number:'26010240',product_code:'20-310901-03761-01',description:'F2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BLANCO',next_process:'',remision:'H.24897-1',status:'pendiente',stdqty:100},
-  {id:12,ot_number:'26010308',product_code:'20-330901-07712-01',description:'B203737-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25042',status:'pendiente',stdqty:68.4},
-  {id:13,ot_number:'26010440',product_code:'20-010901-02245-01',description:'B202828-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25036',status:'pendiente',stdqty:847.09},
-  {id:14,ot_number:'26010441',product_code:'20-010901-02273-01',description:'B202828-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25040',status:'pendiente',stdqty:63.5},
-  {id:15,ot_number:'26010445',product_code:'20-320901-10744-01',description:'B163737-GENERICO-S/I-CLO-17',measure:'17',color:'CLARO',next_process:'',remision:'H.25218',status:'pendiente',stdqty:77.73},
-  {id:16,ot_number:'26010446',product_code:'20-320901-10595-01',description:'B163737-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25033',status:'pendiente',stdqty:585.82},
-  {id:17,ot_number:'26010447',product_code:'20-320901-10595-01',description:'B163737-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25221',status:'pendiente',stdqty:366.14},
-  {id:18,ot_number:'26010448',product_code:'20-320901-10593-01',description:'B163737-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25217',status:'pendiente',stdqty:32.11},
-  {id:19,ot_number:'26010449',product_code:'20-320901-10591-01',description:'B163737-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25030',status:'pendiente',stdqty:149.27},
-  {id:20,ot_number:'26010450',product_code:'20-320901-10591-01',description:'B163737-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25222',status:'pendiente',stdqty:149.27},
-  {id:21,ot_number:'26010451',product_code:'20-320901-10713-01',description:'B163737-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25216',status:'pendiente',stdqty:358.82},
-  {id:22,ot_number:'26010452',product_code:'20-320901-11278-01',description:'B163737-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25032',status:'pendiente',stdqty:715.94},
-  {id:23,ot_number:'26010453',product_code:'20-330901-07712-01',description:'B203737-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25213',status:'pendiente',stdqty:102.6},
-  {id:24,ot_number:'26010454',product_code:'20-330901-07713-01',description:'B203737-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25034',status:'pendiente',stdqty:147},
-  {id:25,ot_number:'26010455',product_code:'20-330901-12446-01',description:'B203737-GEN-S/I-CLO-285MM',measure:'285MM',color:'CLARO',next_process:'',remision:'H.25215',status:'pendiente',stdqty:837.13},
-  {id:26,ot_number:'26010476',product_code:'20-490901-16842-01',description:'FSD2010N-GEN-S/I-CLO-160MM',measure:'160MM',color:'CLARO',next_process:'',remision:'H.25180',status:'pendiente',stdqty:240.54},
-  {id:27,ot_number:'26010509',product_code:'20-330901-08090-01',description:'B203737-GEN-S/I-CLO-20',measure:'20',color:'CLARO',next_process:'',remision:'H.25025-1',status:'pendiente',stdqty:486},
-  {id:28,ot_number:'26010534',product_code:'20-310901-02261-01',description:'F2010-GEN-S/I-CLO-7.5',measure:'7.5',color:'CLARO',next_process:'',remision:'H.25175',status:'pendiente',stdqty:102},
-  {id:29,ot_number:'26010540',product_code:'20-700901-15445-01',description:'FR1710-GEN-S/I-AZK-210MM',measure:'210MM',color:'AZUL K',next_process:'',remision:'H.25158',status:'pendiente',stdqty:1085.27},
-  {id:30,ot_number:'26010541',product_code:'20-700901-15430-01',description:'FR1710-GEN-S/I-AZK-186MM',measure:'186MM',color:'AZUL K',next_process:'',remision:'H.25159',status:'pendiente',stdqty:1160.25},
-  {id:31,ot_number:'26010542',product_code:'20-680901-15416-01',description:'FMXR1704-GEN-S/I-AZK-206MM',measure:'206MM',color:'AZUL K',next_process:'',remision:'H.25156',status:'pendiente',stdqty:774.25},
-  {id:32,ot_number:'26010543',product_code:'20-300901-17211-01',description:'F1710-GEN-S/I-DOR-170MM',measure:'170MM',color:'DORADO',next_process:'',remision:'H.25288',status:'pendiente',stdqty:159.74},
-  {id:33,ot_number:'26010544',product_code:'20-350901-16718-01',description:'FM1710-GEN-S/I-RJO-220MM',measure:'220MM',color:'ROJO',next_process:'',remision:'H.25249',status:'pendiente',stdqty:833.82},
-  {id:34,ot_number:'26010551',product_code:'20-780901-13814-01',description:'FN2010-GEN-S/I-CLO-195MM',measure:'195MM',color:'CLARO',next_process:'',remision:'H.25285',status:'pendiente',stdqty:858.55},
-  {id:35,ot_number:'26010553',product_code:'20-310901-02320-01',description:'F2010-GEN-S/I-CLO-190MM',measure:'190MM',color:'CLARO',next_process:'',remision:'H.25276',status:'pendiente',stdqty:91.51},
-  {id:36,ot_number:'26010554',product_code:'20-310901-02353-01',description:'F2010-GENERICO-S/I-CLO-280MM',measure:'280MM',color:'CLARO',next_process:'',remision:'H.25284',status:'pendiente',stdqty:511.16},
-  {id:37,ot_number:'26010557',product_code:'20-680901-15417-01',description:'FMXR1704-GEN-S/I-CLO-260MM',measure:'260MM',color:'CLARO',next_process:'',remision:'H.25274',status:'pendiente',stdqty:1099.36},
-  {id:38,ot_number:'26010558',product_code:'20-680901-15418-01',description:'FMXR1704-GEN-S/I-CLO-206MM',measure:'206MM',color:'CLARO',next_process:'',remision:'H.25268',status:'pendiente',stdqty:1935.63},
-  {id:39,ot_number:'26010559',product_code:'20-680901-15418-01',description:'FMXR1704-GEN-S/I-CLO-206MM',measure:'206MM',color:'CLARO',next_process:'',remision:'H.25269',status:'pendiente',stdqty:1548.50},
-  {id:40,ot_number:'26010561',product_code:'20-330901-07857-01',description:'B203737-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25261',status:'pendiente',stdqty:147.6},
-  {id:41,ot_number:'26010562',product_code:'20-320901-10573-01',description:'B163737-GEN-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25213',status:'pendiente',stdqty:83.37},
-  {id:42,ot_number:'26010563',product_code:'20-320901-10740-01',description:'B163737-GEN-S/I-CLO-8',measure:'8',color:'CLARO',next_process:'',remision:'H.25220',status:'pendiente',stdqty:167.3},
-  {id:43,ot_number:'26010564',product_code:'20-320901-12731-01',description:'B163737-GEN-S/I-CLO-7.5',measure:'7.5',color:'CLARO',next_process:'',remision:'H.25292',status:'pendiente',stdqty:90.13},
-  {id:44,ot_number:'26010565',product_code:'20-320901-10605-01',description:'B163737-GEN-S/I-CLO-7',measure:'7',color:'CLARO',next_process:'',remision:'H.25212',status:'pendiente',stdqty:130.68},
-  {id:45,ot_number:'26010566',product_code:'20-320901-10669-01',description:'B163737-GEN-S/I-CLO-6',measure:'6',color:'CLARO',next_process:'',remision:'H.25219',status:'pendiente',stdqty:14.08},
-  {id:46,ot_number:'26010567',product_code:'20-430901-11556-01',description:'BX203737-GEN-S/I-CLO-7',measure:'7',color:'CLARO',next_process:'',remision:'H.25259',status:'pendiente',stdqty:121.8},
-  {id:47,ot_number:'26010568',product_code:'20-330901-14123-01',description:'B203737-GEN-S/I-CLO-5.5',measure:'5.5',color:'CLARO',next_process:'',remision:'H.25031',status:'pendiente',stdqty:165.6},
-  {id:48,ot_number:'26010569',product_code:'20-770901-12719-01',description:'TP251010-GENERICO-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25326',status:'pendiente',stdqty:92.13},
-  {id:49,ot_number:'26010570',product_code:'20-770901-08128-01',description:'TP251010-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25204',status:'pendiente',stdqty:1230.06},
-  {id:50,ot_number:'26010571',product_code:'20-580901-15664-01',description:'BNT81520-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25323',status:'pendiente',stdqty:41.91},
-  {id:51,ot_number:'26010572',product_code:'20-580901-15298-01',description:'BNT81520-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25139',status:'pendiente',stdqty:220.98},
-  {id:52,ot_number:'26010573',product_code:'20-580901-15117-01',description:'BNT81520-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25142',status:'pendiente',stdqty:160.02},
-  {id:53,ot_number:'26010574',product_code:'20-500901-03792-01',description:'NT250606-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25019',status:'pendiente',stdqty:425.79},
-  {id:54,ot_number:'26010575',product_code:'20-500901-03791-01',description:'NT250606-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25209',status:'pendiente',stdqty:879.8},
-  {id:55,ot_number:'26010576',product_code:'20-500901-03790-01',description:'NT250606-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25208',status:'pendiente',stdqty:813.4},
-  {id:56,ot_number:'26010577',product_code:'20-500901-03790-01',description:'NT250606-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25206',status:'pendiente',stdqty:325.36},
-  {id:57,ot_number:'26010578',product_code:'20-500901-03787-01',description:'NT250606-GEN-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25203',status:'pendiente',stdqty:136.12},
-  {id:58,ot_number:'26010579',product_code:'20-540901-06266-01',description:'TC250303-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25205',status:'pendiente',stdqty:284.69},
-  {id:59,ot_number:'26010581',product_code:'20-150901-14564-01',description:'B353030RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25058',status:'pendiente',stdqty:1960.40},
-  {id:60,ot_number:'26010582',product_code:'20-010901-02245-01',description:'B202828-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25233',status:'pendiente',stdqty:2320.29},
-  {id:61,ot_number:'26010583',product_code:'20-010901-02242-01',description:'B202828-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25235',status:'pendiente',stdqty:274.32},
-  {id:62,ot_number:'26010584',product_code:'20-010901-02275-01',description:'B202828-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25237',status:'pendiente',stdqty:1226.82},
-  {id:63,ot_number:'26010585',product_code:'20-010901-02227-01',description:'B202828-GEN-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25234',status:'pendiente',stdqty:530.86},
-  {id:64,ot_number:'26010586',product_code:'20-320901-10713-01',description:'B163737-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25224',status:'pendiente',stdqty:662.43},
-  {id:65,ot_number:'26010587',product_code:'20-410901-16283-01',description:'B203333RT-GEN ABRE FACIL-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25263',status:'pendiente',stdqty:2993.65},
-  {id:66,ot_number:'26010592',product_code:'20-840901-08816-01',description:'B353030-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25197',status:'pendiente',stdqty:710.02},
-  {id:67,ot_number:'26010593',product_code:'20-840901-08874-01',description:'B353030-GEN-S/I-CLO-13',measure:'13',color:'CLARO',next_process:'',remision:'H.25140',status:'pendiente',stdqty:648},
-  {id:68,ot_number:'26010594',product_code:'20-840901-08813-01',description:'B353030-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25198',status:'pendiente',stdqty:2925.60},
-  {id:69,ot_number:'26010603',product_code:'20-880901-12669-01',description:'FX1312-GEN-S/I-CLO-58MM',measure:'58MM',color:'CLARO',next_process:'',remision:'H.25177',status:'pendiente',stdqty:208.16},
-  {id:70,ot_number:'26010604',product_code:'20-880901-17175-01',description:'FX1312-GEN-S/I-NTS-84MM',measure:'84MM',color:'NARANJA TRASLUCIDO',next_process:'',remision:'H.25166',status:'pendiente',stdqty:96.97},
-  {id:71,ot_number:'26010605',product_code:'20-700901-16209-01',description:'FR1710-GEN-S/I-BCO-90MM',measure:'90MM',color:'BLANCO',next_process:'',remision:'H.25165',status:'pendiente',stdqty:202.96},
-  {id:72,ot_number:'26010606',product_code:'20-300901-13046-01',description:'F1710-GEN-S/I-BCO-102MM',measure:'102MM',color:'BLANCO',next_process:'',remision:'H.25167',status:'pendiente',stdqty:2731.49},
-  {id:73,ot_number:'26010613',product_code:'20-150901-14564-01',description:'B353030RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25055-1',status:'pendiente',stdqty:3468.40},
-  {id:74,ot_number:'26010618',product_code:'20-010901-02227-01',description:'B202828-GEN-S/I-CLO-9',measure:'9',color:'CLARO',next_process:'',remision:'H.25041-1',status:'pendiente',stdqty:386.08},
-  {id:75,ot_number:'26020018',product_code:'20-330901-08167-01',description:'B203737-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25227',status:'pendiente',stdqty:135},
-  {id:76,ot_number:'26020019',product_code:'20-900901-14179-01',description:'B8203333RT-GEN ABRE FACIL-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25309',status:'pendiente',stdqty:24},
-  {id:77,ot_number:'26020020',product_code:'20-430901-12772-01',description:'BX203737-GEN ABRE FACIL-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25223',status:'pendiente',stdqty:2140},
-  {id:78,ot_number:'26020021',product_code:'20-880901-12697-01',description:'FX1312-GEN-S/I-NTS-58MM',measure:'58MM',color:'NARANJA TRASLUCIDO',next_process:'',remision:'H.25109',status:'pendiente',stdqty:3.93},
-  {id:79,ot_number:'26020022',product_code:'20-670901-15412-01',description:'FMR1710-GEN-S/I-AZK-240MM',measure:'240MM',color:'AZUL K',next_process:'',remision:'H.25256',status:'pendiente',stdqty:811},
-  {id:80,ot_number:'26020029',product_code:'20-720901-15476-01',description:'FXR1710-GEN-S/I-AZL-260MM',measure:'260MM',color:'AZUL TRANSLUCIDO',next_process:'',remision:'H.25290-1',status:'pendiente',stdqty:1343.66},
-  {id:81,ot_number:'26020030',product_code:'20-780901-13814-01',description:'FN2010-GEN-S/I-CLO-195MM',measure:'195MM',color:'CLARO',next_process:'',remision:'H.24781-1',status:'pendiente',stdqty:1654.28},
-  {id:82,ot_number:'26020031',product_code:'20-010901-02250-01',description:'B202828-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25035-1',status:'pendiente',stdqty:586.74},
-  {id:83,ot_number:'26020032',product_code:'20-150901-14697-01',description:'B353030RT-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25050-1',status:'pendiente',stdqty:6075.68},
-  {id:84,ot_number:'26020033',product_code:'20-150901-15703-01',description:'B353030RT-GEN ABRE FACIL-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25195-1',status:'pendiente',stdqty:527.8},
-  {id:85,ot_number:'26020034',product_code:'20-700901-15422-01',description:'FR1710-GEN S/I-CLO-170MM',measure:'170MM',color:'CLARO',next_process:'',remision:'H.24953-1',status:'pendiente',stdqty:2396.04}
+  {id:1,ot_number:'26010005',product_code:'20-010901-02275-01',description:'B202828-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.24291',stdqty:100},
+  {id:2,ot_number:'26010006',product_code:'20-840901-13231-01',description:'B353030-GEN-S/I-CLO-11.5',measure:'11.5',color:'CLARO',next_process:'',remision:'',stdqty:100},
+  {id:3,ot_number:'26010073',product_code:'20-350901-08406-01',description:'FM1710-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25083',stdqty:28.56},
+  {id:4,ot_number:'26010115',product_code:'20-840901-08764-01',description:'B353030-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.24984',stdqty:2145},
+  {id:5,ot_number:'26010127',product_code:'20-840901-09901-01',description:'B353030-GEN-S/I-CLO-8',measure:'8',color:'CLARO',next_process:'',remision:'H.24981',stdqty:81.6},
+  {id:6,ot_number:'26010134',product_code:'20-110901-16851-01',description:'BX7620-GEN-S/I-CLO-220MM',measure:'220MM',color:'CLARO',next_process:'',remision:'H.24956',stdqty:41.69},
+  {id:7,ot_number:'26010153',product_code:'20-310901-02320-01',description:'F2010-GEN-S/I-CLO-190MM',measure:'190MM',color:'CLARO',next_process:'',remision:'',stdqty:1400},
+  {id:8,ot_number:'26010190',product_code:'20-310901-04036-01',description:'F2010-GEN-S/I-MRN-170MM',measure:'170MM',color:'MARRON',next_process:'',remision:'H.25124-1',stdqty:3249},
+  {id:9,ot_number:'26010218',product_code:'20-370901-10040-01',description:'B452530-GENERICO-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.24934-1',stdqty:1000},
+  {id:10,ot_number:'26010232',product_code:'20-360901-07884-01',description:'FM2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BLANCO',next_process:'',remision:'',stdqty:1000},
+  {id:11,ot_number:'26010240',product_code:'20-310901-03761-01',description:'F2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BLANCO',next_process:'',remision:'H.24897-1',stdqty:100},
+  {id:12,ot_number:'26010308',product_code:'20-330901-07712-01',description:'B203737-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25042',stdqty:68.4},
+  {id:13,ot_number:'26010440',product_code:'20-010901-02245-01',description:'B202828-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25036',stdqty:847.09},
+  {id:14,ot_number:'26010441',product_code:'20-010901-02273-01',description:'B202828-GEN-S/I-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25040',stdqty:63.5},
+  {id:15,ot_number:'26010445',product_code:'20-320901-10744-01',description:'B163737-GENERICO-S/I-CLO-17',measure:'17',color:'CLARO',next_process:'',remision:'H.25218',stdqty:77.73},
+  {id:16,ot_number:'26010446',product_code:'20-320901-10595-01',description:'B163737-GEN-S/I-CLO-16',measure:'16',color:'CLARO',next_process:'',remision:'H.25033',stdqty:585.82},
+  {id:17,ot_number:'26010540',product_code:'20-700901-15445-01',description:'FR1710-GEN-S/I-AZK-210MM',measure:'210MM',color:'AZUL K',next_process:'',remision:'H.25158',stdqty:1085.27},
+  {id:18,ot_number:'26010541',product_code:'20-700901-15430-01',description:'FR1710-GEN-S/I-AZK-186MM',measure:'186MM',color:'AZUL K',next_process:'',remision:'H.25159',stdqty:1160.25},
+  {id:19,ot_number:'26010551',product_code:'20-780901-13814-01',description:'FN2010-GEN-S/I-CLO-195MM',measure:'195MM',color:'CLARO',next_process:'',remision:'H.25285',stdqty:858.55},
+  {id:20,ot_number:'26010570',product_code:'20-770901-08128-01',description:'TP251010-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25204',stdqty:1230.06},
+  {id:21,ot_number:'26010581',product_code:'20-150901-14564-01',description:'B353030RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25058',stdqty:1960.40},
+  {id:22,ot_number:'26010582',product_code:'20-010901-02245-01',description:'B202828-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25233',stdqty:2320.29},
+  {id:23,ot_number:'26010587',product_code:'20-410901-16283-01',description:'B203333RT-GEN ABRE FACIL-CLO-12',measure:'12',color:'CLARO',next_process:'',remision:'H.25263',stdqty:2993.65},
+  {id:24,ot_number:'26010606',product_code:'20-300901-13046-01',description:'F1710-GEN-S/I-BCO-102MM',measure:'102MM',color:'BLANCO',next_process:'',remision:'H.25167',stdqty:2731.49},
+  {id:25,ot_number:'26010613',product_code:'20-150901-14564-01',description:'B353030RT-GEN-S/I-CLO-14',measure:'14',color:'CLARO',next_process:'',remision:'H.25055-1',stdqty:3468.40},
+  {id:26,ot_number:'26020020',product_code:'20-430901-12772-01',description:'BX203737-GEN ABRE FACIL-S/I-CLO-10',measure:'10',color:'CLARO',next_process:'',remision:'H.25223',stdqty:2140},
+  {id:27,ot_number:'26020032',product_code:'20-150901-14697-01',description:'B353030RT-GEN-S/I-CLO-11',measure:'11',color:'CLARO',next_process:'',remision:'H.25050-1',stdqty:6075.68},
+  {id:28,ot_number:'26020034',product_code:'20-700901-15422-01',description:'FR1710-GEN S/I-CLO-170MM',measure:'170MM',color:'CLARO',next_process:'',remision:'H.24953-1',stdqty:2396.04}
 ];
 
 var curMach='EXT001',formActive=false,bobinas=[],lastSavedBobina=null,curWOId=null;
@@ -440,8 +338,7 @@ var catCoordinadores=[{id:1,nombre:'Gumaro Flores',activo:true},{id:2,nombre:'Jo
 var currentModalType='',editingId=null;
 var AREAS=['Impresión','Conversión','Barnizado','Corrugado','Empaque','Refilado','Rectificado'];
 var UBICACIONES=(function(){var l=[];['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'].forEach(function(x){for(var n=1;n<=3;n++)l.push(x+n);});return l;})();
-var lastConsultaMaquina=[],lastConsultaLote=[];
-var rfRows=[];
+var lastConsultaMaquina=[],lastConsultaLote=[],lastAdminProd=[];
 
 function getToday(){return new Date();}
 function fmtDate(d){return String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();}
@@ -450,41 +347,33 @@ function nowTime(){var n=new Date();return String(n.getHours()).padStart(2,'0')+
 function parseBoDate(b){var p=b.fecha.split('-');var t=(b.hora||'00:00:00').split(':');return new Date(p[2],p[1]-1,p[0],t[0],t[1],t[2]||0);}
 function ri(label,val,hl){return'<div class="result-item'+(hl?' highlight':'')+'"><div class="ri-label">'+label+'</div><div class="ri-val">'+(val||'—')+'</div></div>';}
 function findBobina(id){return bobinas.find(function(b){return String(b.id).toUpperCase()===String(id).toUpperCase();})||null;}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function hideAlerts(){['alert-sel','alert-metro','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
 
 function initApp(){
-  loadMachines();loadOperators();loadWorkOrders();populateCoord();renderAdmin();
-}
-
-function loadMachines(){
   apiFetch('/machines').then(function(d){buildMachTabs(d);}).catch(function(){buildMachTabs(FB_MACHINES);});
+  apiFetch('/operators').then(function(d){fillOps(d);}).catch(function(){fillOps(FB_OPERATORS);});
+  apiFetch('/work-orders').then(function(d){fillOTs(d);}).catch(function(){fillOTs(FB_ORDERS);});
+  populateCoord();renderAdmin();
 }
 function buildMachTabs(data){
   var mt=document.getElementById('mach-tabs');mt.innerHTML='';
   data.forEach(function(m,i){
-    var b=document.createElement('button');
-    b.className='mach-tab'+(i===0?' active':'');
-    b.textContent=m.id;b.dataset.id=m.id;
-    b.onclick=function(){selectMach(m.id,b);};
-    mt.appendChild(b);
+    var b=document.createElement('button');b.className='mach-tab'+(i===0?' active':'');
+    b.textContent=m.id;b.dataset.id=m.id;b.onclick=function(){selectMach(m.id,b);};mt.appendChild(b);
   });
   if(data.length){curMach=data[0].id;document.getElementById('mach-label').textContent=data[0].id;}
-}
-function loadOperators(){
-  apiFetch('/operators').then(function(d){fillOps(d);}).catch(function(){fillOps(FB_OPERATORS);});
 }
 function fillOps(data){
   var so=document.getElementById('sel-op');so.innerHTML='<option value="">— Seleccione —</option>';
   data.forEach(function(o){var opt=document.createElement('option');opt.value=o.id;opt.textContent=o.full_name;so.appendChild(opt);});
-}
-function loadWorkOrders(){
-  apiFetch('/work-orders').then(function(d){fillOTs(d);}).catch(function(){fillOTs(FB_ORDERS);});
 }
 function fillOTs(data){
   var st=document.getElementById('sel-ot');st.innerHTML='<option value="">— Seleccione —</option>';
   data.forEach(function(o){
     var opt=document.createElement('option');opt.value=o.id;opt.textContent=o.ot_number;
     opt.dataset.prod=o.product_code;opt.dataset.desc=o.description;opt.dataset.med=o.measure;
-    opt.dataset.col=o.color;opt.dataset.rem=o.remision;opt.dataset.sig=o.next_process||'';opt.dataset.stdqty=o.stdqty||0;
+    opt.dataset.col=o.color;opt.dataset.rem=o.remision||'';opt.dataset.sig=o.next_process||'';opt.dataset.stdqty=o.stdqty||0;
     st.appendChild(opt);
   });
 }
@@ -493,11 +382,9 @@ function populateCoord(){
   el.innerHTML='<option value="">— Seleccione —</option>';
   catCoordinadores.filter(function(c){return c.activo;}).forEach(function(c){
     var opt=document.createElement('option');opt.value=c.id;opt.textContent=c.nombre;
-    if(c.id===parseInt(prev))opt.selected=true;
-    el.appendChild(opt);
+    if(c.id===parseInt(prev))opt.selected=true;el.appendChild(opt);
   });
 }
-
 function showView(v,btn){
   ['operador','consulta','almacen','admin'].forEach(function(id){
     var el=document.getElementById('view-'+id);if(el)el.style.display=id===v?'block':'none';
@@ -508,19 +395,16 @@ function showView(v,btn){
   if(v==='almacen'){var t=document.querySelector('#almacen-tabs .sec-tab');if(t)almacenTab('entradas',t);}
   if(v==='consulta'){var t2=document.querySelector('#consulta-tabs .sec-tab');if(t2)consultaTab('maquina',t2);}
 }
-
 function selectMach(m,btn){
-  curMach=m;
-  document.querySelectorAll('.mach-tab').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  document.getElementById('mach-label').textContent=m;
-  resetForm();
+  curMach=m;document.querySelectorAll('.mach-tab').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');document.getElementById('mach-label').textContent=m;resetForm();
 }
 function resetForm(){
   ['sel-op','sel-ot'].forEach(function(id){document.getElementById(id).value='';});
   ['f-desc','f-prod','f-med','f-col','f-sig','f-rem','f-id','f-num','f-fecha','f-hora','f-lote','f-metros','f-peso','f-obs'].forEach(function(id){document.getElementById(id).value='';});
   formActive=false;curWOId=null;hideAlerts();
   document.getElementById('ot-avance').style.display='none';
+  document.getElementById('btn-imprimir').disabled=true;
 }
 function checkForm(){
   var op=document.getElementById('sel-op').value,ot=document.getElementById('sel-ot').value;
@@ -538,10 +422,8 @@ function loadOT(){
   document.getElementById('f-col').value=opt.dataset.col||'';
   document.getElementById('f-sig').value=opt.dataset.sig||'';
   document.getElementById('f-rem').value=opt.dataset.rem||'';
-  updateAvance(opt);
-  initBobina();
+  updateAvance(opt);initBobina();
 }
-
 function updateAvance(opt){
   var stdqty=parseFloat(opt.dataset.stdqty)||0;
   var otTxt=opt.textContent;
@@ -549,152 +431,103 @@ function updateAvance(opt){
   var avEl=document.getElementById('ot-avance');
   if(!stdqty){avEl.style.display='none';return;}
   avEl.style.display='flex';
-  var pct=pesoAcum/stdqty*100;
-  var diff=pesoAcum-stdqty;
-  var excedente=diff>0;
-  var completo=pct>=100&&!excedente;
+  var pct=pesoAcum/stdqty*100,diff=pesoAcum-stdqty,exc=diff>0,comp=pct>=100&&!exc;
   document.getElementById('av-stdqty').textContent=stdqty.toLocaleString()+' Kg';
   document.getElementById('av-producido').textContent=pesoAcum.toFixed(2)+' Kg';
-  var diffEl=document.getElementById('av-diff'),diffLbl=document.getElementById('av-diff-label');
-  if(excedente){
-    diffEl.textContent='+'+diff.toFixed(2)+' Kg';diffEl.style.color='#e63946';
-    diffLbl.textContent='⚠ EXCEDENTE';diffLbl.style.color='#e63946';
-  }else if(completo){
-    diffEl.textContent='✓ Completo';diffEl.style.color='#16a34a';
-    diffLbl.textContent='SIN FALTANTE';diffLbl.style.color='#16a34a';
-  }else{
-    diffEl.textContent='-'+(stdqty-pesoAcum).toFixed(2)+' Kg';diffEl.style.color='#d97706';
-    diffLbl.textContent='FALTANTE';diffLbl.style.color='#d97706';
-  }
-  var barPct=Math.min(100,pct);
+  var de=document.getElementById('av-diff'),dl=document.getElementById('av-diff-label');
+  if(exc){de.textContent='+'+diff.toFixed(2)+' Kg';de.style.color='#e63946';dl.textContent='⚠ EXCEDENTE';dl.style.color='#e63946';}
+  else if(comp){de.textContent='✓ Completo';de.style.color='#16a34a';dl.textContent='SIN FALTANTE';dl.style.color='#16a34a';}
+  else{de.textContent='-'+(stdqty-pesoAcum).toFixed(2)+' Kg';de.style.color='#d97706';dl.textContent='FALTANTE';dl.style.color='#d97706';}
   var bf=document.getElementById('av-bar-fill');
-  bf.style.width=barPct.toFixed(1)+'%';
+  bf.style.width=Math.min(100,pct).toFixed(1)+'%';
   bf.style.background=pct>=100?'#16a34a':pct>=75?'#22c55e':pct>=50?'#d97706':'var(--blue2)';
   var ex=document.getElementById('av-bar-extra'),exf=document.getElementById('av-bar-extra-fill');
-  if(excedente){ex.style.display='block';exf.style.width=Math.min(100,diff/stdqty*100).toFixed(1)+'%';}
-  else{ex.style.display='none';}
+  if(exc){ex.style.display='block';exf.style.width=Math.min(100,diff/stdqty*100).toFixed(1)+'%';}else{ex.style.display='none';}
   var msg=document.getElementById('av-status-msg');
-  msg.textContent=excedente?'Producción al '+pct.toFixed(1)+'% — excede en '+diff.toFixed(2)+' Kg':completo?'✅ Orden completada al 100%':'En progreso — '+pct.toFixed(1)+'% completado';
-  msg.style.color=excedente?'#e63946':completo?'#16a34a':'#d97706';
+  msg.textContent=exc?'Producción al '+pct.toFixed(1)+'% — excede en '+diff.toFixed(2)+' Kg':comp?'✅ Orden completada al 100%':'En progreso — '+pct.toFixed(1)+'% completado';
+  msg.style.color=exc?'#e63946':comp?'#16a34a':'#d97706';
   document.getElementById('av-pct').textContent=pct.toFixed(1)+'%';
-  document.getElementById('av-pct').style.color=excedente?'#e63946':completo?'#16a34a':'var(--blue)';
+  document.getElementById('av-pct').style.color=exc?'#e63946':comp?'#16a34a':'var(--blue)';
 }
-
 function initBobina(){
   var hoy=getToday();
   document.getElementById('f-id').value='—';
-  document.getElementById('f-fecha').value=fmtDate(hoy);
-  document.getElementById('f-hora').value=nowTime();
-  document.getElementById('f-lote').value=fmtLote(hoy);
-  document.getElementById('f-metros').value='';document.getElementById('f-metros').style.borderColor='';
-  document.getElementById('f-peso').value='';document.getElementById('f-obs').value='';
+  document.getElementById('f-fecha').value=fmtDate(hoy);document.getElementById('f-hora').value=nowTime();
+  document.getElementById('f-lote').value=fmtLote(hoy);document.getElementById('f-metros').value='';
+  document.getElementById('f-metros').style.borderColor='';document.getElementById('f-peso').value='';document.getElementById('f-obs').value='';
   if(!curWOId||!formActive){document.getElementById('f-num').value='—';return;}
   apiFetch('/bobbins/next-number?work_order_id='+curWOId+'&machine_id='+curMach)
     .then(function(r){document.getElementById('f-num').value=r.next_number;})
     .catch(function(){
       var stEl=document.getElementById('sel-ot');
-      var otTxt=stEl.options[stEl.selectedIndex].textContent;
-      document.getElementById('f-num').value=bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1;
+      document.getElementById('f-num').value=bobinas.filter(function(b){return b.ot===stEl.options[stEl.selectedIndex].textContent&&b.mach===curMach;}).length+1;
     });
 }
-function nuevaBobina(){if(!formActive){document.getElementById('alert-sel').style.display='block';return;}initBobina();}
+function nuevaBobina(){
+  if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
+  initBobina();
+}
 function limpiarPantalla(){
   ['f-metros','f-peso','f-obs'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('f-metros').style.borderColor='';
   ['p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-temp'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('p-des').value='';document.getElementById('sel-coord').value='';
-  hideAlerts();
+  document.getElementById('p-des').value='';document.getElementById('sel-coord').value='';hideAlerts();
 }
 function validarMetros(inp){
   var v=parseFloat(inp.value);
   if(v>2000){document.getElementById('alert-metro').style.display='block';inp.style.borderColor='#e63946';}
   else{document.getElementById('alert-metro').style.display='none';inp.style.borderColor='';}
 }
-function hideAlerts(){['alert-sel','alert-metro','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
-
-function guardarEImprimir(){
+function soloImprimir(){
+  if(!lastSavedBobina){alert('Primero guarda una bobina.');return;}
+  renderLabel(lastSavedBobina,false);
+}
+function guardarBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
   var metros=parseFloat(document.getElementById('f-metros').value)||0;
   if(metros>2000){document.getElementById('alert-metro').style.display='block';return;}
   var btn=document.getElementById('btn-guardar');
   btn.disabled=true;btn.textContent='⏳ Guardando...';
-  var opEl=document.getElementById('sel-op');
-  var otElS=document.getElementById('sel-ot');
-  var coordEl=document.getElementById('sel-coord');
+  var opEl=document.getElementById('sel-op'),otElS=document.getElementById('sel-ot'),coordEl=document.getElementById('sel-coord');
   var otTxt=otElS.options[otElS.selectedIndex].textContent;
-  var hoy=getToday();
-  var desVal=document.getElementById('p-des').value;
-  var params={
-    med:document.getElementById('p-med').value,ancho:document.getElementById('p-ancho').value,
-    eh:document.getElementById('p-eh').value,cf:document.getElementById('p-cf').value,
-    ev:document.getElementById('p-ev').value,cr:document.getElementById('p-cr').value,
-    edm:document.getElementById('p-edm').value,
-    des:desVal==='si'?'Sí':desVal==='no'?'No':'—',
-    temp:document.getElementById('p-temp').value
-  };
-  var bobLocal={
-    id:nextZxId(),
-    num:bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1,
-    ot:otTxt,operario:opEl.options[opEl.selectedIndex].textContent,mach:curMach,
-    fecha:fmtDate(hoy),hora:nowTime(),lote:fmtLote(hoy),metros:metros,
-    peso:document.getElementById('f-peso').value,obs:document.getElementById('f-obs').value,
-    prod:document.getElementById('f-prod').value,desc:document.getElementById('f-desc').value,
-    med:document.getElementById('f-med').value,col:document.getElementById('f-col').value,
-    rem:document.getElementById('f-rem').value,
-    coordinador:coordEl.options[coordEl.selectedIndex]?coordEl.options[coordEl.selectedIndex].textContent:'—',
-    params:params
-  };
-  apiFetch('/bobbins',{method:'POST',body:JSON.stringify({
-    work_order_id:curWOId,machine_id:curMach,operator_id:parseInt(opEl.value),
-    meters:metros,weight_kg:parseFloat(document.getElementById('f-peso').value)||0,
-    observations:document.getElementById('f-obs').value||null
-  })}).then(function(bobRes){
-    bobLocal.id='ZX-'+bobRes.id;bobLocal.num=bobRes.bobbin_number;
-    if(bobRes.production_date)bobLocal.fecha=bobRes.production_date.split('-').reverse().join('-');
-    if(bobRes.production_time)bobLocal.hora=bobRes.production_time;
-    if(bobRes.lot_code)bobLocal.lote=bobRes.lot_code;
-    return apiFetch('/process-params',{method:'POST',body:JSON.stringify({
-      bobbin_id:bobRes.id,measurement_number:1,
-      measure:parseFloat(document.getElementById('p-med').value)||null,
-      flat_width:parseFloat(document.getElementById('p-ancho').value)||null,
-      horizontal_shrinkage:parseFloat(document.getElementById('p-eh').value)||null,
-      front_gauge:parseFloat(document.getElementById('p-cf').value)||null,
-      vertical_shrinkage:parseFloat(document.getElementById('p-ev').value)||null,
-      back_gauge:parseFloat(document.getElementById('p-cr').value)||null,
-      machine_direction_shrinkage:parseFloat(document.getElementById('p-edm').value)||null,
-      delamination:desVal==='si'?true:desVal==='no'?false:null,
-      tunnel_temperature:parseFloat(document.getElementById('p-temp').value)||null
-    })});
-  }).catch(function(){
-    console.warn('API no disponible, guardando localmente.');
-  }).then(function(){
-    bobinas.push(bobLocal);lastSavedBobina=bobLocal;
-    var al=document.getElementById('alert-save');al.style.display='block';
-    setTimeout(function(){al.style.display='none';},2500);
-    limpiarPantalla();
-    btn.disabled=false;btn.textContent='🖨 Guardar e Imprimir';
-    var opt=otElS.options[otElS.selectedIndex];
-    if(opt)updateAvance(opt);
-    initBobina();
-    renderLabel(bobLocal,false);
-  });
+  var hoy=getToday(),desVal=document.getElementById('p-des').value;
+  var params={med:document.getElementById('p-med').value,ancho:document.getElementById('p-ancho').value,eh:document.getElementById('p-eh').value,cf:document.getElementById('p-cf').value,ev:document.getElementById('p-ev').value,cr:document.getElementById('p-cr').value,edm:document.getElementById('p-edm').value,des:desVal==='si'?'Sí':desVal==='no'?'No':'—',temp:document.getElementById('p-temp').value};
+  var bobLocal={id:nextZxId(),num:bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1,ot:otTxt,operario:opEl.options[opEl.selectedIndex].textContent,mach:curMach,fecha:fmtDate(hoy),hora:nowTime(),lote:fmtLote(hoy),metros:metros,peso:document.getElementById('f-peso').value,obs:document.getElementById('f-obs').value,prod:document.getElementById('f-prod').value,desc:document.getElementById('f-desc').value,med:document.getElementById('f-med').value,col:document.getElementById('f-col').value,rem:document.getElementById('f-rem').value,coordinador:coordEl.options[coordEl.selectedIndex]?coordEl.options[coordEl.selectedIndex].textContent:'—',params:params};
+  apiFetch('/bobbins',{method:'POST',body:JSON.stringify({work_order_id:curWOId,machine_id:curMach,operator_id:parseInt(opEl.value),meters:metros,weight_kg:parseFloat(document.getElementById('f-peso').value)||0,observations:document.getElementById('f-obs').value||null})})
+    .then(function(bobRes){
+      bobLocal.id='ZX-'+bobRes.id;bobLocal.num=bobRes.bobbin_number;
+      if(bobRes.production_date)bobLocal.fecha=bobRes.production_date.split('-').reverse().join('-');
+      if(bobRes.production_time)bobLocal.hora=bobRes.production_time;
+      if(bobRes.lot_code)bobLocal.lote=bobRes.lot_code;
+      return apiFetch('/process-params',{method:'POST',body:JSON.stringify({bobbin_id:bobRes.id,measurement_number:1,measure:parseFloat(document.getElementById('p-med').value)||null,flat_width:parseFloat(document.getElementById('p-ancho').value)||null,horizontal_shrinkage:parseFloat(document.getElementById('p-eh').value)||null,front_gauge:parseFloat(document.getElementById('p-cf').value)||null,vertical_shrinkage:parseFloat(document.getElementById('p-ev').value)||null,back_gauge:parseFloat(document.getElementById('p-cr').value)||null,machine_direction_shrinkage:parseFloat(document.getElementById('p-edm').value)||null,delamination:desVal==='si'?true:desVal==='no'?false:null,tunnel_temperature:parseFloat(document.getElementById('p-temp').value)||null})});
+    })
+    .catch(function(){console.warn('Guardando localmente.');})
+    .then(function(){
+      bobinas.push(bobLocal);lastSavedBobina=bobLocal;
+      var al=document.getElementById('alert-save');al.style.display='block';setTimeout(function(){al.style.display='none';},2500);
+      limpiarPantalla();btn.disabled=false;btn.textContent='💾 Guardar bobina';
+      document.getElementById('btn-imprimir').disabled=false;
+      var opt=otElS.options[otElS.selectedIndex];if(opt)updateAvance(opt);
+      initBobina();
+    });
 }
-
-function imprimirLabel(){window.print();}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-
+function renderLabel(b,esRegreso){
+  var lp=document.getElementById('label-print'),lc=document.getElementById('label-content');
+  var p=b.params||{};
+  var pesoHtml=esRegreso?'<div class="lf"><span>Peso original</span><span>'+b.peso+' Kg</span></div><div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso</span><span style="color:#92400e">'+b.nuevoPeso+' Kg</span></div>':'<div class="lf"><span>Peso</span><span>'+b.peso+' Kg</span></div>';
+  lc.innerHTML='<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">'+b.mach+(esRegreso?' [REGRESO]':'')+'</div></div><div class="label-grid"><div class="lf"><span>ID bobina</span><span>'+b.id+'</span></div><div class="lf"><span>Remisión</span><span>'+b.rem+'</span></div><div class="lf"><span>Num bobina</span><span>'+b.num+'</span></div><div class="lf"><span>Fecha</span><span>'+b.fecha+'</span></div><div class="lf"><span>Lote</span><span>'+b.lote+'</span></div><div class="lf"><span>Medida</span><span>'+b.med+'</span></div>'+pesoHtml+'<div class="lf"><span>Calibre frente</span><span>'+(p.cf||'—')+'</span></div><div class="lf"><span>Color</span><span>'+b.col+'</span></div><div class="lf"><span>Calibre reverso</span><span>'+(p.cr||'—')+'</span></div><div class="lf"><span>Enc. ancho plano</span><span>'+(p.ancho||'—')+'</span></div><div class="lf"><span>Enc. Dir. Maq.</span><span>'+(p.edm||'—')+'</span></div><div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>'+b.desc+'</span></div><div class="lf"><span>Turno</span><span>'+b.hora+'</span></div><div class="lf"><span>Cod. prod.</span><span>'+b.prod+'</span></div><div class="lf"><span>Metros</span><span>'+b.metros+' m</span></div><div class="lf" style="grid-column:1/-1"><span>Operario</span><span>'+b.operario+'</span></div>'+(b.obs?'<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>'+b.obs+'</span></div>':'')+'</div><div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">'+b.id+'</div></div>';
+  lp.style.display='flex';
+  try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
+}
 function openListModal(){
-  var otEl=document.getElementById('sel-ot');
-  var otNum=otEl.options[otEl.selectedIndex].textContent||'—';
+  var otEl=document.getElementById('sel-ot'),otNum=otEl.options[otEl.selectedIndex].textContent||'—';
   document.getElementById('ml-ot').textContent=otNum;
   document.getElementById('ml-body').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
   document.getElementById('modal-list').classList.add('open');
   var bobs=bobinas.filter(function(b){return b.ot===otNum&&b.mach===curMach;});
   apiFetch('/bobbins?work_order_id='+curWOId+'&machine_id='+curMach).then(function(api){
-    var localIds=new Set(bobinas.map(function(b){return String(b.id);}));
-    api.forEach(function(b){
-      if(!localIds.has(String(b.id)))bobs.push({id:b.id,num:b.bobbin_number,operario:b.operator_name,fecha:b.production_date?b.production_date.split('-').reverse().join('-'):'—',hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}});
-    });
+    var ids=new Set(bobinas.map(function(b){return String(b.id);}));
+    api.forEach(function(b){if(!ids.has(String(b.id)))bobs.push({id:b.id,num:b.bobbin_number,operario:b.operator_name,fecha:b.production_date?b.production_date.split('-').reverse().join('-'):'—',hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}});});
   }).catch(function(){}).then(function(){renderListModal(otNum,'',bobs);});
 }
 function renderListModal(ot,filtroOp,bobs){
@@ -705,464 +538,188 @@ function renderListModal(ot,filtroOp,bobs){
   var totM=fil.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
   var totP=fil.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
   window.currentBobs=bobs;
-  body.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">'
-    +'<div class="field" style="min-width:200px;margin:0"><label style="font-size:11px;color:var(--muted)">Filtrar por operador</label>'
-    +'<select onchange="renderListModal(\''+ot+'\',this.value,currentBobs)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px">'
-    +'<option value="">— Todos —</option>'+ops.map(function(o){return'<option value="'+o+'"'+(o===filtroOp?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div>'
-    +'<div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600">'
-    +'<span style="color:var(--blue)">📏 '+totM.toLocaleString()+' m</span>'
-    +'<span>⚖ '+totP.toFixed(2)+' Kg</span>'
-    +'<span style="font-weight:400">'+fil.length+' bobina(s)</span></div></div>'
-    +'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead><tbody>'
-    +fil.map(function(b){return'<tr><td>'+b.id+'</td><td>'+(b.num||'—')+'</td><td style="font-size:11px">'+(b.operario||'—')+'</td><td>'+(b.fecha||'—')+'</td><td>'+(b.hora||'—')+'</td><td>'+(b.metros||0)+' m</td><td>'+parseFloat(b.peso||0).toFixed(2)+' Kg</td></tr>';}).join('')
-    +'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
+  body.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap"><div class="field" style="min-width:200px;margin:0"><label style="font-size:11px;color:var(--muted)">Filtrar por operador</label><select onchange="renderListModal(\''+ot+'\',this.value,currentBobs)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px"><option value="">— Todos —</option>'+ops.map(function(o){return'<option value="'+o+'"'+(o===filtroOp?' selected':'')+'>'+o+'</option>';}).join('')+'</select></div><div style="margin-left:auto;display:flex;gap:16px;font-size:13px;font-weight:600"><span style="color:var(--blue)">📏 '+totM.toLocaleString()+' m</span><span>⚖ '+totP.toFixed(2)+' Kg</span><span style="font-weight:400">'+fil.length+' bobina(s)</span></div></div><div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Operador</th><th>Fecha</th><th>Hora</th><th>Metros</th><th>Peso</th></tr></thead><tbody>'+fil.map(function(b){return'<tr><td>'+b.id+'</td><td>'+(b.num||'—')+'</td><td style="font-size:11px">'+(b.operario||'—')+'</td><td>'+(b.fecha||'—')+'</td><td>'+(b.hora||'—')+'</td><td>'+(b.metros||0)+' m</td><td>'+parseFloat(b.peso||0).toFixed(2)+' Kg</td></tr>';}).join('')+'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="5" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
 }
 
-function renderLabel(b,esRegreso){
-  var lp=document.getElementById('label-print'),lc=document.getElementById('label-content');
-  var p=b.params||{};
-  var pesoHtml=esRegreso
-    ?'<div class="lf"><span>Peso original</span><span>'+b.peso+' Kg</span></div><div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso</span><span style="color:#92400e">'+b.nuevoPeso+' Kg</span></div>'
-    :'<div class="lf"><span>Peso</span><span>'+b.peso+' Kg</span></div>';
-  lc.innerHTML='<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">'+b.mach+(esRegreso?' [REGRESO]':'')+'</div></div>'
-    +'<div class="label-grid">'
-    +'<div class="lf"><span>ID bobina</span><span>'+b.id+'</span></div><div class="lf"><span>Remisión</span><span>'+b.rem+'</span></div>'
-    +'<div class="lf"><span>Num bobina</span><span>'+b.num+'</span></div><div class="lf"><span>Fecha</span><span>'+b.fecha+'</span></div>'
-    +'<div class="lf"><span>Lote</span><span>'+b.lote+'</span></div><div class="lf"><span>Medida</span><span>'+b.med+'</span></div>'
-    +pesoHtml
-    +'<div class="lf"><span>Calibre frente</span><span>'+(p.cf||'—')+'</span></div>'
-    +'<div class="lf"><span>Color</span><span>'+b.col+'</span></div>'
-    +'<div class="lf"><span>Calibre reverso</span><span>'+(p.cr||'—')+'</span></div>'
-    +'<div class="lf"><span>Enc. ancho plano</span><span>'+(p.ancho||'—')+'</span></div>'
-    +'<div class="lf"><span>Enc. Dir. Maq.</span><span>'+(p.edm||'—')+'</span></div>'
-    +'<div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>'+b.desc+'</span></div>'
-    +'<div class="lf"><span>Turno</span><span>'+b.hora+'</span></div>'
-    +'<div class="lf"><span>Cod. prod.</span><span>'+b.prod+'</span></div>'
-    +'<div class="lf"><span>Metros</span><span>'+b.metros+' m</span></div>'
-    +'<div class="lf" style="grid-column:1/-1"><span>Operario</span><span>'+b.operario+'</span></div>'
-    +(b.obs?'<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>'+b.obs+'</span></div>':'')
-    +'</div><div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">'+b.id+'</div></div>';
-  lp.style.display='flex';
-  try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
-}
-
+// CONSULTA
 function consultaTab(tab,btn){
-  document.querySelectorAll('#consulta-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
+  document.querySelectorAll('#consulta-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
   var c=document.getElementById('consulta-content');
-  if(tab==='maquina')renderConsultaMaquina(c);
-  else if(tab==='lote')renderConsultaLote(c);
-  else if(tab==='idbob')renderConsultaID(c);
-  else if(tab==='reporte')renderReporteF01(c);
+  if(tab==='maquina')renderConsultaMaquina(c);else if(tab==='lote')renderConsultaLote(c);else if(tab==='idbob')renderConsultaID(c);else if(tab==='reporte')renderReporteF01(c);
 }
-
 function totalesBar(rows){
-  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  var totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  return'<div class="totales-bar"><span><strong>'+rows.length+'</strong> registro(s)</span>'
-    +'<span style="color:var(--blue)">📏 <strong>'+totM.toLocaleString()+' m</strong></span>'
-    +'<span>⚖ <strong>'+totP.toFixed(2)+' Kg</strong></span></div>';
+  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  return'<div class="totales-bar"><span><strong>'+rows.length+'</strong> registro(s)</span><span style="color:var(--blue)">📏 <strong>'+totM.toLocaleString()+' m</strong></span><span>⚖ <strong>'+totP.toFixed(2)+' Kg</strong></span></div>';
 }
-
 function renderConsultaMaquina(c){
   var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
-  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Máquina</div>'
-    +'<div class="form-grid" style="margin-bottom:12px">'
-    +'<div class="field"><label>Máquina</label><select id="cq-maq">'+mOpts+'</select></div>'
-    +'<div class="field"><label>Lote</label><input id="cq-lote" placeholder="Ej. 062426"/></div>'
-    +'<div class="field"><label>Orden de trabajo</label><input id="cq-ot" placeholder="Ej. 26010005"/></div>'
-    +'<div class="field"><label>Fecha inicio</label><input id="cq-fi" type="date"/></div>'
-    +'<div class="field"><label>Fecha fin</label><input id="cq-ff" type="date"/></div>'
-    +'<div class="field"><label>Hora inicio</label><input id="cq-hi" type="time" value="00:00"/></div>'
-    +'<div class="field"><label>Hora fin</label><input id="cq-hf" type="time" value="23:59"/></div>'
-    +'<div class="field"><label>Metros mín.</label><input id="cq-mmin" type="number" placeholder="0"/></div>'
-    +'<div class="field"><label>Metros máx.</label><input id="cq-mmax" type="number" placeholder="2000"/></div>'
-    +'<div class="field"><label>Peso mín. (Kg)</label><input id="cq-pmin" type="number" placeholder="0"/></div>'
-    +'<div class="field"><label>Peso máx. (Kg)</label><input id="cq-pmax" type="number" placeholder="—"/></div>'
-    +'</div>'
-    +'<div class="btn-row" style="margin-bottom:16px">'
-    +'<button class="btn btn-primary" onclick="ejecutarConsultaMaquina()">🔍 Consultar</button>'
-    +'<button class="btn" onclick="renderConsultaMaquina(document.getElementById(\'consulta-content\'))">Limpiar</button>'
-    +'<button class="btn btn-success" id="cq-xl" style="display:none" onclick="exportarConsulta(\'maquina\')">📥 Exportar Excel</button>'
-    +'</div><div id="cq-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Máquina</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Máquina</label><select id="cq-maq">'+mOpts+'</select></div><div class="field"><label>Lote</label><input id="cq-lote" placeholder="Ej. 062426"/></div><div class="field"><label>OT</label><input id="cq-ot" placeholder="Ej. 26010005"/></div><div class="field"><label>Fecha inicio</label><input id="cq-fi" type="date"/></div><div class="field"><label>Fecha fin</label><input id="cq-ff" type="date"/></div><div class="field"><label>Hora inicio</label><input id="cq-hi" type="time" value="00:00"/></div><div class="field"><label>Hora fin</label><input id="cq-hf" type="time" value="23:59"/></div><div class="field"><label>Metros mín.</label><input id="cq-mmin" type="number" placeholder="0"/></div><div class="field"><label>Metros máx.</label><input id="cq-mmax" type="number"/></div><div class="field"><label>Peso mín.</label><input id="cq-pmin" type="number" placeholder="0"/></div><div class="field"><label>Peso máx.</label><input id="cq-pmax" type="number"/></div></div><div class="btn-row" style="margin-bottom:16px"><button class="btn btn-primary" onclick="ejecutarConsultaMaquina()">🔍 Consultar</button><button class="btn" onclick="renderConsultaMaquina(document.getElementById(\'consulta-content\'))">Limpiar</button><button class="btn btn-success" id="cq-xl" style="display:none" onclick="exportarConsulta(\'maquina\')">📥 Exportar Excel</button></div><div id="cq-result"></div></div>';
 }
 function ejecutarConsultaMaquina(){
-  var maq=document.getElementById('cq-maq').value;
-  var lote=document.getElementById('cq-lote').value.trim();
-  var ot=document.getElementById('cq-ot').value.trim();
-  var fi=document.getElementById('cq-fi').value,hi=document.getElementById('cq-hi').value||'00:00';
-  var ff=document.getElementById('cq-ff').value,hf=document.getElementById('cq-hf').value||'23:59';
-  var mmin=document.getElementById('cq-mmin').value,mmax=document.getElementById('cq-mmax').value;
-  var pmin=document.getElementById('cq-pmin').value,pmax=document.getElementById('cq-pmax').value;
-  var desde=fi?new Date(fi+'T'+hi+':00'):null;
-  var hasta=ff?new Date(ff+'T'+hf+':00'):null;
+  var maq=document.getElementById('cq-maq').value,lote=document.getElementById('cq-lote').value.trim(),ot=document.getElementById('cq-ot').value.trim();
+  var fi=document.getElementById('cq-fi').value,hi=document.getElementById('cq-hi').value||'00:00',ff=document.getElementById('cq-ff').value,hf=document.getElementById('cq-hf').value||'23:59';
+  var mmin=document.getElementById('cq-mmin').value,mmax=document.getElementById('cq-mmax').value,pmin=document.getElementById('cq-pmin').value,pmax=document.getElementById('cq-pmax').value;
+  var desde=fi?new Date(fi+'T'+hi+':00'):null,hasta=ff?new Date(ff+'T'+hf+':00'):null;
   var rows=bobinas.filter(function(b){
-    if(maq&&b.mach!==maq)return false;
-    if(lote&&b.lote!==lote)return false;
-    if(ot&&b.ot!==ot)return false;
-    if(desde&&parseBoDate(b)<desde)return false;
-    if(hasta&&parseBoDate(b)>hasta)return false;
-    if(mmin!==''&&(parseFloat(b.metros)||0)<parseFloat(mmin))return false;
-    if(mmax!==''&&(parseFloat(b.metros)||0)>parseFloat(mmax))return false;
-    if(pmin!==''&&(parseFloat(b.peso)||0)<parseFloat(pmin))return false;
-    if(pmax!==''&&(parseFloat(b.peso)||0)>parseFloat(pmax))return false;
+    if(maq&&b.mach!==maq)return false;if(lote&&b.lote!==lote)return false;if(ot&&b.ot!==ot)return false;
+    if(desde&&parseBoDate(b)<desde)return false;if(hasta&&parseBoDate(b)>hasta)return false;
+    if(mmin!==''&&(parseFloat(b.metros)||0)<parseFloat(mmin))return false;if(mmax!==''&&(parseFloat(b.metros)||0)>parseFloat(mmax))return false;
+    if(pmin!==''&&(parseFloat(b.peso)||0)<parseFloat(pmin))return false;if(pmax!==''&&(parseFloat(b.peso)||0)>parseFloat(pmax))return false;
     return true;
   });
   lastConsultaMaquina=rows;
-  var r=document.getElementById('cq-result');
-  document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
+  var r=document.getElementById('cq-result');document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
   if(!rows.length){r.innerHTML='<div class="not-found">Sin resultados.</div>';return;}
-  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>OT</th><th>Máq.</th><th>Operario</th><th>Fecha</th><th>Hora</th><th>Lote</th><th>Metros</th><th>Peso</th><th>Descripción</th></tr></thead><tbody>'
-    +rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.ot+'</td><td>'+b.mach+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.hora+'</td><td>'+b.lote+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td style="font-size:11px">'+b.desc+'</td></tr>';}).join('')
-    +'</tbody></table></div>';
+  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>OT</th><th>Máq.</th><th>Operario</th><th>Fecha</th><th>Hora</th><th>Lote</th><th>Metros</th><th>Peso</th><th>Descripción</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.ot+'</td><td>'+b.mach+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.hora+'</td><td>'+b.lote+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td style="font-size:11px">'+b.desc+'</td></tr>';}).join('')+'</tbody></table></div>';
 }
-
 function renderConsultaLote(c){
-  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Lote</div>'
-    +'<div class="search-box" style="margin-bottom:12px">'
-    +'<div class="field"><label>Número de lote</label><input id="cl-lote" placeholder="Ej. 062426" onkeydown="if(event.key===\'Enter\')ejecutarConsultaLote()"/></div>'
-    +'<button class="btn btn-primary" onclick="ejecutarConsultaLote()" style="height:38px">Buscar</button>'
-    +'<button class="btn" onclick="renderConsultaLote(document.getElementById(\'consulta-content\'))" style="height:38px">Limpiar</button>'
-    +'<button class="btn btn-success" id="cl-xl" style="display:none" onclick="exportarConsulta(\'lote\')">📥 Exportar Excel</button>'
-    +'</div><div id="cl-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Lote</div><div class="search-box" style="margin-bottom:12px"><div class="field"><label>Número de lote</label><input id="cl-lote" placeholder="Ej. 062426" onkeydown="if(event.key===\'Enter\')ejecutarConsultaLote()"/></div><button class="btn btn-primary" onclick="ejecutarConsultaLote()" style="height:38px">Buscar</button><button class="btn" onclick="renderConsultaLote(document.getElementById(\'consulta-content\'))" style="height:38px">Limpiar</button><button class="btn btn-success" id="cl-xl" style="display:none" onclick="exportarConsulta(\'lote\')">📥 Exportar Excel</button></div><div id="cl-result"></div></div>';
 }
 function ejecutarConsultaLote(){
-  var lote=document.getElementById('cl-lote').value.trim();
-  var r=document.getElementById('cl-result');
+  var lote=document.getElementById('cl-lote').value.trim(),r=document.getElementById('cl-result');
   if(!lote){r.innerHTML='<div class="not-found">Ingresa un lote.</div>';return;}
   var rows=bobinas.filter(function(b){return b.lote===lote;});
-  lastConsultaLote=rows;
-  document.getElementById('cl-xl').style.display=rows.length?'inline-block':'none';
-  if(!rows.length){r.innerHTML='<div class="not-found">⚠ Sin registros para el lote <strong>'+lote+'</strong>.</div>';return;}
-  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  var totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Máquina</th><th>OT</th><th>Operario</th><th>Fecha</th><th>Metros</th><th>Peso</th></tr></thead><tbody>'
-    +rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.mach+'</td><td>'+b.ot+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td></tr>';}).join('')
-    +'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="6" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
+  lastConsultaLote=rows;document.getElementById('cl-xl').style.display=rows.length?'inline-block':'none';
+  if(!rows.length){r.innerHTML='<div class="not-found">⚠ Sin registros para lote <strong>'+lote+'</strong>.</div>';return;}
+  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Máquina</th><th>OT</th><th>Operario</th><th>Fecha</th><th>Metros</th><th>Peso</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.mach+'</td><td>'+b.ot+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td></tr>';}).join('')+'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="6" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
 }
-
 function renderConsultaID(c){
-  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por ID de bobina</div>'
-    +'<div class="search-box" style="margin-bottom:12px">'
-    +'<div class="field"><label>ID de bobina</label><input id="ci-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')ejecutarConsultaID()"/></div>'
-    +'<button class="btn btn-primary" onclick="ejecutarConsultaID()" style="height:38px">Buscar</button>'
-    +'<button class="btn" onclick="renderConsultaID(document.getElementById(\'consulta-content\'))" style="height:38px">Limpiar</button>'
-    +'</div><div id="ci-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por ID de bobina</div><div class="search-box" style="margin-bottom:12px"><div class="field"><label>ID de bobina</label><input id="ci-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')ejecutarConsultaID()"/></div><button class="btn btn-primary" onclick="ejecutarConsultaID()" style="height:38px">Buscar</button><button class="btn" onclick="renderConsultaID(document.getElementById(\'consulta-content\'))" style="height:38px">Limpiar</button></div><div id="ci-result"></div></div>';
 }
 function ejecutarConsultaID(){
-  var busq=document.getElementById('ci-id').value.trim();
-  var r=document.getElementById('ci-result');
+  var busq=document.getElementById('ci-id').value.trim(),r=document.getElementById('ci-result');
   if(!busq){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   var b=findBobina(busq);
   if(!b){r.innerHTML='<div class="not-found">⚠ No se encontró <strong>'+busq+'</strong>.</div>';return;}
   var p=b.params||{};
-  r.innerHTML='<div class="result-card"><div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">'+b.id+'</div>'
-    +'<div style="font-size:12px;color:var(--muted);margin-bottom:12px">Detalle completo</div>'
-    +totalesBar([b])
-    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div>'
-    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Número de bobina',b.num)+ri('OT',b.ot)+ri('Máquina',b.mach)+ri('Operario',b.operario)+ri('Coordinador',b.coordinador||'—')+ri('Fecha',b.fecha)+ri('Hora',b.hora)+ri('Lote',b.lote)+ri('Remisión',b.rem)+ri('Color',b.col)+'</div>'
-    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producción</div>'
-    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Metros',(parseFloat(b.metros)||0).toLocaleString()+' m',true)+ri('Peso',parseFloat(b.peso||0).toFixed(2)+' Kg',true)+ri('Descripción',b.desc)+ri('Producto',b.prod)+ri('Medida',b.med)+'</div>'
-    +'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div>'
-    +'<div class="result-grid" style="margin-top:0">'+ri('Medidas',p.med)+ri('Ancho plano',p.ancho)+ri('Enc. horizontal',p.eh,true)+ri('Enc. vertical',p.ev,true)+ri('Enc. Dir. Máquina',p.edm,true)+ri('Calibre frente',p.cf,true)+ri('Calibre reverso',p.cr,true)+ri('Deslamine',p.des)+ri('Temp. túnel',(p.temp||'—')+' °C')+'</div>'
-    +(b.obs?'<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> '+b.obs+'</div>':'')
-    +'</div>';
+  r.innerHTML='<div class="result-card"><div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">'+b.id+'</div><div style="font-size:12px;color:var(--muted);margin-bottom:12px">Detalle completo</div>'+totalesBar([b])+'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Número de bobina',b.num)+ri('OT',b.ot)+ri('Máquina',b.mach)+ri('Operario',b.operario)+ri('Coordinador',b.coordinador||'—')+ri('Fecha',b.fecha)+ri('Hora',b.hora)+ri('Lote',b.lote)+ri('Remisión',b.rem)+ri('Color',b.col)+'</div><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producción</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Metros',(parseFloat(b.metros)||0).toLocaleString()+' m',true)+ri('Peso',parseFloat(b.peso||0).toFixed(2)+' Kg',true)+ri('Descripción',b.desc)+ri('Producto',b.prod)+ri('Medida',b.med)+'</div><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div><div class="result-grid" style="margin-top:0">'+ri('Medidas',p.med)+ri('Ancho plano',p.ancho)+ri('Enc. horizontal',p.eh,true)+ri('Enc. vertical',p.ev,true)+ri('Enc. Dir. Máquina',p.edm,true)+ri('Calibre frente',p.cf,true)+ri('Calibre reverso',p.cr,true)+ri('Deslamine',p.des)+ri('Temp. túnel',(p.temp||'—')+' °C')+'</div>'+(b.obs?'<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> '+b.obs+'</div>':'')+'</div>';
 }
-
-function renderReporteF01(c){
-  var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
-  c.innerHTML='<div class="card"><div class="card-title">📄 Reporte de Producción por Turno — EXT-F-01</div>'
-    +'<div class="form-grid" style="margin-bottom:12px">'
-    +'<div class="field"><label>Máquina (Línea)</label><select id="rf-maq">'+mOpts+'</select></div>'
-    +'<div class="field"><label>Operario</label><select id="rf-op"><option value="">— Todos —</option></select></div>'
-    +'<div class="field"><label>Fecha</label><input id="rf-fecha" type="date"/></div>'
-    +'<div class="field"><label>Turno</label><select id="rf-turno"><option value="">— Todos —</option><option>Matutino</option><option>Vespertino</option><option>Nocturno</option></select></div>'
-    +'</div>'
-    +'<div class="btn-row" style="margin-bottom:16px">'
-    +'<button class="btn btn-primary" onclick="generarReporteF01()">📄 Generar</button>'
-    +'<button class="btn btn-success" onclick="imprimirReporteF01()">🖨 Imprimir</button>'
-    +'<button class="btn" onclick="renderReporteF01(document.getElementById(\'consulta-content\'))">Limpiar</button>'
-    +'</div><div id="rf-result"></div></div>';
-  var ops=[...new Set(bobinas.map(function(b){return b.operario;}))];
-  var selOp=document.getElementById('rf-op');
-  ops.forEach(function(o){var opt=document.createElement('option');opt.value=o;opt.textContent=o;selOp.appendChild(opt);});
-}
-
-function generarReporteF01(){
-  var maq=document.getElementById('rf-maq').value;
-  var op=document.getElementById('rf-op').value;
-  var fecha=document.getElementById('rf-fecha').value;
-  var turno=document.getElementById('rf-turno').value;
-  var rows=bobinas.filter(function(b){
-    if(maq&&b.mach!==maq)return false;
-    if(op&&b.operario!==op)return false;
-    if(fecha){var fd=fecha.split('-').reverse().join('-');if(b.fecha!==fd)return false;}
-    return true;
-  });
-  rfRows=rows;
-  var r=document.getElementById('rf-result');
-  if(!rows.length){r.innerHTML='<div class="not-found">Sin registros para los filtros seleccionados.</div>';return;}
-  var operario=op||rows[0].operario||'—';
-  var linea=maq||rows[0].mach||'—';
-  var fechaHdr=fecha?fecha.split('-').reverse().join('-'):rows[0].fecha||'—';
-  var turnoHdr=turno||'—';
-  var totPeso=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  var totMetros=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  var obs=rows.filter(function(b){return b.obs;}).map(function(b){return b.obs;}).join(' | ')||'';
-  var filas=rows.map(function(b){
-    var p=b.params||{};
-    var des=p.des||'—';
-    var mal=des==='Sí'?'✗':'';
-    var ok=des==='No'?'✓':'';
-    return'<tr style="text-align:center">'
-      +'<td style="border:1px solid #ccc;padding:3px 5px;text-align:left">'+b.rem+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px">'+b.num+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px;font-size:9px">'+b.id+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px;font-size:9px">'+b.prod+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px;font-size:9px;text-align:left">'+b.desc+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px">'+b.col+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px">'+b.med+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px">'+b.peso+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px">'+b.metros+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px;color:#e63946;font-weight:700">'+mal+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px;color:#16a34a;font-weight:700">'+ok+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px"></td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px"></td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px">'+(p.eh||'')+'</td>'
-      +'<td style="border:1px solid #ccc;padding:3px 5px">'+(p.ev||'')+'</td>'
-      +'</tr>';
-  }).join('');
-  r.innerHTML='<div id="reporte-f01-print" style="font-family:Arial,sans-serif;font-size:11px;padding:12px">'
-    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">'
-    +'<div style="font-size:22px;font-weight:900;color:#0D3B8C;letter-spacing:-1px">zubex</div>'
-    +'<div style="text-align:right;font-size:9px;color:#555;border:1px solid #ccc;padding:6px 10px;border-radius:4px">'
-    +'<div>Sistema de Gestión de Inocuidad y Calidad</div>'
-    +'<div><strong>Formato:</strong> Reporte de Producción por Turno</div>'
-    +'<div><strong>Fecha de Revisión:</strong> 07 febrero 2025</div>'
-    +'<div><strong>Clave:</strong> EXT-F-01 &nbsp; <strong>Revisión:</strong> 10</div>'
-    +'</div></div>'
-    +'<table style="width:100%;border-collapse:collapse;margin-bottom:6px">'
-    +'<tr>'
-    +'<td style="border:1px solid #222;padding:4px 8px;width:45%">Operador: <strong>'+operario+'</strong></td>'
-    +'<td style="border:1px solid #222;padding:4px 8px;width:18%">Línea: <strong>'+linea+'</strong></td>'
-    +'<td style="border:1px solid #222;padding:4px 8px;width:18%">Turno: <strong>'+turnoHdr+'</strong></td>'
-    +'<td style="border:1px solid #222;padding:4px 8px;width:19%">Fecha: <strong>'+fechaHdr+'</strong></td>'
-    +'</tr></table>'
-    +'<table style="width:100%;border-collapse:collapse;font-size:10px">'
-    +'<thead>'
-    +'<tr style="background:#e8eaf6;color:#0D3B8C;font-weight:700;text-align:center">'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">Pedido</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">No. de<br>bobina</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">ID de bobina</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">Código</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">Producto</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">Color</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">Medida</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">Peso kg.</td>'
-    +'<td rowspan="2" style="border:1px solid #222;padding:4px">Metros</td>'
-    +'<td colspan="2" style="border:1px solid #222;padding:4px">Revisión Deslamine</td>'
-    +'<td colspan="2" style="border:1px solid #222;padding:4px">Valor Fuerza de<br>Sello (lbf)</td>'
-    +'<td colspan="2" style="border:1px solid #222;padding:4px">Encogimiento</td>'
-    +'</tr>'
-    +'<tr style="background:#e8eaf6;color:#0D3B8C;font-weight:700;text-align:center">'
-    +'<td style="border:1px solid #222;padding:4px">MAL</td>'
-    +'<td style="border:1px solid #222;padding:4px">OK</td>'
-    +'<td style="border:1px solid #222;padding:4px"></td>'
-    +'<td style="border:1px solid #222;padding:4px"></td>'
-    +'<td style="border:1px solid #222;padding:4px">AP</td>'
-    +'<td style="border:1px solid #222;padding:4px">SM</td>'
-    +'</tr>'
-    +'</thead><tbody>'+filas
-    +'<tr style="font-weight:700;text-align:center;background:#f8f9fb">'
-    +'<td colspan="7" style="border:1px solid #ccc;padding:4px;text-align:right;color:#0D3B8C">Total Producción</td>'
-    +'<td style="border:1px solid #ccc;padding:4px;color:#0D3B8C">'+totPeso.toFixed(2)+'</td>'
-    +'<td style="border:1px solid #ccc;padding:4px;color:#0D3B8C">'+totMetros.toLocaleString()+'</td>'
-    +'<td colspan="6" style="border:1px solid #ccc;padding:4px"></td>'
-    +'</tr></tbody></table>'
-    +'<div style="margin-top:12px"><strong>Observaciones:</strong>'
-    +'<div style="border-bottom:1px solid #222;margin-top:6px;min-height:18px;padding-bottom:2px">'+obs+'</div>'
-    +'<div style="border-bottom:1px solid #222;margin-top:8px;min-height:18px"></div></div>'
-    +'<div style="display:flex;justify-content:space-between;margin-top:32px;gap:16px">'
-    +'<div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma del Operador</div></div>'
-    +'<div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma del Coordinador</div></div>'
-    +'<div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma Auditor de QA</div></div>'
-    +'</div>'
-    +'<div style="text-align:center;margin-top:12px;font-size:8px;color:#888">NOTA: Los documentos del Sistema de Gestión de Inocuidad y Calidad de ZUBEX INDUSTRIAL, se controlan en RED INTERNA, cualquier copia impresa es SOLO REFERENCIA</div>'
-    +'</div>';
-}
-
-function imprimirReporteF01(){
-  var el=document.getElementById('reporte-f01-print');
-  if(!el){alert('Primero genera el reporte.');return;}
-  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>EXT-F-01</title>'
-    +'<style>@page{size:landscape;margin:1cm}body{margin:0;font-family:Arial,sans-serif}</style>'
-    +'</head><body>'+el.outerHTML
-    +'<script>window.onload=function(){window.print();}<\/script>'
-    +'</body></html>';
-  var blob=new Blob([html],{type:'text/html'});
-  var url=URL.createObjectURL(blob);
-  var w=window.open(url,'_blank');
-  if(!w){alert('Permite ventanas emergentes para imprimir.');return;}
-  setTimeout(function(){URL.revokeObjectURL(url);},10000);
-}
-
 function exportarConsulta(tipo){
   var rows=tipo==='maquina'?lastConsultaMaquina:lastConsultaLote;
   if(!rows||!rows.length){alert('Sin datos.');return;}
   var cols=tipo==='maquina'?['ID','Num','OT','Maquina','Operario','Fecha','Hora','Lote','Metros','Peso','Descripcion']:['ID','Num','Maquina','OT','Operario','Fecha','Metros','Peso'];
   var data=rows.map(function(b){return tipo==='maquina'?[b.id,b.num,b.ot,b.mach,b.operario,b.fecha,b.hora,b.lote,b.metros,b.peso,b.desc]:[b.id,b.num,b.mach,b.ot,b.operario,b.fecha,b.metros,b.peso];});
-  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  var totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  var tr=new Array(cols.length).fill('');tr[tr.length-2]=totM.toFixed(2);tr[tr.length-1]=totP.toFixed(2);
-  data.push(tr);
+  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  var tr=new Array(cols.length).fill('');tr[tr.length-2]=totM.toFixed(2);tr[tr.length-1]=totP.toFixed(2);data.push(tr);
   var csv=[cols.join('\t')].concat(data.map(function(r){return r.join('\t');})).join('\n');
   var blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='Consulta_'+tipo+'_'+new Date().toISOString().slice(0,10)+'.xls';a.click();URL.revokeObjectURL(url);
+}
+function renderReporteF01(c){
+  var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
+  c.innerHTML='<div class="card"><div class="card-title">📄 Reporte de Producción por Turno — EXT-F-01</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Máquina</label><select id="rf-maq">'+mOpts+'</select></div><div class="field"><label>Operario</label><select id="rf-op"><option value="">— Todos —</option></select></div><div class="field"><label>Fecha</label><input id="rf-fecha" type="date"/></div><div class="field"><label>Turno</label><select id="rf-turno"><option value="">— Todos —</option><option>Matutino</option><option>Vespertino</option><option>Nocturno</option></select></div></div><div class="btn-row" style="margin-bottom:16px"><button class="btn btn-primary" onclick="generarReporteF01()">📄 Generar</button><button class="btn btn-success" onclick="imprimirReporteF01()">🖨 Imprimir</button><button class="btn" onclick="renderReporteF01(document.getElementById(\'consulta-content\'))">Limpiar</button></div><div id="rf-result"></div></div>';
+  var ops=[...new Set(bobinas.map(function(b){return b.operario;}))];
+  var selOp=document.getElementById('rf-op');
+  ops.forEach(function(o){var opt=document.createElement('option');opt.value=o;opt.textContent=o;selOp.appendChild(opt);});
+}
+function generarReporteF01(){
+  var maq=document.getElementById('rf-maq').value,op=document.getElementById('rf-op').value,fecha=document.getElementById('rf-fecha').value,turno=document.getElementById('rf-turno').value;
+  var rows=bobinas.filter(function(b){
+    if(maq&&b.mach!==maq)return false;if(op&&b.operario!==op)return false;
+    if(fecha){var fd=fecha.split('-').reverse().join('-');if(b.fecha!==fd)return false;}
+    return true;
+  });
+  var r=document.getElementById('rf-result');
+  if(!rows.length){r.innerHTML='<div class="not-found">Sin registros.</div>';return;}
+  var operario=op||rows[0].operario||'—',linea=maq||rows[0].mach||'—';
+  var fechaHdr=fecha?fecha.split('-').reverse().join('-'):rows[0].fecha||'—',turnoHdr=turno||'—';
+  var totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0),totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
+  var obs=rows.filter(function(b){return b.obs;}).map(function(b){return b.obs;}).join(' | ')||'';
+  var filas=rows.map(function(b){
+    var p=b.params||{},des=p.des||'—',mal=des==='Sí'?'✗':'',ok=des==='No'?'✓':'';
+    return'<tr style="text-align:center"><td style="border:1px solid #ccc;padding:3px 5px;text-align:left">'+b.rem+'</td><td style="border:1px solid #ccc;padding:3px 5px">'+b.num+'</td><td style="border:1px solid #ccc;padding:3px 5px;font-size:9px">'+b.id+'</td><td style="border:1px solid #ccc;padding:3px 5px;font-size:9px">'+b.prod+'</td><td style="border:1px solid #ccc;padding:3px 5px;font-size:9px;text-align:left">'+b.desc+'</td><td style="border:1px solid #ccc;padding:3px 5px">'+b.col+'</td><td style="border:1px solid #ccc;padding:3px 5px">'+b.med+'</td><td style="border:1px solid #ccc;padding:3px 5px">'+b.peso+'</td><td style="border:1px solid #ccc;padding:3px 5px">'+b.metros+'</td><td style="border:1px solid #ccc;padding:3px 5px;color:#e63946;font-weight:700">'+mal+'</td><td style="border:1px solid #ccc;padding:3px 5px;color:#16a34a;font-weight:700">'+ok+'</td><td style="border:1px solid #ccc;padding:3px 5px"></td><td style="border:1px solid #ccc;padding:3px 5px"></td><td style="border:1px solid #ccc;padding:3px 5px">'+(p.eh||'')+'</td><td style="border:1px solid #ccc;padding:3px 5px">'+(p.ev||'')+'</td></tr>';
+  }).join('');
+  r.innerHTML='<div id="reporte-f01-print" style="font-family:Arial,sans-serif;font-size:11px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div style="font-size:22px;font-weight:900;color:#0D3B8C;letter-spacing:-1px">zubex</div><div style="text-align:right;font-size:9px;color:#555;border:1px solid #ccc;padding:6px 10px;border-radius:4px"><div>Sistema de Gestión de Inocuidad y Calidad</div><div><strong>Formato:</strong> Reporte de Producción por Turno</div><div><strong>Clave:</strong> EXT-F-01 &nbsp; <strong>Revisión:</strong> 10</div></div></div><table style="width:100%;border-collapse:collapse;margin-bottom:6px"><tr><td style="border:1px solid #222;padding:4px 8px;width:45%">Operador: <strong>'+operario+'</strong></td><td style="border:1px solid #222;padding:4px 8px;width:18%">Línea: <strong>'+linea+'</strong></td><td style="border:1px solid #222;padding:4px 8px;width:18%">Turno: <strong>'+turnoHdr+'</strong></td><td style="border:1px solid #222;padding:4px 8px;width:19%">Fecha: <strong>'+fechaHdr+'</strong></td></tr></table><table style="width:100%;border-collapse:collapse;font-size:10px"><thead><tr style="background:#e8eaf6;color:#0D3B8C;font-weight:700;text-align:center"><td rowspan="2" style="border:1px solid #222;padding:4px">Pedido</td><td rowspan="2" style="border:1px solid #222;padding:4px">No. de<br>bobina</td><td rowspan="2" style="border:1px solid #222;padding:4px">ID de bobina</td><td rowspan="2" style="border:1px solid #222;padding:4px">Código</td><td rowspan="2" style="border:1px solid #222;padding:4px">Producto</td><td rowspan="2" style="border:1px solid #222;padding:4px">Color</td><td rowspan="2" style="border:1px solid #222;padding:4px">Medida</td><td rowspan="2" style="border:1px solid #222;padding:4px">Peso kg.</td><td rowspan="2" style="border:1px solid #222;padding:4px">Metros</td><td colspan="2" style="border:1px solid #222;padding:4px">Revisión Deslamine</td><td colspan="2" style="border:1px solid #222;padding:4px">Valor Fuerza de<br>Sello (lbf)</td><td colspan="2" style="border:1px solid #222;padding:4px">Encogimiento</td></tr><tr style="background:#e8eaf6;color:#0D3B8C;font-weight:700;text-align:center"><td style="border:1px solid #222;padding:4px">MAL</td><td style="border:1px solid #222;padding:4px">OK</td><td style="border:1px solid #222;padding:4px"></td><td style="border:1px solid #222;padding:4px"></td><td style="border:1px solid #222;padding:4px">AP</td><td style="border:1px solid #222;padding:4px">SM</td></tr></thead><tbody>'+filas+'<tr style="font-weight:700;text-align:center;background:#f8f9fb"><td colspan="7" style="border:1px solid #ccc;padding:4px;text-align:right;color:#0D3B8C">Total Producción</td><td style="border:1px solid #ccc;padding:4px;color:#0D3B8C">'+totP.toFixed(2)+'</td><td style="border:1px solid #ccc;padding:4px;color:#0D3B8C">'+totM.toLocaleString()+'</td><td colspan="6" style="border:1px solid #ccc;padding:4px"></td></tr></tbody></table><div style="margin-top:12px"><strong>Observaciones:</strong><div style="border-bottom:1px solid #222;margin-top:6px;min-height:18px;padding-bottom:2px">'+obs+'</div><div style="border-bottom:1px solid #222;margin-top:8px;min-height:18px"></div></div><div style="display:flex;justify-content:space-between;margin-top:32px;gap:16px"><div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma del Operador</div></div><div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma del Coordinador</div></div><div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma Auditor de QA</div></div></div><div style="text-align:center;margin-top:12px;font-size:8px;color:#888">NOTA: Los documentos del Sistema de Gestión de Inocuidad y Calidad de ZUBEX INDUSTRIAL, se controlan en RED INTERNA, cualquier copia impresa es SOLO REFERENCIA</div></div>';
+}
+function imprimirReporteF01(){
+  var el=document.getElementById('reporte-f01-print');
+  if(!el){alert('Primero genera el reporte.');return;}
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>EXT-F-01</title><style>@page{size:landscape;margin:1cm}body{margin:0;font-family:Arial,sans-serif}</style></head><body>'+el.outerHTML+'<script>window.onload=function(){window.print();}<\/script></body></html>';
+  var blob=new Blob([html],{type:'text/html'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download='Consulta_'+tipo+'_'+new Date().toISOString().slice(0,10)+'.xls';a.click();URL.revokeObjectURL(url);
+  var w=window.open(url,'_blank');
+  if(!w)alert('Permite ventanas emergentes para imprimir.');
+  setTimeout(function(){URL.revokeObjectURL(url);},10000);
 }
 
+// ALMACÉN
 function almacenTab(tab,btn){
-  document.querySelectorAll('#almacen-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
+  document.querySelectorAll('#almacen-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
   var c=document.getElementById('almacen-content');
-  if(tab==='entradas')renderEntradas(c);
-  else if(tab==='stock')renderStock(c);
-  else if(tab==='salidas')renderSalidas(c);
-  else if(tab==='regresos')renderRegresos(c);
+  if(tab==='entradas')renderEntradas(c);else if(tab==='stock')renderStock(c);else if(tab==='salidas')renderSalidas(c);else if(tab==='regresos')renderRegresos(c);
 }
-
 function renderEntradas(c){
   almEntradaLoc='';almEntradaList=[];
-  c.innerHTML='<div class="card"><div class="card-title">📥 Entradas</div>'
-    +'<div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="ent-loc" placeholder="Ej. A1" onkeydown="if(event.key===\'Enter\')confirmarUbicacionEntrada()" oninput="this.value=this.value.toUpperCase()"/></div>'
-    +'<button class="btn btn-primary" onclick="confirmarUbicacionEntrada()" style="height:38px">Confirmar</button></div>'
-    +'<div id="ent-loc-info"></div>'
-    +'<div id="ent-scan-bob" style="display:none">'
-    +'<div class="scan-box"><div class="field"><label>🧵 ID de bobina</label><input id="ent-bob" type="text" placeholder="Escanea etiqueta" onkeydown="if(event.key===\'Enter\')agregarBobinaEntrada()"/></div>'
-    +'<button class="btn btn-success" onclick="agregarBobinaEntrada()" style="height:38px">+ Agregar</button></div>'
-    +'<div id="ent-list"></div>'
-    +'<div class="btn-row" id="ent-actions" style="display:none">'
-    +'<button class="btn btn-primary" onclick="guardarEntrada()">💾 Guardar entrada</button>'
-    +'<button class="btn btn-danger" onclick="renderEntradas(document.getElementById(\'almacen-content\'))">Cancelar</button>'
-    +'</div></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">📥 Entradas</div><div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="ent-loc" placeholder="Ej. A1" onkeydown="if(event.key===\'Enter\')confirmarUbicacionEntrada()" oninput="this.value=this.value.toUpperCase()"/></div><button class="btn btn-primary" onclick="confirmarUbicacionEntrada()" style="height:38px">Confirmar</button></div><div id="ent-loc-info"></div><div id="ent-scan-bob" style="display:none"><div class="scan-box"><div class="field"><label>🧵 ID de bobina</label><input id="ent-bob" type="text" placeholder="Escanea etiqueta" onkeydown="if(event.key===\'Enter\')agregarBobinaEntrada()"/></div><button class="btn btn-success" onclick="agregarBobinaEntrada()" style="height:38px">+ Agregar</button></div><div id="ent-list"></div><div class="btn-row" id="ent-actions" style="display:none"><button class="btn btn-primary" onclick="guardarEntrada()">💾 Guardar entrada</button><button class="btn btn-danger" onclick="renderEntradas(document.getElementById(\'almacen-content\'))">Cancelar</button></div></div></div>';
 }
 function confirmarUbicacionEntrada(){
   var val=document.getElementById('ent-loc').value.trim().toUpperCase();
   if(!val){alert('Ingresa una ubicación.');return;}
   if(!UBICACIONES.includes(val)){alert('Ubicación "'+val+'" no reconocida.');return;}
   almEntradaLoc=val;
-  var ex=(almStock[val]||[]).length;
-  document.getElementById('ent-loc-info').innerHTML='<div class="loc-badge">📍 '+val+' <span style="font-size:12px;font-weight:400;opacity:.8">'+ex+' bobina(s)</span></div>';
-  document.getElementById('ent-scan-bob').style.display='block';
-  document.getElementById('ent-bob').focus();renderListaEntrada();
+  document.getElementById('ent-loc-info').innerHTML='<div class="loc-badge">📍 '+val+' <span style="font-size:12px;font-weight:400;opacity:.8">'+(almStock[val]||[]).length+' bobina(s)</span></div>';
+  document.getElementById('ent-scan-bob').style.display='block';document.getElementById('ent-bob').focus();renderListaEntrada();
 }
 function agregarBobinaEntrada(){
-  var id=document.getElementById('ent-bob').value.trim();
-  if(!id)return;
+  var id=document.getElementById('ent-bob').value.trim();if(!id)return;
   if(almEntradaList.find(function(b){return String(b.id).toUpperCase()===id.toUpperCase();})){alert('Ya agregada.');return;}
-  var b=findBobina(id);
-  almEntradaList.push(b?Object.assign({},b):{id:id,desc:'Sin datos',ot:'—',metros:'—',peso:'—',med:'—',col:'—'});
+  var b=findBobina(id);almEntradaList.push(b?Object.assign({},b):{id:id,desc:'Sin datos',ot:'—',metros:'—',peso:'—',med:'—',col:'—'});
   document.getElementById('ent-bob').value='';document.getElementById('ent-bob').focus();renderListaEntrada();
 }
 function renderListaEntrada(){
   var el=document.getElementById('ent-list'),act=document.getElementById('ent-actions');
   if(!almEntradaList.length){el.innerHTML='';act.style.display='none';return;}
   act.style.display='flex';
-  el.innerHTML='<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">'+almEntradaList.length+' bobina(s) → '+almEntradaLoc+'</div>'
-    +almEntradaList.map(function(b,i){return'<div class="bobina-row"><div class="br-info"><div class="br-id">'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></div><button class="icon-btn del" onclick="almEntradaList.splice('+i+',1);renderListaEntrada()">✕</button></div>';}).join('');
+  el.innerHTML='<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">'+almEntradaList.length+' bobina(s) → '+almEntradaLoc+'</div>'+almEntradaList.map(function(b,i){return'<div class="bobina-row"><div class="br-info"><div class="br-id">'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></div><button class="icon-btn del" onclick="almEntradaList.splice('+i+',1);renderListaEntrada()">✕</button></div>';}).join('');
 }
 function guardarEntrada(){
   if(!almStock[almEntradaLoc])almStock[almEntradaLoc]=[];
   var hoy=getToday();
-  almEntradaList.forEach(function(b){
-    if(!almStock[almEntradaLoc].find(function(x){return String(x.id).toUpperCase()===String(b.id).toUpperCase();}))
-      almStock[almEntradaLoc].push(Object.assign({},b,{fechaEntrada:fmtDate(hoy)}));
-  });
-  alert('✅ '+almEntradaList.length+' bobina(s) en '+almEntradaLoc);
-  renderEntradas(document.getElementById('almacen-content'));
+  almEntradaList.forEach(function(b){if(!almStock[almEntradaLoc].find(function(x){return String(x.id).toUpperCase()===String(b.id).toUpperCase();}))almStock[almEntradaLoc].push(Object.assign({},b,{fechaEntrada:fmtDate(hoy)}));});
+  alert('✅ '+almEntradaList.length+' bobina(s) en '+almEntradaLoc);renderEntradas(document.getElementById('almacen-content'));
 }
-
 function renderStock(c){
-  c.innerHTML='<div class="card"><div class="card-title">📦 Stock por ubicación</div>'
-    +'<div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="stk-loc" placeholder="Ej. B2" onkeydown="if(event.key===\'Enter\')consultarStock()" oninput="this.value=this.value.toUpperCase()"/></div>'
-    +'<button class="btn btn-primary" onclick="consultarStock()" style="height:38px">Consultar</button>'
-    +'<button class="btn" onclick="renderStock(document.getElementById(\'almacen-content\'))" style="height:38px">Limpiar</button></div>'
-    +'<div id="stk-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">📦 Stock por ubicación</div><div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="stk-loc" placeholder="Ej. B2" onkeydown="if(event.key===\'Enter\')consultarStock()" oninput="this.value=this.value.toUpperCase()"/></div><button class="btn btn-primary" onclick="consultarStock()" style="height:38px">Consultar</button><button class="btn" onclick="renderStock(document.getElementById(\'almacen-content\'))" style="height:38px">Limpiar</button></div><div id="stk-result"></div></div>';
 }
 function consultarStock(){
-  var val=document.getElementById('stk-loc').value.trim().toUpperCase();
-  var r=document.getElementById('stk-result');
-  var bobs=almStock[val]||[];
+  var val=document.getElementById('stk-loc').value.trim().toUpperCase(),r=document.getElementById('stk-result'),bobs=almStock[val]||[];
   if(!bobs.length){r.innerHTML='<div class="not-found">📍 <strong>'+val+'</strong> — sin inventario.</div>';return;}
-  var totM=bobs.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  var totP=bobs.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  r.innerHTML='<div class="loc-badge" style="margin-top:8px">📍 '+val+'</div>'
-    +'<div class="result-grid" style="margin-top:8px;margin-bottom:16px">'+ri('Bobinas',bobs.length,true)+ri('Metros',totM.toLocaleString()+' m',true)+ri('Peso',totP.toFixed(2)+' Kg',true)+'</div>'
-    +'<table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>Fecha entrada</th></tr></thead><tbody>'
-    +bobs.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td style="font-size:11px">'+b.desc+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td>'+b.col+'</td><td style="font-size:11px">'+(b.fechaEntrada||'—')+'</td></tr>';}).join('')
-    +'</tbody></table>';
+  var totM=bobs.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=bobs.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  r.innerHTML='<div class="loc-badge" style="margin-top:8px">📍 '+val+'</div><div class="result-grid" style="margin-top:8px;margin-bottom:16px">'+ri('Bobinas',bobs.length,true)+ri('Metros',totM.toLocaleString()+' m',true)+ri('Peso',totP.toFixed(2)+' Kg',true)+'</div><table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>Fecha entrada</th></tr></thead><tbody>'+bobs.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td style="font-size:11px">'+b.desc+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td>'+b.col+'</td><td style="font-size:11px">'+(b.fechaEntrada||'—')+'</td></tr>';}).join('')+'</tbody></table>';
 }
-
 function renderSalidas(c){
   almSalidaLoc='';
-  c.innerHTML='<div class="card"><div class="card-title">📤 Salidas</div>'
-    +'<div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="sal-loc" placeholder="Ej. C1" onkeydown="if(event.key===\'Enter\')cargarStockSalida()" oninput="this.value=this.value.toUpperCase()"/></div>'
-    +'<button class="btn btn-primary" onclick="cargarStockSalida()" style="height:38px">Cargar inventario</button></div>'
-    +'<div id="sal-content"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">📤 Salidas</div><div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="sal-loc" placeholder="Ej. C1" onkeydown="if(event.key===\'Enter\')cargarStockSalida()" oninput="this.value=this.value.toUpperCase()"/></div><button class="btn btn-primary" onclick="cargarStockSalida()" style="height:38px">Cargar inventario</button></div><div id="sal-content"></div></div>';
 }
 function cargarStockSalida(){
-  var val=document.getElementById('sal-loc').value.trim().toUpperCase();
-  var bobs=almStock[val]||[];
-  var c=document.getElementById('sal-content');
+  var val=document.getElementById('sal-loc').value.trim().toUpperCase(),bobs=almStock[val]||[],c=document.getElementById('sal-content');
   if(!bobs.length){c.innerHTML='<div class="not-found">📍 <strong>'+val+'</strong> — sin inventario.</div>';return;}
   almSalidaLoc=val;
   var arOpts=AREAS.map(function(a){return'<option>'+a+'</option>';}).join('');
-  c.innerHTML='<div class="loc-badge" style="margin:12px 0">📍 '+val+' — '+bobs.length+' bobina(s)</div>'
-    +'<div id="sal-bobs">'+bobs.map(function(b,i){return'<div class="bobina-row"><input type="checkbox" id="chk-sal-'+i+'" value="'+i+'"/><label for="chk-sal-'+i+'" class="br-info" style="cursor:pointer"><div class="br-id">'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></label></div>';}).join('')+'</div>'
-    +'<div class="sep"></div><div class="form-grid" style="margin-top:12px">'
-    +'<div class="field"><label>Área destino</label><select id="sal-area"><option value="">— Seleccione —</option>'+arOpts+'</select></div>'
-    +'<div class="field"><label>Número de pedido</label><input id="sal-pedido" placeholder="Ej. PED-2026-001"/></div>'
-    +'<div class="field"><label>Entrega a</label><input id="sal-persona" placeholder="Nombre de quien recibe"/></div></div>'
-    +'<div class="btn-row" style="margin-top:16px">'
-    +'<button class="btn btn-primary" onclick="guardarSalida()">💾 Registrar salida</button>'
-    +'<button class="btn" onclick="renderSalidas(document.getElementById(\'almacen-content\'))">Cancelar</button></div>';
+  c.innerHTML='<div class="loc-badge" style="margin:12px 0">📍 '+val+' — '+bobs.length+' bobina(s)</div><div id="sal-bobs">'+bobs.map(function(b,i){return'<div class="bobina-row"><input type="checkbox" id="chk-sal-'+i+'" value="'+i+'"/><label for="chk-sal-'+i+'" class="br-info" style="cursor:pointer"><div class="br-id">'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></label></div>';}).join('')+'</div><div class="sep"></div><div class="form-grid" style="margin-top:12px"><div class="field"><label>Área destino</label><select id="sal-area"><option value="">— Seleccione —</option>'+arOpts+'</select></div><div class="field"><label>Número de pedido</label><input id="sal-pedido" placeholder="Ej. PED-2026-001"/></div><div class="field"><label>Entrega a</label><input id="sal-persona" placeholder="Nombre de quien recibe"/></div></div><div class="btn-row" style="margin-top:16px"><button class="btn btn-primary" onclick="guardarSalida()">💾 Registrar salida</button><button class="btn" onclick="renderSalidas(document.getElementById(\'almacen-content\'))">Cancelar</button></div>';
 }
 function guardarSalida(){
-  var bobs=almStock[almSalidaLoc]||[];
-  var checks=[...document.querySelectorAll('[id^=chk-sal-]:checked')];
+  var bobs=almStock[almSalidaLoc]||[],checks=[...document.querySelectorAll('[id^=chk-sal-]:checked')];
   if(!checks.length){alert('Selecciona al menos una bobina.');return;}
-  var area=document.getElementById('sal-area').value;
-  var pedido=document.getElementById('sal-pedido').value.trim();
-  var persona=document.getElementById('sal-persona').value.trim();
+  var area=document.getElementById('sal-area').value,pedido=document.getElementById('sal-pedido').value.trim(),persona=document.getElementById('sal-persona').value.trim();
   if(!area||!pedido||!persona){alert('Completa todos los campos.');return;}
   var idxs=checks.map(function(ch){return parseInt(ch.value);}).sort(function(a,b){return b-a;});
   idxs.forEach(function(i){bobs.splice(i,1);});
   alert('✅ '+idxs.length+' bobina(s) a '+area+'\nPedido: '+pedido+' | Recibe: '+persona);
   renderSalidas(document.getElementById('almacen-content'));
 }
-
 function renderRegresos(c){
   almRegresosBobina=null;
-  c.innerHTML='<div class="card"><div class="card-title">🔄 Regresos — Reimprimir etiqueta</div>'
-    +'<div class="scan-box"><div class="field"><label>🧵 ID de bobina</label><input id="reg-id" placeholder="Escanea o ingresa ID" onkeydown="if(event.key===\'Enter\')buscarBobinaRegreso()"/></div>'
-    +'<button class="btn btn-primary" onclick="buscarBobinaRegreso()" style="height:38px">Buscar</button>'
-    +'<button class="btn" onclick="renderRegresos(document.getElementById(\'almacen-content\'))" style="height:38px">Limpiar</button></div>'
-    +'<div id="reg-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🔄 Regresos</div><div class="scan-box"><div class="field"><label>🧵 ID de bobina</label><input id="reg-id" placeholder="Escanea o ingresa ID" onkeydown="if(event.key===\'Enter\')buscarBobinaRegreso()"/></div><button class="btn btn-primary" onclick="buscarBobinaRegreso()" style="height:38px">Buscar</button><button class="btn" onclick="renderRegresos(document.getElementById(\'almacen-content\'))" style="height:38px">Limpiar</button></div><div id="reg-result"></div></div>';
 }
 function buscarBobinaRegreso(){
-  var id=document.getElementById('reg-id').value.trim();
-  var r=document.getElementById('reg-result');
+  var id=document.getElementById('reg-id').value.trim(),r=document.getElementById('reg-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   var b=findBobina(id);
   if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   almRegresosBobina=Object.assign({},b);
-  r.innerHTML='<div class="result-card"><div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div>'
-    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Descripción',b.desc)+ri('Metros',b.metros+' m')+ri('Peso original',b.peso+' Kg')+ri('Medida',b.med)+'</div>'
-    +'<div class="sep"></div>'
-    +'<div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap">'
-    +'<div class="field" style="min-width:200px"><label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg)</label>'
-    +'<input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Nuevo peso" style="border:2px solid var(--blue2);font-size:15px"/></div>'
-    +'<button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button></div></div>';
+  r.innerHTML='<div class="result-card"><div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Descripción',b.desc)+ri('Metros',b.metros+' m')+ri('Peso original',b.peso+' Kg')+ri('Medida',b.med)+'</div><div class="sep"></div><div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap"><div class="field" style="min-width:200px"><label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg)</label><input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Nuevo peso" style="border:2px solid var(--blue2);font-size:15px"/></div><button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button></div></div>';
 }
 function imprimirEtiquetaRegreso(){
   var np=document.getElementById('reg-nuevo-peso').value.trim();
@@ -1170,170 +727,90 @@ function imprimirEtiquetaRegreso(){
   renderLabel(Object.assign({},almRegresosBobina,{nuevoPeso:np}),true);
 }
 
+// ADMIN
 function renderAdmin(){
   var totM=bobinas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  document.getElementById('stats-grid').innerHTML=
-    '<div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div>'
-    +'<div class="stat"><div class="sv">'+bobinas.length+'</div><div class="sl">Bobinas esta sesión</div></div>'
-    +'<div class="stat"><div class="sv">'+totM.toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div>'
-    +'<div class="stat"><div class="sv">'+Object.values(almStock).reduce(function(a,v){return a+v.length;},0)+'</div><div class="sl">Bobinas en almacén</div></div>';
+  document.getElementById('stats-grid').innerHTML='<div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div><div class="stat"><div class="sv">'+bobinas.length+'</div><div class="sl">Bobinas esta sesión</div></div><div class="stat"><div class="sv">'+totM.toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div><div class="stat"><div class="sv">'+Object.values(almStock).reduce(function(a,v){return a+v.length;},0)+'</div><div class="sl">Bobinas en almacén</div></div>';
   adminTab('produccion',document.querySelector('#admin-tabs .sec-tab'));
 }
 function adminTab(tab,btn){
-  document.querySelectorAll('#admin-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
+  document.querySelectorAll('#admin-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
   var c=document.getElementById('admin-content');
-  if(tab==='produccion')renderAdminProduccion(c);
-  else if(tab==='etiqueta')renderAdminEtiqueta(c);
-  else if(tab==='coordinadores')renderCatCoordinadores(c);
-  else if(tab==='operadores')renderAdminOperadores(c);
-  else if(tab==='maquinas')renderAdminMaquinas(c);
-  else if(tab==='ordenes')renderAdminOrdenes(c);
+  if(tab==='produccion')renderAdminProduccion(c);else if(tab==='etiqueta')renderAdminEtiqueta(c);else if(tab==='coordinadores')renderCatCoordinadores(c);else if(tab==='operadores')renderAdminOperadores(c);else if(tab==='maquinas')renderAdminMaquinas(c);else if(tab==='ordenes')renderAdminOrdenes(c);
 }
-
 function renderAdminProduccion(c){
   var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
-  c.innerHTML='<div class="card"><div class="card-title">📊 Producción</div>'
-    +'<div class="form-grid" style="margin-bottom:12px">'
-    +'<div class="field"><label>Extruder</label><select id="ap-maq">'+mOpts+'</select></div>'
-    +'<div class="field"><label>Fecha inicio</label><input id="ap-di" type="date"/></div>'
-    +'<div class="field"><label>Hora inicio</label><input id="ap-hi" type="time" value="00:00"/></div>'
-    +'<div class="field"><label>Fecha fin</label><input id="ap-df" type="date"/></div>'
-    +'<div class="field"><label>Hora fin</label><input id="ap-hf" type="time" value="23:59"/></div></div>'
-    +'<div class="btn-row" style="margin-bottom:12px">'
-    +'<button class="btn btn-primary" onclick="queryAdminProd()">🔍 Consultar</button>'
-    +'<button class="btn btn-success" id="ap-xl" style="display:none" onclick="exportAdminProd()">📥 Exportar Excel</button></div>'
-    +'<div id="ap-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">📊 Producción</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Extruder</label><select id="ap-maq">'+mOpts+'</select></div><div class="field"><label>Fecha inicio</label><input id="ap-di" type="date"/></div><div class="field"><label>Hora inicio</label><input id="ap-hi" type="time" value="00:00"/></div><div class="field"><label>Fecha fin</label><input id="ap-df" type="date"/></div><div class="field"><label>Hora fin</label><input id="ap-hf" type="time" value="23:59"/></div></div><div class="btn-row" style="margin-bottom:12px"><button class="btn btn-primary" onclick="queryAdminProd()">🔍 Consultar</button><button class="btn btn-success" id="ap-xl" style="display:none" onclick="exportAdminProd()">📥 Exportar Excel</button></div><div id="ap-result"></div></div>';
 }
-var lastAdminProd=[];
 function queryAdminProd(){
-  var maq=document.getElementById('ap-maq').value;
-  var di=document.getElementById('ap-di').value,hi=document.getElementById('ap-hi').value||'00:00';
-  var df=document.getElementById('ap-df').value,hf=document.getElementById('ap-hf').value||'23:59';
-  var rows=bobinas.filter(function(b){
-    if(maq&&b.mach!==maq)return false;
-    if(di&&df){var t=parseBoDate(b);if(t<new Date(di+'T'+hi+':00')||t>new Date(df+'T'+hf+':00'))return false;}
-    return true;
-  });
-  lastAdminProd=rows;
-  var r=document.getElementById('ap-result');
-  document.getElementById('ap-xl').style.display=rows.length?'inline-block':'none';
+  var maq=document.getElementById('ap-maq').value,di=document.getElementById('ap-di').value,hi=document.getElementById('ap-hi').value||'00:00',df=document.getElementById('ap-df').value,hf=document.getElementById('ap-hf').value||'23:59';
+  var rows=bobinas.filter(function(b){if(maq&&b.mach!==maq)return false;if(di&&df){var t=parseBoDate(b);if(t<new Date(di+'T'+hi+':00')||t>new Date(df+'T'+hf+':00'))return false;}return true;});
+  lastAdminProd=rows;var r=document.getElementById('ap-result');document.getElementById('ap-xl').style.display=rows.length?'inline-block':'none';
   if(!rows.length){r.innerHTML='<div class="not-found">Sin resultados.</div>';return;}
-  var byOT={};
-  rows.forEach(function(b){
-    if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,desc:b.desc,prod:b.prod,med:b.med,bobinas:0,peso:0,metros:0,fecha:b.fecha};
-    byOT[b.ot].bobinas++;byOT[b.ot].peso+=parseFloat(b.peso)||0;byOT[b.ot].metros+=parseFloat(b.metros)||0;
-  });
+  var byOT={};rows.forEach(function(b){if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,desc:b.desc,prod:b.prod,med:b.med,bobinas:0,peso:0,metros:0,fecha:b.fecha};byOT[b.ot].bobinas++;byOT[b.ot].peso+=parseFloat(b.peso)||0;byOT[b.ot].metros+=parseFloat(b.metros)||0;});
   var sr=Object.values(byOT);
-  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th><th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th></tr></thead><tbody>'
-    +sr.map(function(rw){return'<tr><td>'+rw.fecha+'</td><td style="font-weight:600">'+rw.ot+'</td><td>'+rw.mach+'</td><td style="font-size:11px">'+rw.prod+'</td><td style="font-size:11px">'+rw.desc+'</td><td><strong>'+rw.bobinas+'</strong></td><td>'+rw.peso.toFixed(3)+'</td><td>'+rw.med+'</td><td>'+rw.metros.toLocaleString()+' m</td></tr>';}).join('')
-    +'</tbody></table></div>';
+  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>Fecha</th><th>OT</th><th>Máq.</th><th>Código</th><th>Descripción</th><th>Bobinas</th><th>Peso (Kg)</th><th>Medida</th><th>Metros</th></tr></thead><tbody>'+sr.map(function(rw){return'<tr><td>'+rw.fecha+'</td><td style="font-weight:600">'+rw.ot+'</td><td>'+rw.mach+'</td><td style="font-size:11px">'+rw.prod+'</td><td style="font-size:11px">'+rw.desc+'</td><td><strong>'+rw.bobinas+'</strong></td><td>'+rw.peso.toFixed(3)+'</td><td>'+rw.med+'</td><td>'+rw.metros.toLocaleString()+' m</td></tr>';}).join('')+'</tbody></table></div>';
 }
 function exportAdminProd(){
   if(!lastAdminProd.length){alert('Sin datos.');return;}
+  var byOT={};lastAdminProd.forEach(function(b){if(!byOT[b.ot])byOT[b.ot]={Fecha:b.fecha,OT:b.ot,Maquina:b.mach,Codigo:b.prod,Descripcion:b.desc,Bobinas:0,Peso_Kg:0,Medida:b.med,Metros:0};byOT[b.ot].Bobinas++;byOT[b.ot].Peso_Kg+=parseFloat(b.peso)||0;byOT[b.ot].Metros+=parseFloat(b.metros)||0;});
   var cols=['Fecha','OT','Maquina','Codigo','Descripcion','Bobinas','Peso_Kg','Medida','Metros'];
-  var byOT={};
-  lastAdminProd.forEach(function(b){
-    if(!byOT[b.ot])byOT[b.ot]={Fecha:b.fecha,OT:b.ot,Maquina:b.mach,Codigo:b.prod,Descripcion:b.desc,Bobinas:0,Peso_Kg:0,Medida:b.med,Metros:0};
-    byOT[b.ot].Bobinas++;byOT[b.ot].Peso_Kg+=parseFloat(b.peso)||0;byOT[b.ot].Metros+=parseFloat(b.metros)||0;
-  });
   var data=Object.values(byOT).map(function(rw){return cols.map(function(k){return rw[k];});});
   var csv=[cols.join('\t')].concat(data.map(function(rw){return rw.join('\t');})).join('\n');
-  var blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download='Produccion_'+new Date().toISOString().slice(0,10)+'.xls';a.click();URL.revokeObjectURL(url);
+  var blob=new Blob(['\uFEFF'+csv],{type:'application/vnd.ms-excel;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='Produccion_'+new Date().toISOString().slice(0,10)+'.xls';a.click();URL.revokeObjectURL(url);
 }
-
 function renderAdminEtiqueta(c){
-  c.innerHTML='<div class="card"><div class="card-title">🖨 Imprimir etiqueta por ID</div>'
-    +'<div class="search-box"><div class="field"><label>ID de bobina</label><input id="adm-etq-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')buscarEtiquetaAdmin()"/></div>'
-    +'<button class="btn btn-primary" onclick="buscarEtiquetaAdmin()" style="height:38px">Buscar</button></div>'
-    +'<div id="adm-etq-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🖨 Imprimir etiqueta por ID</div><div class="search-box"><div class="field"><label>ID de bobina</label><input id="adm-etq-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')buscarEtiquetaAdmin()"/></div><button class="btn btn-primary" onclick="buscarEtiquetaAdmin()" style="height:38px">Buscar</button></div><div id="adm-etq-result"></div></div>';
 }
 function buscarEtiquetaAdmin(){
-  var id=document.getElementById('adm-etq-id').value.trim();
-  var r=document.getElementById('adm-etq-result');
+  var id=document.getElementById('adm-etq-id').value.trim(),r=document.getElementById('adm-etq-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   var b=findBobina(id);
   if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   var p=b.params||{};
-  r.innerHTML='<div class="result-card"><div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div>'
-    +'<div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Metros',b.metros+' m')+ri('Peso',b.peso+' Kg')+ri('Calibre frente',p.cf)+ri('Calibre reverso',p.cr)+'</div>'
-    +'<button class="btn btn-primary" onclick="renderLabel(findBobina(\''+b.id+'\'),false)">🖨 Imprimir etiqueta</button></div>';
+  r.innerHTML='<div class="result-card"><div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Metros',b.metros+' m')+ri('Peso',b.peso+' Kg')+ri('Calibre frente',p.cf)+ri('Calibre reverso',p.cr)+'</div><button class="btn btn-primary" onclick="renderLabel(findBobina(\''+b.id+'\'),false)">🖨 Ver etiqueta</button></div>';
 }
-
 function renderAdminOperadores(c){
-  c.innerHTML='<div class="card"><div class="card-title">👷 Operadores</div>'
-    +'<div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar desde API</button></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">👷 Operadores</div><div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar desde API</button></div></div>';
 }
 function loadAdminOps(){
   document.getElementById('admin-op-list').innerHTML='<p style="color:var(--muted);font-size:13px">Cargando...</p>';
-  apiFetch('/operators').then(function(data){
-    document.getElementById('admin-op-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th><th>ID externo</th></tr></thead><tbody>'
-      +data.map(function(o){return'<tr><td>'+o.id+'</td><td>'+o.full_name+'</td><td>'+(o.external_id||'—')+'</td></tr>';}).join('')+'</tbody></table>';
-  }).catch(function(){document.getElementById('admin-op-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
+  apiFetch('/operators').then(function(data){document.getElementById('admin-op-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th></tr></thead><tbody>'+data.map(function(o){return'<tr><td>'+o.id+'</td><td>'+o.full_name+'</td></tr>';}).join('')+'</tbody></table>';}).catch(function(){document.getElementById('admin-op-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
 }
 function renderAdminMaquinas(c){
-  c.innerHTML='<div class="card"><div class="card-title">⚙ Máquinas</div>'
-    +'<div id="admin-maq-list"><button class="btn btn-primary" onclick="loadAdminMaqs()">🔄 Cargar desde API</button></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">⚙ Máquinas</div><div id="admin-maq-list"><button class="btn btn-primary" onclick="loadAdminMaqs()">🔄 Cargar desde API</button></div></div>';
 }
 function loadAdminMaqs(){
-  apiFetch('/machines').then(function(data){
-    document.getElementById('admin-maq-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th></tr></thead><tbody>'
-      +data.map(function(m){return'<tr><td style="font-weight:700">'+m.id+'</td><td>'+m.name+'</td></tr>';}).join('')+'</tbody></table>';
-  }).catch(function(){document.getElementById('admin-maq-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
+  apiFetch('/machines').then(function(data){document.getElementById('admin-maq-list').innerHTML='<table><thead><tr><th>ID</th><th>Nombre</th></tr></thead><tbody>'+data.map(function(m){return'<tr><td style="font-weight:700">'+m.id+'</td><td>'+m.name+'</td></tr>';}).join('')+'</tbody></table>';}).catch(function(){document.getElementById('admin-maq-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
 }
 function renderAdminOrdenes(c){
-  c.innerHTML='<div class="card"><div class="card-title">📋 Órdenes de trabajo</div>'
-    +'<div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar desde API</button></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">📋 Órdenes de trabajo</div><div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar desde API</button></div></div>';
 }
 function loadAdminOTs(){
-  apiFetch('/work-orders').then(function(data){
-    document.getElementById('admin-ot-list').innerHTML='<table><thead><tr><th>OT</th><th>Producto</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>'
-      +data.map(function(o){return'<tr><td style="font-weight:700">'+o.ot_number+'</td><td style="font-size:11px">'+o.product_code+'</td><td style="font-size:11px">'+o.description+'</td><td>'+o.measure+'</td><td>'+o.color+'</td><td><span class="badge '+(o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend')+'">'+o.status+'</span></td></tr>';}).join('')+'</tbody></table>';
-  }).catch(function(){document.getElementById('admin-ot-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
+  apiFetch('/work-orders').then(function(data){document.getElementById('admin-ot-list').innerHTML='<table><thead><tr><th>OT</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>'+data.map(function(o){return'<tr><td style="font-weight:700">'+o.ot_number+'</td><td style="font-size:11px">'+o.description+'</td><td>'+o.measure+'</td><td>'+o.color+'</td><td><span class="badge '+(o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend')+'">'+o.status+'</span></td></tr>';}).join('')+'</tbody></table>';}).catch(function(){document.getElementById('admin-ot-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
 }
-
 function renderCatCoordinadores(c){
-  var rows=catCoordinadores.map(function(o){
-    return'<tr><td>'+o.id+'</td><td>'+o.nombre+'</td>'
-      +'<td><span class="badge '+(o.activo?'badge-ok':'badge-pend')+'">'+(o.activo?'Activo':'Inactivo')+'</span></td>'
-      +'<td><div class="tbl-action"><button class="icon-btn" onclick="openEditCoord('+o.id+')">✏️</button>'
-      +'<button class="icon-btn del" onclick="delCoord('+o.id+')">🗑</button></div></td></tr>';
-  }).join('');
-  c.innerHTML='<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">'
-    +'<span style="font-size:15px;font-weight:600;color:var(--blue)">Coordinadores</span>'
-    +'<button class="btn btn-primary" onclick="openAddCoord()">+ Agregar</button></div>'
-    +'<table><thead><tr><th>ID</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+  var rows=catCoordinadores.map(function(o){return'<tr><td>'+o.id+'</td><td>'+o.nombre+'</td><td><span class="badge '+(o.activo?'badge-ok':'badge-pend')+'">'+(o.activo?'Activo':'Inactivo')+'</span></td><td><div class="tbl-action"><button class="icon-btn" onclick="openEditCoord('+o.id+')">✏️</button><button class="icon-btn del" onclick="delCoord('+o.id+')">🗑</button></div></td></tr>';}).join('');
+  c.innerHTML='<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><span style="font-size:15px;font-weight:600;color:var(--blue)">Coordinadores</span><button class="btn btn-primary" onclick="openAddCoord()">+ Agregar</button></div><table><thead><tr><th>ID</th><th>Nombre</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
 }
 function openAddCoord(){
   document.getElementById('mf-title').textContent='Agregar Coordinador';
-  document.getElementById('mf-body').innerHTML='<div class="form-grid">'
-    +'<div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" placeholder="Nombre completo"/></div>'
-    +'<div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true">Activo</option><option value="false">Inactivo</option></select></div></div>';
-  currentModalType='coord-add';editingId=null;
-  document.getElementById('modal-form').classList.add('open');
+  document.getElementById('mf-body').innerHTML='<div class="form-grid"><div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" placeholder="Nombre completo"/></div><div class="field"><label>Estatus</label><select id="mfi-activo"><option value="true">Activo</option><option value="false">Inactivo</option></select></div></div>';
+  currentModalType='coord-add';editingId=null;document.getElementById('modal-form').classList.add('open');
 }
 function openEditCoord(id){
-  var item=catCoordinadores.find(function(c){return c.id===id;});
-  if(!item)return;
+  var item=catCoordinadores.find(function(c){return c.id===id;});if(!item)return;
   document.getElementById('mf-title').textContent='Editar Coordinador';
-  var selOpts='<option value="true"'+(item.activo?' selected':'')+'>Activo</option>'
-    +'<option value="false"'+(!item.activo?' selected':'')+'>Inactivo</option>';
-  document.getElementById('mf-body').innerHTML='<div class="form-grid">'
-    +'<div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" value="'+item.nombre+'"/></div>'
-    +'<div class="field"><label>Estatus</label><select id="mfi-activo">'+selOpts+'</select></div></div>';
-  currentModalType='coord-edit';editingId=id;
-  document.getElementById('modal-form').classList.add('open');
+  var selOpts='<option value="true"'+(item.activo?' selected':'')+'>Activo</option><option value="false"'+(!item.activo?' selected':'')+'>Inactivo</option>';
+  document.getElementById('mf-body').innerHTML='<div class="form-grid"><div class="field"><label>Nombre</label><input type="text" id="mfi-nombre" value="'+item.nombre+'"/></div><div class="field"><label>Estatus</label><select id="mfi-activo">'+selOpts+'</select></div></div>';
+  currentModalType='coord-edit';editingId=id;document.getElementById('modal-form').classList.add('open');
 }
 function saveModalForm(){
-  var nombre=document.getElementById('mfi-nombre').value.trim();
-  var activo=document.getElementById('mfi-activo').value==='true';
+  var nombre=document.getElementById('mfi-nombre').value.trim(),activo=document.getElementById('mfi-activo').value==='true';
   if(!nombre){alert('Ingresa el nombre.');return;}
   if(currentModalType==='coord-add'){catCoordinadores.push({id:Date.now(),nombre:nombre,activo:activo});}
   else{var idx=catCoordinadores.findIndex(function(c){return c.id===editingId;});if(idx>-1)catCoordinadores[idx]=Object.assign({},catCoordinadores[idx],{nombre:nombre,activo:activo});}
-  closeModal('modal-form');populateCoord();
-  renderCatCoordinadores(document.getElementById('admin-content'));
+  closeModal('modal-form');populateCoord();renderCatCoordinadores(document.getElementById('admin-content'));
 }
 function delCoord(id){
   if(!confirm('¿Eliminar coordinador?'))return;
