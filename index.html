@@ -672,10 +672,35 @@ function guardarEImprimir(){
     if(opt)updateAvance(opt);
     initBobina();
     renderLabel(bobLocal,false);
+    setTimeout(function(){imprimirLabel();},300);
   });
 }
 
-function imprimirLabel(){window.print();}
+function imprimirLabel(){
+  var contenido=document.getElementById('label-content').innerHTML;
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Etiqueta</title>'
+    +'<style>'
+    +'@page{margin:0.5cm}'
+    +'body{margin:10px;font-family:Segoe UI,sans-serif;font-size:12px}'
+    +'.label-wrap{border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px}'
+    +'.lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}'
+    +'.brand{font-size:22px;font-weight:900;color:#0D3B8C}'
+    +'.mach{font-size:16px;font-weight:700}'
+    +'.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}'
+    +'.lf{display:flex;flex-direction:column}'
+    +'.lf span:first-child{font-size:10px;color:#888}'
+    +'.lf span:last-child{font-weight:600;font-size:13px}'
+    +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}'
+    +'</style></head><body>'
+    +'<div class="label-wrap">'+contenido+'</div>'
+    +'<script>window.onload=function(){window.print();}<\/script>'
+    +'</body></html>';
+  var blob=new Blob([html],{type:'text/html'});
+  var url=URL.createObjectURL(blob);
+  var w=window.open(url,'_blank');
+  if(!w){alert('Permite ventanas emergentes para imprimir.');return;}
+  setTimeout(function(){URL.revokeObjectURL(url);},10000);
+}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 function openListModal(){
@@ -991,12 +1016,14 @@ function imprimirReporteF01(){
   if(!el){alert('Primero genera el reporte.');return;}
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>EXT-F-01</title>'
     +'<style>@page{size:landscape;margin:1cm}body{margin:0;font-family:Arial,sans-serif}</style>'
-    +'</head><body>'+el.outerHTML+'</body></html>';
+    +'</head><body>'+el.outerHTML
+    +'<script>window.onload=function(){window.print();}<\/script>'
+    +'</body></html>';
   var blob=new Blob([html],{type:'text/html'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.target='_blank';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  setTimeout(function(){URL.revokeObjectURL(url);},5000);
+  var w=window.open(url,'_blank');
+  if(!w){alert('Permite ventanas emergentes para imprimir.');return;}
+  setTimeout(function(){URL.revokeObjectURL(url);},10000);
 }
 
 function exportarConsulta(tipo){
