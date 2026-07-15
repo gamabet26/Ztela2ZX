@@ -122,7 +122,6 @@ tr:hover td{background:#f8f9fb}
     <nav>
       <button class="active" onclick="showView('operador',this)">Operador</button>
       <button onclick="showView('consulta',this)">Consulta</button>
-      <button onclick="showView('almacen',this)">Almacén</button>
       <button onclick="showView('admin',this)">Administrador</button>
     </nav>
     <div style="font-size:12px;color:#ffffff66">Ztela ZX</div>
@@ -134,6 +133,7 @@ tr:hover td{background:#f8f9fb}
         <div class="card-title">📋 Registro de producción — <span id="mach-label">EXT001</span></div>
         <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo.</div>
         <div id="alert-metro" class="alert alert-err">🚫 Máximo 2,000 metros por bobina.</div>
+        <div id="alert-req" class="alert alert-err">🚫 Completa todos los campos obligatorios: Metros totales, Peso y todos los Parámetros de proceso.</div>
         <div id="alert-save" class="alert alert-ok">✅ Bobina guardada correctamente.</div>
         <div class="form-grid">
           <div class="field"><label>Operario</label><select id="sel-op" onchange="checkForm()"><option value="">— Seleccione —</option></select></div>
@@ -200,8 +200,7 @@ tr:hover td{background:#f8f9fb}
             <button class="btn btn-primary" onclick="nuevaBobina()">+ Nueva bobina</button>
             <button class="btn" onclick="limpiarPantalla()">🗑 Limpiar</button>
             <button class="btn" onclick="openListModal()">Lista de bobinas</button>
-            <button class="btn btn-success" id="btn-guardar" onclick="guardarBobina()">💾 Guardar bobina</button>
-            <button class="btn btn-primary" id="btn-imprimir" onclick="soloImprimir()" disabled>🖨 Imprimir etiqueta</button>
+            <button class="btn btn-success" id="btn-guardar" onclick="guardarEImprimirBobina()">🖨 Imprimir etiqueta</button>
           </div>
         </div>
       </div>
@@ -215,16 +214,6 @@ tr:hover td{background:#f8f9fb}
         <button class="sec-tab" onclick="consultaTab('reporte',this)">📄 Reporte EXT-F-01</button>
       </div>
       <div id="consulta-content"></div>
-    </div>
-
-    <div id="view-almacen" style="display:none">
-      <div class="sec-tabs" id="almacen-tabs">
-        <button class="sec-tab active" onclick="almacenTab('entradas',this)">📥 Entradas</button>
-        <button class="sec-tab" onclick="almacenTab('stock',this)">📦 Stock</button>
-        <button class="sec-tab" onclick="almacenTab('salidas',this)">📤 Salidas</button>
-        <button class="sec-tab" onclick="almacenTab('regresos',this)">🔄 Regresos</button>
-      </div>
-      <div id="almacen-content"></div>
     </div>
 
     <div id="view-admin" style="display:none">
@@ -342,11 +331,8 @@ var FB_ORDERS=[
 var curMach='EXT001',formActive=false,bobinas=[],lastSavedBobina=null,curWOId=null;
 var zxIdCounter=1000;
 function nextZxId(){zxIdCounter++;return'ZX-'+zxIdCounter;}
-var almStock={},almEntradaLoc='',almEntradaList=[],almSalidaLoc='',almRegresosBobina=null;
 var catCoordinadores=[{id:1,nombre:'Gumaro Flores',activo:true},{id:2,nombre:'Joaquin Gonzalez',activo:true},{id:3,nombre:'Erick Presas',activo:true},{id:4,nombre:'Israel Rodriguez',activo:true}];
 var currentModalType='',editingId=null;
-var AREAS=['Impresión','Conversión','Barnizado','Corrugado','Empaque','Refilado','Rectificado'];
-var UBICACIONES=(function(){var l=[];['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','AA','AB','AC','AD','AE'].forEach(function(x){for(var n=1;n<=3;n++)l.push(x+n);});return l;})();
 var lastConsultaMaquina=[],lastConsultaLote=[],lastAdminProd=[];
 
 function getToday(){return new Date();}
@@ -357,7 +343,7 @@ function parseBoDate(b){var p=b.fecha.split('-');var t=(b.hora||'00:00:00').spli
 function ri(label,val,hl){return'<div class="result-item'+(hl?' highlight':'')+'"><div class="ri-label">'+label+'</div><div class="ri-val">'+(val||'—')+'</div></div>';}
 function findBobina(id){return bobinas.find(function(b){return String(b.id).toUpperCase()===String(id).toUpperCase();})||null;}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function hideAlerts(){['alert-sel','alert-metro','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
+function hideAlerts(){['alert-sel','alert-metro','alert-req','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
 
 function initApp(){
   apiFetch('/machines').then(function(d){buildMachTabs(d);}).catch(function(){buildMachTabs(FB_MACHINES);});
@@ -395,13 +381,12 @@ function populateCoord(){
   });
 }
 function showView(v,btn){
-  ['operador','consulta','almacen','admin'].forEach(function(id){
+  ['operador','consulta','admin'].forEach(function(id){
     var el=document.getElementById('view-'+id);if(el)el.style.display=id===v?'block':'none';
   });
   document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   if(v==='admin')renderAdmin();
-  if(v==='almacen'){var t=document.querySelector('#almacen-tabs .sec-tab');if(t)almacenTab('entradas',t);}
   if(v==='consulta'){var t2=document.querySelector('#consulta-tabs .sec-tab');if(t2)consultaTab('maquina',t2);}
 }
 function selectMach(m,btn){
@@ -411,9 +396,9 @@ function selectMach(m,btn){
 function resetForm(){
   ['sel-op','sel-ot'].forEach(function(id){document.getElementById(id).value='';});
   ['f-desc','f-prod','f-med','f-col','f-sig','f-rem','f-id','f-num','f-fecha','f-hora','f-lote','f-metros','f-peso','f-obs'].forEach(function(id){document.getElementById(id).value='';});
+  ['f-metros','f-peso','p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-des','p-temp'].forEach(function(id){document.getElementById(id).style.borderColor='';});
   formActive=false;curWOId=null;hideAlerts();
   document.getElementById('ot-avance').style.display='none';
-  document.getElementById('btn-imprimir').disabled=true;
 }
 function checkForm(){
   var op=document.getElementById('sel-op').value,ot=document.getElementById('sel-ot').value;
@@ -478,7 +463,7 @@ function nuevaBobina(){
 }
 function limpiarPantalla(){
   ['f-metros','f-peso','f-obs'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('f-metros').style.borderColor='';
+  ['f-metros','f-peso','p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-des','p-temp'].forEach(function(id){document.getElementById(id).style.borderColor='';});
   ['p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-temp'].forEach(function(id){document.getElementById(id).value='';});
   document.getElementById('p-des').value='';document.getElementById('sel-coord').value='';hideAlerts();
 }
@@ -487,14 +472,19 @@ function validarMetros(inp){
   if(v>2000){document.getElementById('alert-metro').style.display='block';inp.style.borderColor='#e63946';}
   else{document.getElementById('alert-metro').style.display='none';inp.style.borderColor='';}
 }
-function soloImprimir(){
-  if(!lastSavedBobina){alert('Primero guarda una bobina.');return;}
-  renderLabel(lastSavedBobina,false);
-}
-function guardarBobina(){
+function guardarEImprimirBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
   var metros=parseFloat(document.getElementById('f-metros').value)||0;
   if(metros>2000){document.getElementById('alert-metro').style.display='block';return;}
+  var camposReq=['f-metros','f-peso','p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-des','p-temp'];
+  var faltantes=false;
+  camposReq.forEach(function(id){
+    var el=document.getElementById(id),val=(el.value||'').toString().trim();
+    if(!val){el.style.borderColor='#e63946';faltantes=true;}
+    else{el.style.borderColor='';}
+  });
+  if(faltantes){document.getElementById('alert-req').style.display='block';return;}
+  document.getElementById('alert-req').style.display='none';
   var btn=document.getElementById('btn-guardar');
   btn.disabled=true;btn.textContent='⏳ Guardando...';
   var opEl=document.getElementById('sel-op'),otElS=document.getElementById('sel-ot'),coordEl=document.getElementById('sel-coord');
@@ -514,10 +504,11 @@ function guardarBobina(){
     .then(function(){
       bobinas.push(bobLocal);lastSavedBobina=bobLocal;
       var al=document.getElementById('alert-save');al.style.display='block';setTimeout(function(){al.style.display='none';},2500);
-      limpiarPantalla();btn.disabled=false;btn.textContent='💾 Guardar bobina';
-      document.getElementById('btn-imprimir').disabled=false;
+      limpiarPantalla();btn.disabled=false;btn.textContent='🖨 Imprimir etiqueta';
       var opt=otElS.options[otElS.selectedIndex];if(opt)updateAvance(opt);
       initBobina();
+      renderLabel(bobLocal,false);
+      setTimeout(function(){imprimirEtiqueta();},300);
     });
 }
 function imprimirEtiqueta(){
@@ -591,7 +582,7 @@ function totalesBar(rows){
 }
 function renderConsultaMaquina(c){
   var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
-  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Máquina</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Máquina</label><select id="cq-maq">'+mOpts+'</select></div><div class="field"><label>Lote</label><input id="cq-lote" placeholder="Ej. 062426"/></div><div class="field"><label>OT</label><input id="cq-ot" placeholder="Ej. 26010005"/></div><div class="field"><label>Fecha inicio</label><input id="cq-fi" type="date"/></div><div class="field"><label>Fecha fin</label><input id="cq-ff" type="date"/></div><div class="field"><label>Hora inicio</label><input id="cq-hi" type="time" value="00:00"/></div><div class="field"><label>Hora fin</label><input id="cq-hf" type="time" value="23:59"/></div><div class="field"><label>Metros mín.</label><input id="cq-mmin" type="number" placeholder="0"/></div><div class="field"><label>Metros máx.</label><input id="cq-mmax" type="number"/></div><div class="field"><label>Peso mín.</label><input id="cq-pmin" type="number" placeholder="0"/></div><div class="field"><label>Peso máx.</label><input id="cq-pmax" type="number"/></div></div><div class="btn-row" style="margin-bottom:16px"><button class="btn btn-primary" onclick="ejecutarConsultaMaquina()">🔍 Consultar</button><button class="btn" onclick="renderConsultaMaquina(document.getElementById(\'consulta-content\'))">Limpiar</button><button class="btn btn-success" id="cq-xl" style="display:none" onclick="exportarConsulta(\'maquina\')">📥 Exportar Excel</button></div><div id="cq-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Máquina</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Máquina</label><select id="cq-maq">'+mOpts+'</select></div><div class="field"><label>Lote</label><input id="cq-lote" placeholder="Ej. 062426"/></div><div class="field"><label>OT</label><input id="cq-ot" placeholder="Ej. 26010005"/></div><div class="field"><label>Fecha inicio</label><input id="cq-fi" type="date"/></div><div class="field"><label>Fecha fin</label><input id="cq-ff" type="date"/></div><div class="field"><label>Hora inicio</label><input id="cq-hi" type="time" value="00:00"/></div><div class="field"><label>Hora fin</label><input id="cq-hf" type="time" value="23:59"/></div><div class="field"><label>Metros mín.</label><input id="cq-mmin" type="number" placeholder="0"/></div><div class="field"><label>Metros máx.</label><input id="cq-mmax" type="number"/></div><div class="field"><label>Peso mín.</label><input id="cq-pmin" type="number" placeholder="0"/></div><div class="field"><label>Peso máx.</label><input id="cq-pmax" type="number"/></div><div class="field"><label>Vista</label><select id="cq-vista" onchange="if(lastConsultaMaquina.length)renderConsultaMaquinaResult(lastConsultaMaquina)"><option value="detallado">Detallado</option><option value="agrupado">Agrupado por OT</option></select></div></div><div class="btn-row" style="margin-bottom:16px"><button class="btn btn-primary" onclick="ejecutarConsultaMaquina()">🔍 Consultar</button><button class="btn" onclick="renderConsultaMaquina(document.getElementById(\'consulta-content\'))">Limpiar</button><button class="btn btn-success" id="cq-xl" style="display:none" onclick="exportarConsulta(\'maquina\')">📥 Exportar Excel</button></div><div id="cq-result"></div></div>';
 }
 function ejecutarConsultaMaquina(){
   var maq=document.getElementById('cq-maq').value,lote=document.getElementById('cq-lote').value.trim(),ot=document.getElementById('cq-ot').value.trim();
@@ -606,9 +597,27 @@ function ejecutarConsultaMaquina(){
     return true;
   });
   lastConsultaMaquina=rows;
-  var r=document.getElementById('cq-result');document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
+  document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
+  renderConsultaMaquinaResult(rows);
+}
+function renderConsultaMaquinaResult(rows){
+  var r=document.getElementById('cq-result');
+  if(!r)return;
   if(!rows.length){r.innerHTML='<div class="not-found">Sin resultados.</div>';return;}
-  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>OT</th><th>Máq.</th><th>Operario</th><th>Fecha</th><th>Hora</th><th>Lote</th><th>Metros</th><th>Peso</th><th>Descripción</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.ot+'</td><td>'+b.mach+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.hora+'</td><td>'+b.lote+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td style="font-size:11px">'+b.desc+'</td></tr>';}).join('')+'</tbody></table></div>';
+  var vistaEl=document.getElementById('cq-vista'),vista=vistaEl?vistaEl.value:'detallado';
+  if(vista==='agrupado'){
+    var byOT={};
+    rows.forEach(function(b){
+      if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,desc:b.desc,prod:b.prod,col:b.col,fechaMin:b.fecha,fechaMax:b.fecha,bobinas:0,peso:0,metros:0};
+      var g=byOT[b.ot];g.bobinas++;g.peso+=parseFloat(b.peso)||0;g.metros+=parseFloat(b.metros)||0;
+      if(parseBoDate(b)<parseBoDate({fecha:g.fechaMin,hora:'00:00:00'}))g.fechaMin=b.fecha;
+      if(parseBoDate(b)>parseBoDate({fecha:g.fechaMax,hora:'23:59:59'}))g.fechaMax=b.fecha;
+    });
+    var groups=Object.values(byOT);
+    r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>OT</th><th>Máq.</th><th>Bobinas</th><th>Metros</th><th>Peso</th><th>Fecha(s)</th><th>Descripción</th></tr></thead><tbody>'+groups.map(function(g){return'<tr><td style="font-weight:700;color:var(--blue)">'+g.ot+'</td><td>'+g.mach+'</td><td><strong>'+g.bobinas+'</strong></td><td>'+g.metros.toLocaleString()+' m</td><td>'+g.peso.toFixed(2)+' Kg</td><td>'+(g.fechaMin===g.fechaMax?g.fechaMin:g.fechaMin+' → '+g.fechaMax)+'</td><td style="font-size:11px">'+g.desc+'</td></tr>';}).join('')+'</tbody></table></div>';
+  }else{
+    r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>OT</th><th>Máq.</th><th>Operario</th><th>Fecha</th><th>Hora</th><th>Lote</th><th>Metros</th><th>Peso</th><th>Descripción</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.ot+'</td><td>'+b.mach+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.hora+'</td><td>'+b.lote+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td style="font-size:11px">'+b.desc+'</td></tr>';}).join('')+'</tbody></table></div>';
+  }
 }
 function renderConsultaLote(c){
   c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Lote</div><div class="search-box" style="margin-bottom:12px"><div class="field"><label>Número de lote</label><input id="cl-lote" placeholder="Ej. 062426" onkeydown="if(event.key===\'Enter\')ejecutarConsultaLote()"/></div><button class="btn btn-primary" onclick="ejecutarConsultaLote()" style="height:38px">Buscar</button><button class="btn" onclick="renderConsultaLote(document.getElementById(\'consulta-content\'))" style="height:38px">Limpiar</button><button class="btn btn-success" id="cl-xl" style="display:none" onclick="exportarConsulta(\'lote\')">📥 Exportar Excel</button></div><div id="cl-result"></div></div>';
@@ -681,94 +690,10 @@ function imprimirReporteF01(){
   setTimeout(function(){URL.revokeObjectURL(url);},10000);
 }
 
-// ALMACÉN
-function almacenTab(tab,btn){
-  document.querySelectorAll('#almacen-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
-  var c=document.getElementById('almacen-content');
-  if(tab==='entradas')renderEntradas(c);else if(tab==='stock')renderStock(c);else if(tab==='salidas')renderSalidas(c);else if(tab==='regresos')renderRegresos(c);
-}
-function renderEntradas(c){
-  almEntradaLoc='';almEntradaList=[];
-  c.innerHTML='<div class="card"><div class="card-title">📥 Entradas</div><div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="ent-loc" placeholder="Ej. A1" onkeydown="if(event.key===\'Enter\')confirmarUbicacionEntrada()" oninput="this.value=this.value.toUpperCase()"/></div><button class="btn btn-primary" onclick="confirmarUbicacionEntrada()" style="height:38px">Confirmar</button></div><div id="ent-loc-info"></div><div id="ent-scan-bob" style="display:none"><div class="scan-box"><div class="field"><label>🧵 ID de bobina</label><input id="ent-bob" type="text" placeholder="Escanea etiqueta" onkeydown="if(event.key===\'Enter\')agregarBobinaEntrada()"/></div><button class="btn btn-success" onclick="agregarBobinaEntrada()" style="height:38px">+ Agregar</button></div><div id="ent-list"></div><div class="btn-row" id="ent-actions" style="display:none"><button class="btn btn-primary" onclick="guardarEntrada()">💾 Guardar entrada</button><button class="btn btn-danger" onclick="renderEntradas(document.getElementById(\'almacen-content\'))">Cancelar</button></div></div></div>';
-}
-function confirmarUbicacionEntrada(){
-  var val=document.getElementById('ent-loc').value.trim().toUpperCase();
-  if(!val){alert('Ingresa una ubicación.');return;}
-  if(!UBICACIONES.includes(val)){alert('Ubicación "'+val+'" no reconocida.');return;}
-  almEntradaLoc=val;
-  document.getElementById('ent-loc-info').innerHTML='<div class="loc-badge">📍 '+val+' <span style="font-size:12px;font-weight:400;opacity:.8">'+(almStock[val]||[]).length+' bobina(s)</span></div>';
-  document.getElementById('ent-scan-bob').style.display='block';document.getElementById('ent-bob').focus();renderListaEntrada();
-}
-function agregarBobinaEntrada(){
-  var id=document.getElementById('ent-bob').value.trim();if(!id)return;
-  if(almEntradaList.find(function(b){return String(b.id).toUpperCase()===id.toUpperCase();})){alert('Ya agregada.');return;}
-  var b=findBobina(id);almEntradaList.push(b?Object.assign({},b):{id:id,desc:'Sin datos',ot:'—',metros:'—',peso:'—',med:'—',col:'—'});
-  document.getElementById('ent-bob').value='';document.getElementById('ent-bob').focus();renderListaEntrada();
-}
-function renderListaEntrada(){
-  var el=document.getElementById('ent-list'),act=document.getElementById('ent-actions');
-  if(!almEntradaList.length){el.innerHTML='';act.style.display='none';return;}
-  act.style.display='flex';
-  el.innerHTML='<div style="margin:12px 0;font-size:13px;font-weight:600;color:var(--blue)">'+almEntradaList.length+' bobina(s) → '+almEntradaLoc+'</div>'+almEntradaList.map(function(b,i){return'<div class="bobina-row"><div class="br-info"><div class="br-id">'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></div><button class="icon-btn del" onclick="almEntradaList.splice('+i+',1);renderListaEntrada()">✕</button></div>';}).join('');
-}
-function guardarEntrada(){
-  if(!almStock[almEntradaLoc])almStock[almEntradaLoc]=[];
-  var hoy=getToday();
-  almEntradaList.forEach(function(b){if(!almStock[almEntradaLoc].find(function(x){return String(x.id).toUpperCase()===String(b.id).toUpperCase();}))almStock[almEntradaLoc].push(Object.assign({},b,{fechaEntrada:fmtDate(hoy)}));});
-  alert('✅ '+almEntradaList.length+' bobina(s) en '+almEntradaLoc);renderEntradas(document.getElementById('almacen-content'));
-}
-function renderStock(c){
-  c.innerHTML='<div class="card"><div class="card-title">📦 Stock por ubicación</div><div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="stk-loc" placeholder="Ej. B2" onkeydown="if(event.key===\'Enter\')consultarStock()" oninput="this.value=this.value.toUpperCase()"/></div><button class="btn btn-primary" onclick="consultarStock()" style="height:38px">Consultar</button><button class="btn" onclick="renderStock(document.getElementById(\'almacen-content\'))" style="height:38px">Limpiar</button></div><div id="stk-result"></div></div>';
-}
-function consultarStock(){
-  var val=document.getElementById('stk-loc').value.trim().toUpperCase(),r=document.getElementById('stk-result'),bobs=almStock[val]||[];
-  if(!bobs.length){r.innerHTML='<div class="not-found">📍 <strong>'+val+'</strong> — sin inventario.</div>';return;}
-  var totM=bobs.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=bobs.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  r.innerHTML='<div class="loc-badge" style="margin-top:8px">📍 '+val+'</div><div class="result-grid" style="margin-top:8px;margin-bottom:16px">'+ri('Bobinas',bobs.length,true)+ri('Metros',totM.toLocaleString()+' m',true)+ri('Peso',totP.toFixed(2)+' Kg',true)+'</div><table><thead><tr><th>ID</th><th>Descripción</th><th>Metros</th><th>Peso</th><th>Color</th><th>Fecha entrada</th></tr></thead><tbody>'+bobs.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td style="font-size:11px">'+b.desc+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td>'+b.col+'</td><td style="font-size:11px">'+(b.fechaEntrada||'—')+'</td></tr>';}).join('')+'</tbody></table>';
-}
-function renderSalidas(c){
-  almSalidaLoc='';
-  c.innerHTML='<div class="card"><div class="card-title">📤 Salidas</div><div class="scan-box"><div class="field"><label>📍 Ubicación</label><input id="sal-loc" placeholder="Ej. C1" onkeydown="if(event.key===\'Enter\')cargarStockSalida()" oninput="this.value=this.value.toUpperCase()"/></div><button class="btn btn-primary" onclick="cargarStockSalida()" style="height:38px">Cargar inventario</button></div><div id="sal-content"></div></div>';
-}
-function cargarStockSalida(){
-  var val=document.getElementById('sal-loc').value.trim().toUpperCase(),bobs=almStock[val]||[],c=document.getElementById('sal-content');
-  if(!bobs.length){c.innerHTML='<div class="not-found">📍 <strong>'+val+'</strong> — sin inventario.</div>';return;}
-  almSalidaLoc=val;
-  var arOpts=AREAS.map(function(a){return'<option>'+a+'</option>';}).join('');
-  c.innerHTML='<div class="loc-badge" style="margin:12px 0">📍 '+val+' — '+bobs.length+' bobina(s)</div><div id="sal-bobs">'+bobs.map(function(b,i){return'<div class="bobina-row"><input type="checkbox" id="chk-sal-'+i+'" value="'+i+'"/><label for="chk-sal-'+i+'" class="br-info" style="cursor:pointer"><div class="br-id">'+b.id+'</div><div class="br-sub">'+b.desc+' | '+b.metros+' m | '+b.peso+' Kg</div></label></div>';}).join('')+'</div><div class="sep"></div><div class="form-grid" style="margin-top:12px"><div class="field"><label>Área destino</label><select id="sal-area"><option value="">— Seleccione —</option>'+arOpts+'</select></div><div class="field"><label>Número de pedido</label><input id="sal-pedido" placeholder="Ej. PED-2026-001"/></div><div class="field"><label>Entrega a</label><input id="sal-persona" placeholder="Nombre de quien recibe"/></div></div><div class="btn-row" style="margin-top:16px"><button class="btn btn-primary" onclick="guardarSalida()">💾 Registrar salida</button><button class="btn" onclick="renderSalidas(document.getElementById(\'almacen-content\'))">Cancelar</button></div>';
-}
-function guardarSalida(){
-  var bobs=almStock[almSalidaLoc]||[],checks=[...document.querySelectorAll('[id^=chk-sal-]:checked')];
-  if(!checks.length){alert('Selecciona al menos una bobina.');return;}
-  var area=document.getElementById('sal-area').value,pedido=document.getElementById('sal-pedido').value.trim(),persona=document.getElementById('sal-persona').value.trim();
-  if(!area||!pedido||!persona){alert('Completa todos los campos.');return;}
-  var idxs=checks.map(function(ch){return parseInt(ch.value);}).sort(function(a,b){return b-a;});
-  idxs.forEach(function(i){bobs.splice(i,1);});
-  alert('✅ '+idxs.length+' bobina(s) a '+area+'\nPedido: '+pedido+' | Recibe: '+persona);
-  renderSalidas(document.getElementById('almacen-content'));
-}
-function renderRegresos(c){
-  almRegresosBobina=null;
-  c.innerHTML='<div class="card"><div class="card-title">🔄 Regresos</div><div class="scan-box"><div class="field"><label>🧵 ID de bobina</label><input id="reg-id" placeholder="Escanea o ingresa ID" onkeydown="if(event.key===\'Enter\')buscarBobinaRegreso()"/></div><button class="btn btn-primary" onclick="buscarBobinaRegreso()" style="height:38px">Buscar</button><button class="btn" onclick="renderRegresos(document.getElementById(\'almacen-content\'))" style="height:38px">Limpiar</button></div><div id="reg-result"></div></div>';
-}
-function buscarBobinaRegreso(){
-  var id=document.getElementById('reg-id').value.trim(),r=document.getElementById('reg-result');
-  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
-  var b=findBobina(id);
-  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
-  almRegresosBobina=Object.assign({},b);
-  r.innerHTML='<div class="result-card"><div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Descripción',b.desc)+ri('Metros',b.metros+' m')+ri('Peso original',b.peso+' Kg')+ri('Medida',b.med)+'</div><div class="sep"></div><div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap"><div class="field" style="min-width:200px"><label style="font-weight:700;color:var(--blue);font-size:13px">⚖ Nuevo peso (Kg)</label><input id="reg-nuevo-peso" type="number" step="0.01" placeholder="Nuevo peso" style="border:2px solid var(--blue2);font-size:15px"/></div><button class="btn btn-primary" onclick="imprimirEtiquetaRegreso()" style="height:38px">🖨 Imprimir etiqueta de regreso</button></div></div>';
-}
-function imprimirEtiquetaRegreso(){
-  var np=document.getElementById('reg-nuevo-peso').value.trim();
-  if(!np){alert('Ingresa el nuevo peso.');return;}
-  renderLabel(Object.assign({},almRegresosBobina,{nuevoPeso:np}),true);
-}
-
 // ADMIN
 function renderAdmin(){
   var totM=bobinas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  document.getElementById('stats-grid').innerHTML='<div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div><div class="stat"><div class="sv">'+bobinas.length+'</div><div class="sl">Bobinas esta sesión</div></div><div class="stat"><div class="sv">'+totM.toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div><div class="stat"><div class="sv">'+Object.values(almStock).reduce(function(a,v){return a+v.length;},0)+'</div><div class="sl">Bobinas en almacén</div></div>';
+  document.getElementById('stats-grid').innerHTML='<div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div><div class="stat"><div class="sv">'+bobinas.length+'</div><div class="sl">Bobinas esta sesión</div></div><div class="stat"><div class="sv">'+totM.toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div>';
   adminTab('produccion',document.querySelector('#admin-tabs .sec-tab'));
 }
 function adminTab(tab,btn){
