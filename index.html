@@ -221,6 +221,7 @@ tr:hover td{background:#f8f9fb}
       <div class="sec-tabs" id="admin-tabs">
         <button class="sec-tab active" onclick="adminTab('produccion',this)">Producción</button>
         <button class="sec-tab" onclick="adminTab('etiqueta',this)">Imprimir etiqueta</button>
+        <button class="sec-tab" onclick="adminTab('eliminar',this)">🗑 Eliminar bobina</button>
         <button class="sec-tab" onclick="adminTab('coordinadores',this)">Coordinadores</button>
         <button class="sec-tab" onclick="adminTab('operadores',this)">Operadores</button>
         <button class="sec-tab" onclick="adminTab('maquinas',this)">Máquinas</button>
@@ -699,7 +700,7 @@ function renderAdmin(){
 function adminTab(tab,btn){
   document.querySelectorAll('#admin-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
   var c=document.getElementById('admin-content');
-  if(tab==='produccion')renderAdminProduccion(c);else if(tab==='etiqueta')renderAdminEtiqueta(c);else if(tab==='coordinadores')renderCatCoordinadores(c);else if(tab==='operadores')renderAdminOperadores(c);else if(tab==='maquinas')renderAdminMaquinas(c);else if(tab==='ordenes')renderAdminOrdenes(c);
+  if(tab==='produccion')renderAdminProduccion(c);else if(tab==='etiqueta')renderAdminEtiqueta(c);else if(tab==='eliminar')renderAdminEliminar(c);else if(tab==='coordinadores')renderCatCoordinadores(c);else if(tab==='operadores')renderAdminOperadores(c);else if(tab==='maquinas')renderAdminMaquinas(c);else if(tab==='ordenes')renderAdminOrdenes(c);
 }
 function renderAdminProduccion(c){
   var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
@@ -732,6 +733,28 @@ function buscarEtiquetaAdmin(){
   if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
   var p=b.params||{};
   r.innerHTML='<div class="result-card"><div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Metros',b.metros+' m')+ri('Peso',b.peso+' Kg')+ri('Calibre frente',p.cf)+ri('Calibre reverso',p.cr)+'</div><button class="btn btn-primary" onclick="renderLabel(findBobina(\''+b.id+'\'),false)">🖨 Ver etiqueta</button></div>';
+}
+function renderAdminEliminar(c){
+  c.innerHTML='<div class="card"><div class="card-title">🗑 Eliminar bobina por ID</div><div class="alert alert-warn" style="display:block;margin-bottom:16px">⚠ Esta acción es permanente y no se puede deshacer. Úsala solo para corregir errores de captura.</div><div class="search-box"><div class="field"><label>ID de bobina</label><input id="adm-del-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')buscarEliminarAdmin()"/></div><button class="btn btn-primary" onclick="buscarEliminarAdmin()" style="height:38px">Buscar</button></div><div id="adm-del-result"></div></div>';
+}
+function buscarEliminarAdmin(){
+  var id=document.getElementById('adm-del-id').value.trim(),r=document.getElementById('adm-del-result');
+  if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
+  var b=findBobina(id);
+  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
+  var p=b.params||{};
+  r.innerHTML='<div class="result-card"><div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Fecha',b.fecha)+ri('Hora',b.hora)+ri('Metros',b.metros+' m',true)+ri('Peso',b.peso+' Kg',true)+ri('Descripción',b.desc)+'</div><button class="btn btn-danger" onclick="eliminarBobinaAdmin(\''+b.id+'\')">🗑 Eliminar esta bobina</button></div>';
+}
+function eliminarBobinaAdmin(id){
+  var b=findBobina(id);if(!b)return;
+  if(!confirm('¿Seguro que quieres eliminar la bobina '+id+'? Esta acción no se puede deshacer.'))return;
+  bobinas=bobinas.filter(function(x){return String(x.id).toUpperCase()!==String(id).toUpperCase();});
+  if(lastSavedBobina&&String(lastSavedBobina.id).toUpperCase()===String(id).toUpperCase())lastSavedBobina=null;
+  var numId=id.replace(/^ZX-/i,'');
+  apiFetch('/bobbins/'+numId,{method:'DELETE'}).catch(function(){console.warn('No se pudo eliminar en el servidor (puede que no exista ese endpoint o esté sin conexión). Se eliminó localmente.');});
+  document.getElementById('adm-del-result').innerHTML='<div class="alert alert-ok" style="display:block">✅ Bobina '+id+' eliminada.</div>';
+  document.getElementById('adm-del-id').value='';
+  renderAdmin();
 }
 function renderAdminOperadores(c){
   c.innerHTML='<div class="card"><div class="card-title">👷 Operadores</div><div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar desde API</button></div></div>';
