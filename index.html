@@ -124,7 +124,10 @@ tr:hover td{background:#f8f9fb}
       <button onclick="showView('consulta',this)">Consulta</button>
       <button onclick="showView('admin',this)">Administrador</button>
     </nav>
-    <div style="font-size:12px;color:#ffffff66">Ztela ZX</div>
+    <div style="display:flex;align-items:center;gap:10px;font-size:12px">
+      <span id="conn-status" style="font-weight:600;color:#ffe08a">🟡 Conectando...</span>
+      <button onclick="reconectarServidor()" style="background:#ffffff1a;border:1px solid #ffffff33;color:#fff;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px">🔄 Reintentar</button>
+    </div>
   </header>
   <main>
     <div id="view-operador">
@@ -289,11 +292,22 @@ setTimeout(function(){
 },2000);
 
 var API='http://192.168.43.170/api';
+var apiConnected=null;
 function apiFetch(path,opts){
   opts=opts||{};
   var h={'Content-Type':'application/json'};
-  return fetch(API+path,Object.assign({},opts,{headers:Object.assign(h,opts.headers||{})}))
-    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Error');return d;});});
+  var ctrl=new AbortController();
+  var timer=setTimeout(function(){ctrl.abort();},5000);
+  return fetch(API+path,Object.assign({},opts,{headers:Object.assign(h,opts.headers||{}),signal:ctrl.signal}))
+    .then(function(r){clearTimeout(timer);return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Error');return d;});})
+    .catch(function(e){clearTimeout(timer);throw e;});
+}
+function setConnStatus(ok){
+  apiConnected=ok;
+  var el=document.getElementById('conn-status');
+  if(!el)return;
+  el.innerHTML=ok?'🟢 Conectado al servidor':'🔴 Modo local (sin conexión al servidor)';
+  el.style.color=ok?'#8ef0a8':'#ffb4b4';
 }
 
 var FB_MACHINES=[{id:'EXT001'},{id:'EXT002'},{id:'EXT003'},{id:'EXT004'},{id:'EXT005'},{id:'EXT006'}];
@@ -347,10 +361,18 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 function hideAlerts(){['alert-sel','alert-metro','alert-req','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
 
 function initApp(){
-  apiFetch('/machines').then(function(d){buildMachTabs(d);}).catch(function(){buildMachTabs(FB_MACHINES);});
-  apiFetch('/operators').then(function(d){fillOps(d);}).catch(function(){fillOps(FB_OPERATORS);});
-  apiFetch('/work-orders').then(function(d){fillOTs(d);}).catch(function(){fillOTs(FB_ORDERS);});
+  var pMach=apiFetch('/machines').then(function(d){buildMachTabs(d);return true;}).catch(function(){buildMachTabs(FB_MACHINES);return false;});
+  var pOps=apiFetch('/operators').then(function(d){fillOps(d);return true;}).catch(function(){fillOps(FB_OPERATORS);return false;});
+  var pOts=apiFetch('/work-orders').then(function(d){fillOTs(d);return true;}).catch(function(){fillOTs(FB_ORDERS);return false;});
+  Promise.all([pMach,pOps,pOts]).then(function(results){
+    setConnStatus(results.some(function(r){return r;}));
+  });
   populateCoord();renderAdmin();
+}
+function reconectarServidor(){
+  var el=document.getElementById('conn-status');
+  if(el){el.innerHTML='🟡 Conectando...';el.style.color='#ffe08a';}
+  initApp();
 }
 function buildMachTabs(data){
   var mt=document.getElementById('mach-tabs');mt.innerHTML='';
@@ -495,13 +517,14 @@ function guardarEImprimirBobina(){
   var bobLocal={id:nextZxId(),num:bobinas.filter(function(b){return b.ot===otTxt&&b.mach===curMach;}).length+1,ot:otTxt,operario:opEl.options[opEl.selectedIndex].textContent,mach:curMach,fecha:fmtDate(hoy),hora:nowTime(),lote:fmtLote(hoy),metros:metros,peso:document.getElementById('f-peso').value,obs:document.getElementById('f-obs').value,prod:document.getElementById('f-prod').value,desc:document.getElementById('f-desc').value,med:document.getElementById('f-med').value,col:document.getElementById('f-col').value,rem:document.getElementById('f-rem').value,coordinador:coordEl.options[coordEl.selectedIndex]?coordEl.options[coordEl.selectedIndex].textContent:'—',params:params};
   apiFetch('/bobbins',{method:'POST',body:JSON.stringify({work_order_id:curWOId,machine_id:curMach,operator_id:parseInt(opEl.value),meters:metros,weight_kg:parseFloat(document.getElementById('f-peso').value)||0,observations:document.getElementById('f-obs').value||null})})
     .then(function(bobRes){
+      setConnStatus(true);
       bobLocal.id='ZX-'+bobRes.id;bobLocal.num=bobRes.bobbin_number;
       if(bobRes.production_date)bobLocal.fecha=bobRes.production_date.split('-').reverse().join('-');
       if(bobRes.production_time)bobLocal.hora=bobRes.production_time;
       if(bobRes.lot_code)bobLocal.lote=bobRes.lot_code;
       return apiFetch('/process-params',{method:'POST',body:JSON.stringify({bobbin_id:bobRes.id,measurement_number:1,measure:parseFloat(document.getElementById('p-med').value)||null,flat_width:parseFloat(document.getElementById('p-ancho').value)||null,horizontal_shrinkage:parseFloat(document.getElementById('p-eh').value)||null,front_gauge:parseFloat(document.getElementById('p-cf').value)||null,vertical_shrinkage:parseFloat(document.getElementById('p-ev').value)||null,back_gauge:parseFloat(document.getElementById('p-cr').value)||null,machine_direction_shrinkage:parseFloat(document.getElementById('p-edm').value)||null,delamination:desVal==='si'?true:desVal==='no'?false:null,tunnel_temperature:parseFloat(document.getElementById('p-temp').value)||null})});
     })
-    .catch(function(){console.warn('Guardando localmente.');})
+    .catch(function(){setConnStatus(false);console.warn('No se pudo guardar en el servidor. Guardando localmente.');})
     .then(function(){
       bobinas.push(bobLocal);lastSavedBobina=bobLocal;
       var al=document.getElementById('alert-save');al.style.display='block';setTimeout(function(){al.style.display='none';},2500);
