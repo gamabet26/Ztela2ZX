@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Ztela ZX</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+<script src="/vendor/jsbarcode.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
 :root{--blue:#0D3B8C;--blue2:#1a56c4;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280}
@@ -116,6 +116,19 @@ tr:hover td{background:#f8f9fb}
   <canvas id="circuit"></canvas>
   <div class="zx-logo"><div class="zx-text">ZX</div><div class="zx-sub">ZTELA</div></div>
 </div>
+<div id="login-screen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:500;align-items:center;justify-content:center">
+  <div class="card" style="width:320px;max-width:90vw">
+    <div class="card-title">🔒 Iniciar sesión</div>
+    <div id="login-alert" class="alert alert-err">Usuario o contraseña incorrectos.</div>
+    <div class="form-grid">
+      <div class="field"><label>Usuario</label><input id="login-user" type="text" onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/></div>
+      <div class="field"><label>Contraseña</label><input id="login-pass" type="password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="login-btn" onclick="doLogin()" style="flex:1">Entrar</button>
+    </div>
+  </div>
+</div>
 <div id="app">
   <header>
     <div class="logo-h">ZX <span>Ztela</span></div>
@@ -127,6 +140,8 @@ tr:hover td{background:#f8f9fb}
     <div style="display:flex;align-items:center;gap:10px;font-size:12px">
       <span id="conn-status" style="font-weight:600;color:#ffe08a">🟡 Conectando...</span>
       <button onclick="reconectarServidor()" style="background:#ffffff1a;border:1px solid #ffffff33;color:#fff;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px">🔄 Reintentar</button>
+      <span id="user-badge" style="color:#ffffffcc"></span>
+      <button onclick="doLogout()" style="background:#ffffff1a;border:1px solid #ffffff33;color:#fff;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:11px">Cerrar sesión</button>
     </div>
   </header>
   <main>
@@ -136,6 +151,7 @@ tr:hover td{background:#f8f9fb}
         <div class="card-title">📋 Registro de producción — <span id="mach-label">EXT001</span></div>
         <div id="alert-sel" class="alert alert-warn">⚠ Seleccione el Operario y la Orden de Trabajo.</div>
         <div id="alert-metro" class="alert alert-err">🚫 Máximo 2,000 metros por bobina.</div>
+        <div id="alert-peso" class="alert alert-err">🚫 Máximo 3,000 Kg por bobina.</div>
         <div id="alert-req" class="alert alert-err">🚫 Completa todos los campos obligatorios: Metros totales, Peso y todos los Parámetros de proceso.</div>
         <div id="alert-save" class="alert alert-ok">✅ Bobina guardada correctamente.</div>
         <div class="form-grid">
@@ -181,7 +197,7 @@ tr:hover td{background:#f8f9fb}
           <div class="field"><label>Hora</label><input id="f-hora" readonly class="auto"/></div>
           <div class="field"><label>Lote</label><input id="f-lote" readonly class="auto"/></div>
           <div class="field"><label>Metros totales ⚠ máx 2,000</label><input id="f-metros" type="number" min="0" max="2000" placeholder="0" oninput="validarMetros(this)"/></div>
-          <div class="field"><label>Peso (Kg)</label><input id="f-peso" type="number" placeholder="0.0" step="0.01"/></div>
+          <div class="field"><label>Peso (Kg) ⚠ máx 3,000</label><input id="f-peso" type="number" min="0" max="3000" placeholder="0.0" step="0.01" oninput="validarPeso(this)"/></div>
           <div class="field"><label>Observaciones</label><textarea id="f-obs" placeholder="Opcional..."></textarea></div>
         </div>
         <div class="sep"></div>
@@ -288,18 +304,32 @@ tr:hover td{background:#f8f9fb}
 setTimeout(function(){
   var s=document.getElementById('splash');
   s.style.transition='opacity .6s';s.style.opacity='0';
-  setTimeout(function(){s.style.display='none';document.getElementById('app').style.display='flex';initApp();if(window.stopCircuitAnim)window.stopCircuitAnim();},600);
+  setTimeout(function(){
+    s.style.display='none';
+    if(window.stopCircuitAnim)window.stopCircuitAnim();
+    if(authToken){showApp();}else{document.getElementById('login-screen').style.display='flex';}
+  },600);
 },2000);
 
-var API='http://192.168.43.170/api';
+var API='/api';
 var apiConnected=null;
+var authToken=localStorage.getItem('ztela_token')||null;
+var authUser=(function(){try{return JSON.parse(localStorage.getItem('ztela_user')||'null');}catch(e){return null;}})();
 function apiFetch(path,opts){
   opts=opts||{};
   var h={'Content-Type':'application/json'};
+  if(authToken)h['Authorization']='Bearer '+authToken;
   var ctrl=new AbortController();
   var timer=setTimeout(function(){ctrl.abort();},5000);
   return fetch(API+path,Object.assign({},opts,{headers:Object.assign(h,opts.headers||{}),signal:ctrl.signal}))
-    .then(function(r){clearTimeout(timer);return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Error');return d;});})
+    .then(function(r){
+      clearTimeout(timer);
+      return r.json().then(function(d){
+        if(r.status===401){doLogout();throw new Error('Sesión expirada');}
+        if(!r.ok)throw new Error(d.error||'Error');
+        return d;
+      });
+    })
     .catch(function(e){clearTimeout(timer);throw e;});
 }
 function setConnStatus(ok){
@@ -308,6 +338,38 @@ function setConnStatus(ok){
   if(!el)return;
   el.innerHTML=ok?'🟢 Conectado al servidor':'🔴 Modo local (sin conexión al servidor)';
   el.style.color=ok?'#8ef0a8':'#ffb4b4';
+}
+function doLogin(){
+  var user=document.getElementById('login-user').value.trim();
+  var pass=document.getElementById('login-pass').value;
+  var btn=document.getElementById('login-btn'),al=document.getElementById('login-alert');
+  al.style.display='none';
+  if(!user||!pass){al.textContent='Ingresa usuario y contraseña.';al.style.display='block';return;}
+  btn.disabled=true;btn.textContent='Entrando...';
+  fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:user,password:pass})})
+    .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Error');return d;});})
+    .then(function(d){
+      authToken=d.token;authUser=d.user;
+      localStorage.setItem('ztela_token',authToken);
+      localStorage.setItem('ztela_user',JSON.stringify(authUser));
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('login-user').value='';document.getElementById('login-pass').value='';
+      showApp();
+    })
+    .catch(function(e){al.textContent=e.message||'Usuario o contraseña incorrectos.';al.style.display='block';})
+    .then(function(){btn.disabled=false;btn.textContent='Entrar';});
+}
+function doLogout(){
+  authToken=null;authUser=null;
+  localStorage.removeItem('ztela_token');localStorage.removeItem('ztela_user');
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+}
+function showApp(){
+  document.getElementById('app').style.display='flex';
+  var ub=document.getElementById('user-badge');
+  if(ub)ub.textContent=authUser?('👤 '+authUser.username+' ('+authUser.role+')'):'';
+  initApp();
 }
 
 var FB_MACHINES=[{id:'EXT001'},{id:'EXT002'},{id:'EXT003'},{id:'EXT004'},{id:'EXT005'},{id:'EXT006'}];
@@ -357,8 +419,17 @@ function nowTime(){var n=new Date();return String(n.getHours()).padStart(2,'0')+
 function parseBoDate(b){var p=b.fecha.split('-');var t=(b.hora||'00:00:00').split(':');return new Date(p[2],p[1]-1,p[0],t[0],t[1],t[2]||0);}
 function ri(label,val,hl){return'<div class="result-item'+(hl?' highlight':'')+'"><div class="ri-label">'+label+'</div><div class="ri-val">'+(val||'—')+'</div></div>';}
 function findBobina(id){return bobinas.find(function(b){return String(b.id).toUpperCase()===String(id).toUpperCase();})||null;}
+function normId(id){return String(id).replace(/^ZX-/i,'').toUpperCase();}
+function dispId(id){return /^ZX-/i.test(String(id))?String(id):'ZX-'+id;}
+function fmtServerDate(d){
+  if(!d)return '—';
+  var datePart=String(d).split('T')[0];
+  var p=datePart.split('-');
+  if(p.length!==3)return String(d);
+  return p[2]+'-'+p[1]+'-'+p[0];
+}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
-function hideAlerts(){['alert-sel','alert-metro','alert-req','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
+function hideAlerts(){['alert-sel','alert-metro','alert-peso','alert-req','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
 
 function initApp(){
   var pMach=apiFetch('/machines').then(function(d){buildMachTabs(d);return true;}).catch(function(){buildMachTabs(FB_MACHINES);return false;});
@@ -471,7 +542,7 @@ function initBobina(){
   document.getElementById('f-id').value='—';
   document.getElementById('f-fecha').value=fmtDate(hoy);document.getElementById('f-hora').value=nowTime();
   document.getElementById('f-lote').value=fmtLote(hoy);document.getElementById('f-metros').value='';
-  document.getElementById('f-metros').style.borderColor='';document.getElementById('f-peso').value='';document.getElementById('f-obs').value='';
+  document.getElementById('f-metros').style.borderColor='';document.getElementById('f-peso').value='';document.getElementById('f-peso').style.borderColor='';document.getElementById('f-obs').value='';
   if(!curWOId||!formActive){document.getElementById('f-num').value='—';return;}
   apiFetch('/bobbins/next-number?work_order_id='+curWOId+'&machine_id='+curMach)
     .then(function(r){document.getElementById('f-num').value=r.next_number;})
@@ -495,10 +566,17 @@ function validarMetros(inp){
   if(v>2000){document.getElementById('alert-metro').style.display='block';inp.style.borderColor='#e63946';}
   else{document.getElementById('alert-metro').style.display='none';inp.style.borderColor='';}
 }
+function validarPeso(inp){
+  var v=parseFloat(inp.value);
+  if(v>3000){document.getElementById('alert-peso').style.display='block';inp.style.borderColor='#e63946';}
+  else{document.getElementById('alert-peso').style.display='none';inp.style.borderColor='';}
+}
 function guardarEImprimirBobina(){
   if(!formActive){document.getElementById('alert-sel').style.display='block';return;}
   var metros=parseFloat(document.getElementById('f-metros').value)||0;
   if(metros>2000){document.getElementById('alert-metro').style.display='block';return;}
+  var peso=parseFloat(document.getElementById('f-peso').value)||0;
+  if(peso>3000){document.getElementById('alert-peso').style.display='block';return;}
   var camposReq=['f-metros','f-peso','p-med','p-ancho','p-eh','p-cf','p-ev','p-cr','p-edm','p-des','p-temp'];
   var faltantes=false;
   camposReq.forEach(function(id){
@@ -519,7 +597,7 @@ function guardarEImprimirBobina(){
     .then(function(bobRes){
       setConnStatus(true);
       bobLocal.id='ZX-'+bobRes.id;bobLocal.num=bobRes.bobbin_number;
-      if(bobRes.production_date)bobLocal.fecha=bobRes.production_date.split('-').reverse().join('-');
+      if(bobRes.production_date)bobLocal.fecha=fmtServerDate(bobRes.production_date);
       if(bobRes.production_time)bobLocal.hora=bobRes.production_time;
       if(bobRes.lot_code)bobLocal.lote=bobRes.lot_code;
       return apiFetch('/process-params',{method:'POST',body:JSON.stringify({bobbin_id:bobRes.id,measurement_number:1,measure:parseFloat(document.getElementById('p-med').value)||null,flat_width:parseFloat(document.getElementById('p-ancho').value)||null,horizontal_shrinkage:parseFloat(document.getElementById('p-eh').value)||null,front_gauge:parseFloat(document.getElementById('p-cf').value)||null,vertical_shrinkage:parseFloat(document.getElementById('p-ev').value)||null,back_gauge:parseFloat(document.getElementById('p-cr').value)||null,machine_direction_shrinkage:parseFloat(document.getElementById('p-edm').value)||null,delamination:desVal==='si'?true:desVal==='no'?false:null,tunnel_temperature:parseFloat(document.getElementById('p-temp').value)||null})});
@@ -579,8 +657,8 @@ function openListModal(){
   document.getElementById('modal-list').classList.add('open');
   var bobs=bobinas.filter(function(b){return b.ot===otNum&&b.mach===curMach;});
   apiFetch('/bobbins?work_order_id='+curWOId+'&machine_id='+curMach).then(function(api){
-    var ids=new Set(bobinas.map(function(b){return String(b.id);}));
-    api.forEach(function(b){if(!ids.has(String(b.id)))bobs.push({id:b.id,num:b.bobbin_number,operario:b.operator_name,fecha:b.production_date?b.production_date.split('-').reverse().join('-'):'—',hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}});});
+    var ids=new Set(bobinas.map(function(b){return normId(b.id);}));
+    api.forEach(function(b){if(!ids.has(normId(b.id)))bobs.push({id:dispId(b.id),num:b.bobbin_number,operario:b.operator_name,fecha:fmtServerDate(b.production_date),hora:b.production_time||'—',metros:b.meters,peso:b.weight_kg,ot:otNum,mach:curMach,params:{}});});
   }).catch(function(){}).then(function(){renderListModal(otNum,'',bobs);});
 }
 function renderListModal(ot,filtroOp,bobs){
@@ -613,16 +691,38 @@ function ejecutarConsultaMaquina(){
   var fi=document.getElementById('cq-fi').value,hi=document.getElementById('cq-hi').value||'00:00',ff=document.getElementById('cq-ff').value,hf=document.getElementById('cq-hf').value||'23:59';
   var mmin=document.getElementById('cq-mmin').value,mmax=document.getElementById('cq-mmax').value,pmin=document.getElementById('cq-pmin').value,pmax=document.getElementById('cq-pmax').value;
   var desde=fi?new Date(fi+'T'+hi+':00'):null,hasta=ff?new Date(ff+'T'+hf+':00'):null;
-  var rows=bobinas.filter(function(b){
-    if(maq&&b.mach!==maq)return false;if(lote&&b.lote!==lote)return false;if(ot&&b.ot!==ot)return false;
-    if(desde&&parseBoDate(b)<desde)return false;if(hasta&&parseBoDate(b)>hasta)return false;
-    if(mmin!==''&&(parseFloat(b.metros)||0)<parseFloat(mmin))return false;if(mmax!==''&&(parseFloat(b.metros)||0)>parseFloat(mmax))return false;
-    if(pmin!==''&&(parseFloat(b.peso)||0)<parseFloat(pmin))return false;if(pmax!==''&&(parseFloat(b.peso)||0)>parseFloat(pmax))return false;
-    return true;
-  });
-  lastConsultaMaquina=rows;
-  document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
-  renderConsultaMaquinaResult(rows);
+  var r=document.getElementById('cq-result');
+  function filtrarYMostrar(){
+    var rows=bobinas.filter(function(b){
+      if(maq&&b.mach!==maq)return false;if(lote&&b.lote!==lote)return false;if(ot&&b.ot!==ot)return false;
+      if(desde&&parseBoDate(b)<desde)return false;if(hasta&&parseBoDate(b)>hasta)return false;
+      if(mmin!==''&&(parseFloat(b.metros)||0)<parseFloat(mmin))return false;if(mmax!==''&&(parseFloat(b.metros)||0)>parseFloat(mmax))return false;
+      if(pmin!==''&&(parseFloat(b.peso)||0)<parseFloat(pmin))return false;if(pmax!==''&&(parseFloat(b.peso)||0)>parseFloat(pmax))return false;
+      return true;
+    });
+    lastConsultaMaquina=rows;
+    document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
+    renderConsultaMaquinaResult(rows);
+  }
+  // Si hay Máquina + OT específicas, el servidor sí puede contestar esta combinación exacta
+  // (GET /api/bobbins exige ambos parámetros — no soporta búsquedas más abiertas todavía).
+  if(maq&&ot){
+    var stEl=document.getElementById('sel-ot'),woId=null;
+    for(var i=0;i<stEl.options.length;i++){if(stEl.options[i].textContent===ot){woId=stEl.options[i].value;break;}}
+    if(woId){
+      r.innerHTML='<div class="not-found">Consultando servidor...</div>';
+      apiFetch('/bobbins?work_order_id='+woId+'&machine_id='+maq).then(function(api){
+        var ids=new Set(bobinas.map(function(b){return normId(b.id);}));
+        api.forEach(function(b){
+          if(!ids.has(normId(b.id))){
+            bobinas.push({id:dispId(b.id),num:b.bobbin_number,operario:b.operator_name,fecha:fmtServerDate(b.production_date),hora:b.production_time||'—',lote:b.lot_code||'—',metros:b.meters,peso:b.weight_kg,obs:b.observations||'',ot:ot,mach:maq,desc:'',prod:'',med:'',col:'',rem:'',params:{}});
+          }
+        });
+      }).catch(function(){}).then(filtrarYMostrar);
+      return;
+    }
+  }
+  filtrarYMostrar();
 }
 function renderConsultaMaquinaResult(rows){
   var r=document.getElementById('cq-result');
