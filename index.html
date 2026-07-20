@@ -65,15 +65,16 @@ tr:hover td{background:#f8f9fb}
   #label-content{position:static;margin:0 auto}
   .label-print-actions{display:none !important}
 }
-.label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}
-.lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}
-.lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}
-.lh .mach{font-size:16px;font-weight:700}
-.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}
+.label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px;position:relative;overflow:hidden;color:#111}
+.label-wrap::before{content:'';position:absolute;inset:0;background-image:url('data:image/png;base64,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');background-repeat:no-repeat;background-position:center;background-size:220px auto;pointer-events:none;z-index:0}
+.lh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px;position:relative;z-index:1}
+.lh .brand img{height:44px;display:block}
+.lh .mach{font-size:16px;font-weight:700;color:#111}
+.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px;position:relative;z-index:1}
 .label-grid .lf{display:flex;flex-direction:column}
 .label-grid .lf span:first-child{font-size:10px;color:#888}
-.label-grid .lf span:last-child{font-weight:600;font-size:13px}
-.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}
+.label-grid .lf span:last-child{font-weight:600;font-size:13px;color:#111}
+.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd;position:relative;z-index:1}
 .modal-bg{position:fixed;inset:0;background:#0007;z-index:100;display:none;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:12px;padding:24px;max-width:700px;width:95%;max-height:85vh;overflow-y:auto}
@@ -126,6 +127,9 @@ tr:hover td{background:#f8f9fb}
     </div>
     <div class="btn-row">
       <button class="btn btn-primary" id="login-btn" onclick="doLogin()" style="flex:1">Entrar</button>
+    </div>
+    <div style="text-align:center;margin-top:12px">
+      <a href="javascript:void(0)" onclick="trabajarSinConexion()" style="font-size:12px;color:var(--muted);text-decoration:underline">Trabajar sin conexión (modo local)</a>
     </div>
   </div>
 </div>
@@ -241,6 +245,7 @@ tr:hover td{background:#f8f9fb}
         <button class="sec-tab active" onclick="adminTab('produccion',this)">Producción</button>
         <button class="sec-tab" onclick="adminTab('etiqueta',this)">Imprimir etiqueta</button>
         <button class="sec-tab" onclick="adminTab('eliminar',this)">🗑 Eliminar bobina</button>
+        <button class="sec-tab" onclick="adminTab('usuarios',this)">👤 Usuarios</button>
         <button class="sec-tab" onclick="adminTab('coordinadores',this)">Coordinadores</button>
         <button class="sec-tab" onclick="adminTab('operadores',this)">Operadores</button>
         <button class="sec-tab" onclick="adminTab('maquinas',this)">Máquinas</button>
@@ -313,9 +318,11 @@ setTimeout(function(){
 
 var API='/api';
 var apiConnected=null;
+var offlineMode=false;
 var authToken=localStorage.getItem('ztela_token')||null;
 var authUser=(function(){try{return JSON.parse(localStorage.getItem('ztela_user')||'null');}catch(e){return null;}})();
 function apiFetch(path,opts){
+  if(offlineMode)return Promise.reject(new Error('Modo local — sin servidor'));
   opts=opts||{};
   var h={'Content-Type':'application/json'};
   if(authToken)h['Authorization']='Bearer '+authToken;
@@ -336,8 +343,14 @@ function setConnStatus(ok){
   apiConnected=ok;
   var el=document.getElementById('conn-status');
   if(!el)return;
+  if(offlineMode){el.innerHTML='⚪ Modo local (sin servidor, a propósito)';el.style.color='#cbd5e1';return;}
   el.innerHTML=ok?'🟢 Conectado al servidor':'🔴 Modo local (sin conexión al servidor)';
   el.style.color=ok?'#8ef0a8':'#ffb4b4';
+}
+function trabajarSinConexion(){
+  offlineMode=true;authToken=null;authUser={username:'local',role:'dev'};
+  document.getElementById('login-screen').style.display='none';
+  showApp();
 }
 function doLogin(){
   var user=document.getElementById('login-user').value.trim();
@@ -346,6 +359,7 @@ function doLogin(){
   al.style.display='none';
   if(!user||!pass){al.textContent='Ingresa usuario y contraseña.';al.style.display='block';return;}
   btn.disabled=true;btn.textContent='Entrando...';
+  offlineMode=false;
   fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:user,password:pass})})
     .then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||'Error');return d;});})
     .then(function(d){
@@ -356,11 +370,11 @@ function doLogin(){
       document.getElementById('login-user').value='';document.getElementById('login-pass').value='';
       showApp();
     })
-    .catch(function(e){al.textContent=e.message||'Usuario o contraseña incorrectos.';al.style.display='block';})
+    .catch(function(e){al.textContent=(e.message==='Failed to fetch')?'No se pudo conectar al servidor. Prueba "Trabajar sin conexión" si solo quieres desarrollar.':(e.message||'Usuario o contraseña incorrectos.');al.style.display='block';})
     .then(function(){btn.disabled=false;btn.textContent='Entrar';});
 }
 function doLogout(){
-  authToken=null;authUser=null;
+  authToken=null;authUser=null;offlineMode=false;
   localStorage.removeItem('ztela_token');localStorage.removeItem('ztela_user');
   document.getElementById('app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
@@ -427,6 +441,15 @@ function fmtServerDate(d){
   var p=datePart.split('-');
   if(p.length!==3)return String(d);
   return p[2]+'-'+p[1]+'-'+p[0];
+}
+function mapApiBobina(b){
+  return{id:dispId(b.id),num:b.bobbin_number,operario:b.operator_name,fecha:fmtServerDate(b.production_date),hora:b.production_time||'—',lote:b.lot_code||'—',metros:b.meters,peso:b.weight_kg,obs:b.observations||'',ot:b.ot_number||'—',mach:b.machine_id||'—',desc:b.description||'',prod:b.product_code||'',med:b.measure||'',col:b.color||'',rem:b.remision||'',coordinador:'—',params:{}};
+}
+function mergeIntoLocal(apiRows){
+  var ids=new Set(bobinas.map(function(b){return normId(b.id);}));
+  (apiRows||[]).forEach(function(b){
+    if(!ids.has(normId(b.id))){bobinas.push(mapApiBobina(b));ids.add(normId(b.id));}
+  });
 }
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function hideAlerts(){['alert-sel','alert-metro','alert-peso','alert-req','alert-save'].forEach(function(id){document.getElementById(id).style.display='none';});}
@@ -619,15 +642,16 @@ function imprimirEtiqueta(){
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Etiqueta</title><style>'
     +'*{box-sizing:border-box;margin:0;padding:0;font-family:\'Segoe UI\',Arial,sans-serif}'
     +'body{padding:14px}'
-    +'.label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px}'
-    +'.lh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px}'
-    +'.lh .brand{font-size:22px;font-weight:900;color:#0D3B8C}'
-    +'.lh .mach{font-size:16px;font-weight:700}'
-    +'.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px}'
+    +'.label-wrap{background:#fff;border:1.5px solid #ccc;border-radius:8px;padding:16px;max-width:520px;font-size:12px;position:relative;overflow:hidden;color:#111}'
+    +'.label-wrap::before{content:\'\';position:absolute;inset:0;background-image:url(\'data:image/png;base64,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\');background-repeat:no-repeat;background-position:center;background-size:220px auto;pointer-events:none;z-index:0}'
+    +'.lh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:1px solid #ddd;padding-bottom:8px;position:relative;z-index:1}'
+    +'.lh .brand img{height:44px;display:block}'
+    +'.lh .mach{font-size:16px;font-weight:700;color:#111}'
+    +'.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-bottom:8px;position:relative;z-index:1}'
     +'.label-grid .lf{display:flex;flex-direction:column}'
     +'.label-grid .lf span:first-child{font-size:10px;color:#888}'
-    +'.label-grid .lf span:last-child{font-weight:600;font-size:13px}'
-    +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd}'
+    +'.label-grid .lf span:last-child{font-weight:600;font-size:13px;color:#111}'
+    +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd;position:relative;z-index:1}'
     +'@page{margin:8mm}'
     +'@media print{html,body{height:auto}}'
     +'</style></head><body><div class="label-wrap">'+lc.innerHTML+'</div>'
@@ -646,7 +670,7 @@ function renderLabel(b,esRegreso){
   var lp=document.getElementById('label-print'),lc=document.getElementById('label-content');
   var p=b.params||{};
   var pesoHtml=esRegreso?'<div class="lf"><span>Peso original</span><span>'+b.peso+' Kg</span></div><div class="lf" style="background:#fef9c3;padding:4px;border-radius:4px"><span style="color:#92400e">⚖ Nuevo peso</span><span style="color:#92400e">'+b.nuevoPeso+' Kg</span></div>':'<div class="lf"><span>Peso</span><span>'+b.peso+' Kg</span></div>';
-  lc.innerHTML='<div class="lh"><div class="brand">z<span style="color:#e63946">∪</span>bex</div><div class="mach">'+b.mach+(esRegreso?' [REGRESO]':'')+'</div></div><div class="label-grid"><div class="lf"><span>ID bobina</span><span>'+b.id+'</span></div><div class="lf"><span>Remisión</span><span>'+b.rem+'</span></div><div class="lf"><span>Num bobina</span><span>'+b.num+'</span></div><div class="lf"><span>Fecha</span><span>'+b.fecha+'</span></div><div class="lf"><span>Lote</span><span>'+b.lote+'</span></div><div class="lf"><span>Medida</span><span>'+b.med+'</span></div>'+pesoHtml+'<div class="lf"><span>Calibre frente</span><span>'+(p.cf||'—')+'</span></div><div class="lf"><span>Color</span><span>'+b.col+'</span></div><div class="lf"><span>Calibre reverso</span><span>'+(p.cr||'—')+'</span></div><div class="lf"><span>Enc. ancho plano</span><span>'+(p.ancho||'—')+'</span></div><div class="lf"><span>Enc. Dir. Maq.</span><span>'+(p.edm||'—')+'</span></div><div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>'+b.desc+'</span></div><div class="lf"><span>Turno</span><span>'+b.hora+'</span></div><div class="lf"><span>Cod. prod.</span><span>'+b.prod+'</span></div><div class="lf"><span>Metros</span><span>'+b.metros+' m</span></div><div class="lf" style="grid-column:1/-1"><span>Operario</span><span>'+b.operario+'</span></div>'+(b.obs?'<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>'+b.obs+'</span></div>':'')+'</div><div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">'+b.id+'</div></div>';
+  lc.innerHTML='<div class="lh"><div class="brand"><img src="data:image/png;base64,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" alt="zubex"/></div><div class="mach">'+b.mach+(esRegreso?' [REGRESO]':'')+'</div></div><div class="label-grid"><div class="lf"><span>ID bobina</span><span>'+b.id+'</span></div><div class="lf"><span>Remisión</span><span>'+b.rem+'</span></div><div class="lf"><span>Num bobina</span><span>'+b.num+'</span></div><div class="lf"><span>Fecha</span><span>'+b.fecha+'</span></div><div class="lf"><span>Lote</span><span>'+b.lote+'</span></div><div class="lf"><span>Medida</span><span>'+b.med+'</span></div>'+pesoHtml+'<div class="lf"><span>Calibre frente</span><span>'+(p.cf||'—')+'</span></div><div class="lf"><span>Color</span><span>'+b.col+'</span></div><div class="lf"><span>Calibre reverso</span><span>'+(p.cr||'—')+'</span></div><div class="lf"><span>Enc. ancho plano</span><span>'+(p.ancho||'—')+'</span></div><div class="lf"><span>Enc. Dir. Maq.</span><span>'+(p.edm||'—')+'</span></div><div class="lf" style="grid-column:1/-1"><span>Descripción</span><span>'+b.desc+'</span></div><div class="lf"><span>Turno</span><span>'+b.hora+'</span></div><div class="lf"><span>Cod. prod.</span><span>'+b.prod+'</span></div><div class="lf"><span>Metros</span><span>'+b.metros+' m</span></div><div class="lf" style="grid-column:1/-1"><span>Operario</span><span>'+b.operario+'</span></div>'+(b.obs?'<div class="lf" style="grid-column:1/-1"><span>Observaciones</span><span>'+b.obs+'</span></div>':'')+'</div><div class="label-bar"><svg id="barcode-svg"></svg><div style="font-size:11px;margin-top:4px;letter-spacing:2px">'+b.id+'</div></div>';
   lp.style.display='flex';
   try{JsBarcode('#barcode-svg',String(b.id),{format:'CODE128',width:2,height:50,displayValue:false,margin:0});}catch(e){}
 }
@@ -704,25 +728,20 @@ function ejecutarConsultaMaquina(){
     document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
     renderConsultaMaquinaResult(rows);
   }
-  // Si hay Máquina + OT específicas, el servidor sí puede contestar esta combinación exacta
-  // (GET /api/bobbins exige ambos parámetros — no soporta búsquedas más abiertas todavía).
-  if(maq&&ot){
-    var stEl=document.getElementById('sel-ot'),woId=null;
-    for(var i=0;i<stEl.options.length;i++){if(stEl.options[i].textContent===ot){woId=stEl.options[i].value;break;}}
-    if(woId){
-      r.innerHTML='<div class="not-found">Consultando servidor...</div>';
-      apiFetch('/bobbins?work_order_id='+woId+'&machine_id='+maq).then(function(api){
-        var ids=new Set(bobinas.map(function(b){return normId(b.id);}));
-        api.forEach(function(b){
-          if(!ids.has(normId(b.id))){
-            bobinas.push({id:dispId(b.id),num:b.bobbin_number,operario:b.operator_name,fecha:fmtServerDate(b.production_date),hora:b.production_time||'—',lote:b.lot_code||'—',metros:b.meters,peso:b.weight_kg,obs:b.observations||'',ot:ot,mach:maq,desc:'',prod:'',med:'',col:'',rem:'',params:{}});
-          }
-        });
-      }).catch(function(){}).then(filtrarYMostrar);
-      return;
-    }
+  var stEl=document.getElementById('sel-ot'),woId=null;
+  if(ot){for(var i=0;i<stEl.options.length;i++){if(stEl.options[i].textContent===ot){woId=stEl.options[i].value;break;}}}
+  var params=[];
+  if(maq)params.push('machine_id='+encodeURIComponent(maq));
+  if(woId)params.push('work_order_id='+encodeURIComponent(woId));
+  if(lote)params.push('lot_code='+encodeURIComponent(lote));
+  if(fi)params.push('date_from='+encodeURIComponent(fi));
+  if(ff)params.push('date_to='+encodeURIComponent(ff));
+  if(params.length){
+    r.innerHTML='<div class="not-found">Consultando servidor...</div>';
+    apiFetch('/bobbins?'+params.join('&')).then(function(api){mergeIntoLocal(api);}).catch(function(){}).then(filtrarYMostrar);
+  }else{
+    filtrarYMostrar();
   }
-  filtrarYMostrar();
 }
 function renderConsultaMaquinaResult(rows){
   var r=document.getElementById('cq-result');
@@ -749,11 +768,14 @@ function renderConsultaLote(c){
 function ejecutarConsultaLote(){
   var lote=document.getElementById('cl-lote').value.trim(),r=document.getElementById('cl-result');
   if(!lote){r.innerHTML='<div class="not-found">Ingresa un lote.</div>';return;}
-  var rows=bobinas.filter(function(b){return b.lote===lote;});
-  lastConsultaLote=rows;document.getElementById('cl-xl').style.display=rows.length?'inline-block':'none';
-  if(!rows.length){r.innerHTML='<div class="not-found">⚠ Sin registros para lote <strong>'+lote+'</strong>.</div>';return;}
-  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
-  r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Máquina</th><th>OT</th><th>Operario</th><th>Fecha</th><th>Metros</th><th>Peso</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.mach+'</td><td>'+b.ot+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td></tr>';}).join('')+'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="6" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
+  r.innerHTML='<div class="not-found">Consultando servidor...</div>';
+  apiFetch('/bobbins?lot_code='+encodeURIComponent(lote)).then(function(api){mergeIntoLocal(api);}).catch(function(){}).then(function(){
+    var rows=bobinas.filter(function(b){return b.lote===lote;});
+    lastConsultaLote=rows;document.getElementById('cl-xl').style.display=rows.length?'inline-block':'none';
+    if(!rows.length){r.innerHTML='<div class="not-found">⚠ Sin registros para lote <strong>'+lote+'</strong>.</div>';return;}
+    var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+    r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>Máquina</th><th>OT</th><th>Operario</th><th>Fecha</th><th>Metros</th><th>Peso</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.mach+'</td><td>'+b.ot+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td></tr>';}).join('')+'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="6" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td></tr></tfoot></table></div>';
+  });
 }
 function renderConsultaID(c){
   c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por ID de bobina</div><div class="search-box" style="margin-bottom:12px"><div class="field"><label>ID de bobina</label><input id="ci-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')ejecutarConsultaID()"/></div><button class="btn btn-primary" onclick="ejecutarConsultaID()" style="height:38px">Buscar</button><button class="btn" onclick="renderConsultaID(document.getElementById(\'consulta-content\'))" style="height:38px">Limpiar</button></div><div id="ci-result"></div></div>';
@@ -761,10 +783,15 @@ function renderConsultaID(c){
 function ejecutarConsultaID(){
   var busq=document.getElementById('ci-id').value.trim(),r=document.getElementById('ci-result');
   if(!busq){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
-  var b=findBobina(busq);
-  if(!b){r.innerHTML='<div class="not-found">⚠ No se encontró <strong>'+busq+'</strong>.</div>';return;}
-  var p=b.params||{};
-  r.innerHTML='<div class="result-card"><div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">'+b.id+'</div><div style="font-size:12px;color:var(--muted);margin-bottom:12px">Detalle completo</div>'+totalesBar([b])+'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Número de bobina',b.num)+ri('OT',b.ot)+ri('Máquina',b.mach)+ri('Operario',b.operario)+ri('Coordinador',b.coordinador||'—')+ri('Fecha',b.fecha)+ri('Hora',b.hora)+ri('Lote',b.lote)+ri('Remisión',b.rem)+ri('Color',b.col)+'</div><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producción</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Metros',(parseFloat(b.metros)||0).toLocaleString()+' m',true)+ri('Peso',parseFloat(b.peso||0).toFixed(2)+' Kg',true)+ri('Descripción',b.desc)+ri('Producto',b.prod)+ri('Medida',b.med)+'</div><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div><div class="result-grid" style="margin-top:0">'+ri('Medidas',p.med)+ri('Ancho plano',p.ancho)+ri('Enc. horizontal',p.eh,true)+ri('Enc. vertical',p.ev,true)+ri('Enc. Dir. Máquina',p.edm,true)+ri('Calibre frente',p.cf,true)+ri('Calibre reverso',p.cr,true)+ri('Deslamine',p.des)+ri('Temp. túnel',(p.temp||'—')+' °C')+'</div>'+(b.obs?'<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> '+b.obs+'</div>':'')+'</div>';
+  var mostrar=function(){
+    var b=findBobina(busq);
+    if(!b){r.innerHTML='<div class="not-found">⚠ No se encontró <strong>'+busq+'</strong>.</div>';return;}
+    var p=b.params||{};
+    r.innerHTML='<div class="result-card"><div style="font-size:18px;font-weight:700;color:var(--blue);margin-bottom:4px">'+b.id+'</div><div style="font-size:12px;color:var(--muted);margin-bottom:12px">Detalle completo</div>'+totalesBar([b])+'<div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Identificación</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Número de bobina',b.num)+ri('OT',b.ot)+ri('Máquina',b.mach)+ri('Operario',b.operario)+ri('Coordinador',b.coordinador||'—')+ri('Fecha',b.fecha)+ri('Hora',b.hora)+ri('Lote',b.lote)+ri('Remisión',b.rem)+ri('Color',b.col)+'</div><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Producción</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('Metros',(parseFloat(b.metros)||0).toLocaleString()+' m',true)+ri('Peso',parseFloat(b.peso||0).toFixed(2)+' Kg',true)+ri('Descripción',b.desc)+ri('Producto',b.prod)+ri('Medida',b.med)+'</div><div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase">Parámetros</div><div class="result-grid" style="margin-top:0">'+ri('Medidas',p.med)+ri('Ancho plano',p.ancho)+ri('Enc. horizontal',p.eh,true)+ri('Enc. vertical',p.ev,true)+ri('Enc. Dir. Máquina',p.edm,true)+ri('Calibre frente',p.cf,true)+ri('Calibre reverso',p.cr,true)+ri('Deslamine',p.des)+ri('Temp. túnel',(p.temp||'—')+' °C')+'</div>'+(b.obs?'<div style="margin-top:12px;padding:10px;background:#f8f9fb;border-radius:6px;font-size:13px"><strong>Observaciones:</strong> '+b.obs+'</div>':'')+'</div>';
+  };
+  if(findBobina(busq)){mostrar();return;}
+  r.innerHTML='<div class="not-found">Consultando servidor...</div>';
+  apiFetch('/bobbins?bobbin_id='+encodeURIComponent(normId(busq))).then(function(api){mergeIntoLocal(api);}).catch(function(){}).then(mostrar);
 }
 function exportarConsulta(tipo){
   var rows=tipo==='maquina'?lastConsultaMaquina:lastConsultaLote;
@@ -823,7 +850,7 @@ function renderAdmin(){
 function adminTab(tab,btn){
   document.querySelectorAll('#admin-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
   var c=document.getElementById('admin-content');
-  if(tab==='produccion')renderAdminProduccion(c);else if(tab==='etiqueta')renderAdminEtiqueta(c);else if(tab==='eliminar')renderAdminEliminar(c);else if(tab==='coordinadores')renderCatCoordinadores(c);else if(tab==='operadores')renderAdminOperadores(c);else if(tab==='maquinas')renderAdminMaquinas(c);else if(tab==='ordenes')renderAdminOrdenes(c);
+  if(tab==='produccion')renderAdminProduccion(c);else if(tab==='etiqueta')renderAdminEtiqueta(c);else if(tab==='eliminar')renderAdminEliminar(c);else if(tab==='usuarios')renderAdminUsuarios(c);else if(tab==='coordinadores')renderCatCoordinadores(c);else if(tab==='operadores')renderAdminOperadores(c);else if(tab==='maquinas')renderAdminMaquinas(c);else if(tab==='ordenes')renderAdminOrdenes(c);
 }
 function renderAdminProduccion(c){
   var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
@@ -858,26 +885,70 @@ function buscarEtiquetaAdmin(){
   r.innerHTML='<div class="result-card"><div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Metros',b.metros+' m')+ri('Peso',b.peso+' Kg')+ri('Calibre frente',p.cf)+ri('Calibre reverso',p.cr)+'</div><button class="btn btn-primary" onclick="renderLabel(findBobina(\''+b.id+'\'),false)">🖨 Ver etiqueta</button></div>';
 }
 function renderAdminEliminar(c){
-  c.innerHTML='<div class="card"><div class="card-title">🗑 Eliminar bobina por ID</div><div class="alert alert-warn" style="display:block;margin-bottom:16px">⚠ Esta acción es permanente y no se puede deshacer. Úsala solo para corregir errores de captura.</div><div class="search-box"><div class="field"><label>ID de bobina</label><input id="adm-del-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')buscarEliminarAdmin()"/></div><button class="btn btn-primary" onclick="buscarEliminarAdmin()" style="height:38px">Buscar</button></div><div id="adm-del-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🗑 Eliminar bobina por ID</div><div class="alert alert-warn" style="display:block;margin-bottom:16px">⚠ La bobina desaparecerá de todos los listados y reportes. Úsala solo para corregir errores de captura.</div><div class="search-box"><div class="field"><label>ID de bobina</label><input id="adm-del-id" placeholder="Ej. ZX-1001" onkeydown="if(event.key===\'Enter\')buscarEliminarAdmin()"/></div><button class="btn btn-primary" onclick="buscarEliminarAdmin()" style="height:38px">Buscar</button></div><div id="adm-del-result"></div></div>';
 }
 function buscarEliminarAdmin(){
   var id=document.getElementById('adm-del-id').value.trim(),r=document.getElementById('adm-del-result');
   if(!id){r.innerHTML='<div class="not-found">Ingresa un ID.</div>';return;}
   var b=findBobina(id);
-  if(!b){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';return;}
-  var p=b.params||{};
+  if(b){mostrarResultadoEliminar(b);return;}
+  r.innerHTML='<div class="not-found">Consultando servidor...</div>';
+  apiFetch('/bobbins?bobbin_id='+encodeURIComponent(normId(id))).then(function(api){
+    if(api&&api.length){mergeIntoLocal(api);var b2=findBobina(id);if(b2){mostrarResultadoEliminar(b2);return;}}
+    r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';
+  }).catch(function(){r.innerHTML='<div class="not-found">⚠ Bobina <strong>'+id+'</strong> no encontrada.</div>';});
+}
+function mostrarResultadoEliminar(b){
+  var r=document.getElementById('adm-del-result');
   r.innerHTML='<div class="result-card"><div style="font-size:15px;font-weight:700;color:var(--blue);margin-bottom:12px">'+b.id+' — '+b.mach+'</div><div class="result-grid" style="margin-top:0;margin-bottom:16px">'+ri('OT',b.ot)+ri('Operario',b.operario)+ri('Fecha',b.fecha)+ri('Hora',b.hora)+ri('Metros',b.metros+' m',true)+ri('Peso',b.peso+' Kg',true)+ri('Descripción',b.desc)+'</div><button class="btn btn-danger" onclick="eliminarBobinaAdmin(\''+b.id+'\')">🗑 Eliminar esta bobina</button></div>';
 }
 function eliminarBobinaAdmin(id){
   var b=findBobina(id);if(!b)return;
-  if(!confirm('¿Seguro que quieres eliminar la bobina '+id+'? Esta acción no se puede deshacer.'))return;
-  bobinas=bobinas.filter(function(x){return String(x.id).toUpperCase()!==String(id).toUpperCase();});
-  if(lastSavedBobina&&String(lastSavedBobina.id).toUpperCase()===String(id).toUpperCase())lastSavedBobina=null;
-  var numId=id.replace(/^ZX-/i,'');
-  apiFetch('/bobbins/'+numId,{method:'DELETE'}).catch(function(){console.warn('No se pudo eliminar en el servidor (puede que no exista ese endpoint o esté sin conexión). Se eliminó localmente.');});
-  document.getElementById('adm-del-result').innerHTML='<div class="alert alert-ok" style="display:block">✅ Bobina '+id+' eliminada.</div>';
-  document.getElementById('adm-del-id').value='';
-  renderAdmin();
+  if(!confirm('¿Seguro que quieres eliminar la bobina '+id+'? Desaparecerá de todos los listados.'))return;
+  var numId=normId(id);
+  var r=document.getElementById('adm-del-result');
+  r.innerHTML='<div class="not-found">Eliminando...</div>';
+  apiFetch('/bobbins/'+numId,{method:'DELETE'})
+    .then(function(){
+      bobinas=bobinas.filter(function(x){return normId(x.id)!==numId;});
+      if(lastSavedBobina&&normId(lastSavedBobina.id)===numId)lastSavedBobina=null;
+      r.innerHTML='<div class="alert alert-ok" style="display:block">✅ Bobina '+id+' eliminada del servidor.</div>';
+      document.getElementById('adm-del-id').value='';
+      renderAdmin();
+    })
+    .catch(function(e){
+      r.innerHTML='<div class="alert alert-err" style="display:block">🚫 No se pudo eliminar en el servidor: '+(e.message||'error desconocido')+'</div>';
+    });
+}
+function renderAdminUsuarios(c){
+  c.innerHTML='<div class="card"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><span style="font-size:15px;font-weight:600;color:var(--blue)">👤 Usuarios del sistema</span><button class="btn btn-primary" onclick="openAddUsuario()">+ Nuevo usuario</button></div><div id="admin-users-list"><p style="color:var(--muted);font-size:13px">Cargando...</p></div></div>';
+  cargarUsuarios();
+}
+function cargarUsuarios(){
+  var el=document.getElementById('admin-users-list');
+  apiFetch('/admin/users').then(function(data){
+    if(!data.length){el.innerHTML='<p style="color:var(--muted);font-size:13px">Sin usuarios.</p>';return;}
+    el.innerHTML='<table><thead><tr><th>Usuario</th><th>Rol</th><th>Operador vinculado</th><th>Estatus</th><th>Acciones</th></tr></thead><tbody>'+data.map(function(u){
+      return'<tr><td style="font-weight:600">'+u.username+'</td><td>'+u.role+'</td><td>'+(u.operator_id||'—')+'</td><td><span class="badge '+(u.active?'badge-ok':'badge-pend')+'">'+(u.active?'Activo':'Inactivo')+'</span></td><td><button class="btn" style="padding:4px 10px;font-size:12px" onclick="toggleUsuarioActivo('+u.id+','+(!u.active)+')">'+(u.active?'Desactivar':'Activar')+'</button></td></tr>';
+    }).join('')+'</tbody></table>';
+  }).catch(function(e){el.innerHTML='<p style="color:#b91c1c;font-size:13px">🚫 No se pudo cargar: '+(e.message||'error')+'</p>';});
+}
+function toggleUsuarioActivo(id,nuevoEstado){
+  apiFetch('/admin/users/'+id+'/active',{method:'PATCH',body:JSON.stringify({active:nuevoEstado})})
+    .then(function(){cargarUsuarios();})
+    .catch(function(e){alert('No se pudo actualizar: '+(e.message||'error'));});
+}
+function openAddUsuario(){
+  document.getElementById('mf-title').textContent='Nuevo usuario';
+  document.getElementById('mf-body').innerHTML='<div class="form-grid"><div class="field"><label>Usuario</label><input type="text" id="mfu-username" placeholder="ej. josue.gamaliel"/></div><div class="field"><label>Contraseña</label><input type="password" id="mfu-password" placeholder="Contraseña"/></div><div class="field"><label>Rol</label><select id="mfu-role"><option value="operator">operator</option><option value="coordinator">coordinator</option><option value="admin">admin</option></select></div><div class="field"><label>ID de operador (opcional)</label><input type="number" id="mfu-operator" placeholder="Ej. 241"/></div></div>';
+  currentModalType='usuario-add';editingId=null;document.getElementById('modal-form').classList.add('open');
+}
+function saveModalFormUsuario(){
+  var username=document.getElementById('mfu-username').value.trim(),password=document.getElementById('mfu-password').value,role=document.getElementById('mfu-role').value,operatorId=document.getElementById('mfu-operator').value.trim();
+  if(!username||!password){alert('Usuario y contraseña son obligatorios.');return;}
+  apiFetch('/admin/users',{method:'POST',body:JSON.stringify({username:username,password:password,role:role,operator_id:operatorId?parseInt(operatorId):null})})
+    .then(function(){closeModal('modal-form');cargarUsuarios();})
+    .catch(function(e){alert('No se pudo crear: '+(e.message||'error'));});
 }
 function renderAdminOperadores(c){
   c.innerHTML='<div class="card"><div class="card-title">👷 Operadores</div><div id="admin-op-list"><button class="btn btn-primary" onclick="loadAdminOps()">🔄 Cargar desde API</button></div></div>';
@@ -915,6 +986,7 @@ function openEditCoord(id){
   currentModalType='coord-edit';editingId=id;document.getElementById('modal-form').classList.add('open');
 }
 function saveModalForm(){
+  if(currentModalType==='usuario-add'){saveModalFormUsuario();return;}
   var nombre=document.getElementById('mfi-nombre').value.trim(),activo=document.getElementById('mfi-activo').value==='true';
   if(!nombre){alert('Ingresa el nombre.');return;}
   if(currentModalType==='coord-add'){catCoordinadores.push({id:Date.now(),nombre:nombre,activo:activo});}
