@@ -4,7 +4,19 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Ztela ZX</title>
-<script src="/vendor/jsbarcode.min.js"></script>
+<script>
+(function(){
+  function cargar(src, siFalla){
+    var s=document.createElement('script');
+    s.src=src;
+    if(siFalla)s.onerror=siFalla;
+    document.head.appendChild(s);
+  }
+  cargar('/vendor/jsbarcode.min.js', function(){
+    cargar('https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js');
+  });
+})();
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',sans-serif}
 :root{--blue:#0D3B8C;--blue2:#1a56c4;--bg:#f0f2f6;--card:#fff;--border:#dde2ea;--text:#1a1d23;--muted:#6b7280}
