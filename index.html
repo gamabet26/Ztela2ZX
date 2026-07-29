@@ -151,7 +151,7 @@ tr:hover td{background:#f8f9fb}
     <nav>
       <button class="active" onclick="showView('operador',this)">Operador</button>
       <button onclick="showView('consulta',this)">Consulta</button>
-      <button onclick="showView('admin',this)">Administrador</button>
+      <button id="nav-admin-btn" onclick="irAAdmin(this)">Administrador</button>
     </nav>
     <div style="display:flex;align-items:center;gap:10px;font-size:12px">
       <span id="conn-status" style="font-weight:600;color:#ffe08a">🟡 Conectando...</span>
@@ -252,16 +252,15 @@ tr:hover td{background:#f8f9fb}
     </div>
 
     <div id="view-admin" style="display:none">
-      <div class="stat-grid" id="stats-grid"></div>
       <div class="sec-tabs" id="admin-tabs">
-        <button class="sec-tab active" onclick="adminTab('produccion',this)">Producción</button>
-        <button class="sec-tab" onclick="adminTab('etiqueta',this)">Imprimir etiqueta</button>
-        <button class="sec-tab" onclick="adminTab('eliminar',this)">🗑 Eliminar bobina</button>
-        <button class="sec-tab" onclick="adminTab('usuarios',this)">👤 Usuarios</button>
-        <button class="sec-tab" onclick="adminTab('coordinadores',this)">Coordinadores</button>
-        <button class="sec-tab" onclick="adminTab('operadores',this)">Operadores</button>
-        <button class="sec-tab" onclick="adminTab('maquinas',this)">Máquinas</button>
-        <button class="sec-tab" onclick="adminTab('ordenes',this)">Órdenes de trabajo</button>
+        <button class="sec-tab active" id="admtab-produccion" onclick="adminTab('produccion',this)">Producción</button>
+        <button class="sec-tab" id="admtab-etiqueta" onclick="adminTab('etiqueta',this)">Imprimir etiqueta</button>
+        <button class="sec-tab" id="admtab-eliminar" onclick="adminTab('eliminar',this)">🗑 Eliminar bobina</button>
+        <button class="sec-tab" id="admtab-usuarios" onclick="adminTab('usuarios',this)">👤 Usuarios</button>
+        <button class="sec-tab" id="admtab-coordinadores" onclick="adminTab('coordinadores',this)">Coordinadores</button>
+        <button class="sec-tab" id="admtab-operadores" onclick="adminTab('operadores',this)">Operadores</button>
+        <button class="sec-tab" id="admtab-maquinas" onclick="adminTab('maquinas',this)">Máquinas</button>
+        <button class="sec-tab" id="admtab-ordenes" onclick="adminTab('ordenes',this)">Órdenes de trabajo</button>
       </div>
       <div id="admin-content"></div>
     </div>
@@ -360,7 +359,7 @@ function setConnStatus(ok){
   el.style.color=ok?'#8ef0a8':'#ffb4b4';
 }
 function trabajarSinConexion(){
-  offlineMode=true;authToken=null;authUser={username:'local',role:'dev'};
+  offlineMode=true;authToken=null;authUser={username:'local (sin servidor)',role:'operator'};
   document.getElementById('login-screen').style.display='none';
   showApp();
 }
@@ -395,96 +394,27 @@ function showApp(){
   document.getElementById('app').style.display='flex';
   var ub=document.getElementById('user-badge');
   if(ub)ub.textContent=authUser?('👤 '+authUser.username+' ('+authUser.role+')'):'';
+  var navAdmin=document.getElementById('nav-admin-btn');
+  if(navAdmin)navAdmin.style.display=(authUser&&authUser.role==='admin')?'':'none';
   initApp();
 }
 
 var FB_MACHINES=[{id:'EXT001'},{id:'EXT002'},{id:'EXT003'},{id:'EXT004'},{id:'EXT005'},{id:'EXT006'}];
 var FB_OPERATORS=[
-  {id:103,full_name:'SIFUENTES DECIGA SANDRA MIROSLAVA',area:'ADMINISTRACION',department:'ADMINISTRACIÓN'},
-  {id:108,full_name:'RODRIGUEZ SIFUENTES JULIETA',area:'ADMINISTRACION',department:'ADMINISTRACIÓN'},
-  {id:126,full_name:'MELCHOR GUERRERO KARINA DANIELA',area:'COSTOS',department:'COSTOS'},
-  {id:141,full_name:'NAJAR LEAL ALFREDO',area:'COMERCIAL',department:'COMERCIAL'},
-  {id:149,full_name:'DELGADO PEDRAZA WILBERT OZIEL',area:'COMERCIAL',department:'COMERCIAL'},
-  {id:170,full_name:'ORTA JIMENEZ JUAN MANUEL',area:'LOGISTICA',department:'LOGÍSTICA'},
-  {id:175,full_name:'PATIÑO GONZALEZ ALMA WALKIRIA',area:'COMERCIAL',department:'COMERCIAL'},
-  {id:204,full_name:'RODRIGUEZ RODRIGUEZ ANA LUISA',area:'REC. HUMANOS',department:'REC. HUMANOS'},
-  {id:257,full_name:'RODRIGUEZ CALVA FARIVA MARGARITA',area:'COMERCIAL',department:'COMERCIAL'},
-  {id:260,full_name:'TAVERA SANCHEZ GIANA AIDE',area:'CALIDAD',department:'CALIDAD'},
-  {id:262,full_name:'LOPEZ MENDOZA CINTHYA SELENE',area:'PRE-PRENSA',department:'PRE-PRENSA'},
-  {id:268,full_name:'ROBLES LOPEZ ADRIANA MAIHUALIDA',area:'COMERCIAL',department:'COMERCIAL'},
-  {id:271,full_name:'RUIZ GUERRA JESUS ANTONIO',area:'ADMINISTRACION',department:'ADMINISTRACIÓN'},
-  {id:274,full_name:'RODRIGUEZ MALDONADO LUIS DANIEL',area:'COMERCIAL',department:'COMERCIAL'},
-  {id:279,full_name:'LOPEZ CASTILLO LUIS GUADALUPE',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2009,full_name:'QUIROZ SEGOVIA JUAN',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2011,full_name:'PEREZ VAZQUEZ FERNANDO',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2015,full_name:'FLORES SANCHEZ HUMARO MANUEL',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2027,full_name:'CRUZ SANMIGUEL JUAN CARLOS',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2033,full_name:'RUIZ RODRIGUEZ JOSE ALEJANDRO',area:'COSTOS',department:'COSTOS'},
-  {id:2060,full_name:'MARTINEZ PEREZ LUIS ANGEL',area:'IMPRESION',department:'IMPRESIÓN'},
-  {id:2087,full_name:'MEJIA SOTO PABLO EVERARDO',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2233,full_name:'ANTUNA RODRIGUEZ JOSE ANTONIO',area:'CORRUGADO',department:'CORRUGADO'},
-  {id:2237,full_name:'CASTILLO RODRIGUEZ FERNANDO JESUS',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2255,full_name:'VALADEZ LOPEZ JOSE JUAN',area:'DIR. GENERAL',department:'DESARROLLO EMPRESARIAL'},
-  {id:2270,full_name:'ZUÑIGA ROQUE PEDRO LUIS',area:'CORRUGADO',department:'CORRUGADO'},
-  {id:2280,full_name:'HERNANDEZ CASANGO HEBER',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2281,full_name:'GONZALEZ GONZALEZ EDUARDO',area:'IMPRESION',department:'IMPRESIÓN'},
-  {id:2303,full_name:'SANCHEZ CORONADO ROBERTO ALEJANDRO',area:'IMPRESION',department:'IMPRESIÓN'},
-  {id:2311,full_name:'RODRIGUEZ MARTINEZ JOSE LUIS',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2316,full_name:'CRUZ HERNANDEZ JUAN ANGEL',area:'IMPRESION',department:'IMPRESIÓN'},
-  {id:2338,full_name:'SAUCEDO GAYTAN NESTOR IVAN',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2344,full_name:'SAUCEDA ROBLEDO ERIK JOEL',area:'PRE-PRENSA',department:'PRE-PRENSA'},
-  {id:2352,full_name:'NUÑEZ PACHECO JOSE EFRAIN',area:'IMPRESION',department:'IMPRESIÓN'},
-  {id:2357,full_name:'GONZALEZ CASTRO EDGAR ALEJANDRO',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2367,full_name:'RODRIGUEZ GOVEA J. CARLOS',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2371,full_name:'ESTRADA ZAPATA JOSE VALENTIN',area:'COSTOS',department:'COSTOS'},
-  {id:2372,full_name:'FUANTOS TENIENTE OSCAR NARCISO',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2381,full_name:'TORRES CABRERA GUSTAVO DANIEL',area:'LOGISTICA',department:'LOGÍSTICA'},
-  {id:2386,full_name:'GONZALEZ RAMIREZ LUIS ANTONIO',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2394,full_name:'CASTAÑEDA PEREZ JUAN CARLOS',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2398,full_name:'RODRIGUEZ MEDINA JOSE MARCOS',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2401,full_name:'OCHOA LEIJA JOSE ALFONSO',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2406,full_name:'CRUZ RIVERA VIRGINIA',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2411,full_name:'DE SANTIAGO JARA MANUEL',area:'COSTOS',department:'COSTOS PP'},
-  {id:2413,full_name:'VEGA BERNAL JOSE ALEJANDRO',area:'REC. HUMANOS',department:'REC. HUMANOS'},
-  {id:2419,full_name:'GONZALEZ GURROLA JOSÉ JOAQUIN',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2442,full_name:'ESPAÑA PEREZ SERGIO DENIS',area:'COSTOS',department:'COSTOS'},
-  {id:2459,full_name:'RODRIGUEZ ZAVALA JOSE ANTONIO',area:'IMPRESION',department:'IMPRESIÓN'},
-  {id:2487,full_name:'IRACHETA FLORES ALEJANDRO GUADALUPE',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2492,full_name:'RODRIGUEZ PEREZ JAIR ALEJANDRO',area:'IMPRESION',department:'IMPRESIÓN'},
-  {id:2517,full_name:'ALMANZA SANCHEZ JESUS CARLOS',area:'COSTOS',department:'COSTOS MP'},
-  {id:2523,full_name:'PEREZ VALLADARES EDWING ARGENIZ',area:'REC. HUMANOS',department:'REC. HUMANOS'},
-  {id:2526,full_name:'SOLIS MARTINEZ LISBETH ADAIDE',area:'CALIDAD',department:'CALIDAD'},
-  {id:2527,full_name:'MORENO GONZALEZ LINO FRANCISCO',area:'MANTENIMIENTO',department:'MANTENIMIENTO'},
-  {id:2530,full_name:'GAMEZ GARCIA ABDON',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2539,full_name:'DE LEON ZAMARRON PEDRO ANTONIO',area:'CORRUGADO',department:'CORRUGADO'},
-  {id:2547,full_name:'PRESAS JASSO JUAN REYNALDO',area:'CALIDAD',department:'CALIDAD'},
-  {id:2552,full_name:'PRESAS JASSO ERICK RODRIGO',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2553,full_name:'CASTILLO MENDEZ HERIBERTO',area:'CONVERSION',department:'CONVERSIÓN'},
-  {id:2554,full_name:'GARCIA DE LA CRUZ ILIANA CELESTE',area:'COSTOS',department:'ERP'},
-  {id:2559,full_name:'RODRIGUEZ HERRERA ISRAEL',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:2560,full_name:'MARTINEZ GAMEZ LUIS ANGEL',area:'CALIDAD',department:'CALIDAD'}
+  {id:1001,full_name:'OPERADOR PRUEBA UNO',area:'EXTRUSION',department:'EXTRUSIÓN'},
+  {id:1002,full_name:'OPERADOR PRUEBA DOS',area:'EXTRUSION',department:'EXTRUSIÓN'},
+  {id:1003,full_name:'OPERADOR PRUEBA TRES',area:'EXTRUSION',department:'EXTRUSIÓN'},
+  {id:1004,full_name:'OPERADOR PRUEBA CUATRO',area:'CONVERSION',department:'CONVERSIÓN'},
+  {id:1005,full_name:'OPERADOR PRUEBA CINCO',area:'IMPRESION',department:'IMPRESIÓN'},
+  {id:1006,full_name:'OPERADOR PRUEBA SEIS',area:'MANTENIMIENTO',department:'MANTENIMIENTO'}
 ];
 var FB_ORDERS=[
-  {id:1,ot_number:'26010005',product_code:'20-010901-02275-01',description:'B202828-GEN-S/I-CLO-11',measure:'11',color:'CLO',remision:'H.24291',stdqty:100},
-  {id:2,ot_number:'26010006',product_code:'20-840901-13231-01',description:'B353030-GEN-S/I-CLO-11.5',measure:'11.5',color:'CLO',remision:'',stdqty:100},
-  {id:3,ot_number:'26010073',product_code:'20-350901-08406-01',description:'FM1710-GEN-S/I-CLO-12',measure:'12',color:'CLO',remision:'H.25083',stdqty:28.56},
-  {id:4,ot_number:'26010115',product_code:'20-840901-08764-01',description:'B353030-GEN-S/I-CLO-12',measure:'12',color:'CLO',remision:'H.24984',stdqty:2145.00},
-  {id:5,ot_number:'26010127',product_code:'20-840901-09901-01',description:'B353030-GEN-S/I-CLO-8',measure:'8',color:'CLO',remision:'H.24981',stdqty:81.6},
-  {id:6,ot_number:'26010134',product_code:'20-110901-16851-01',description:'BX7620-GEN-S/I-CLO-220MM',measure:'220',color:'CLO',remision:'H.24956',stdqty:41.69},
-  {id:7,ot_number:'26010153',product_code:'20-310901-02320-01',description:'F2010-GEN-S/I-CLO-190MM',measure:'190',color:'CLO',remision:'',stdqty:1400.00},
-  {id:8,ot_number:'26010190',product_code:'20-310901-04036-01',description:'F2010-GEN-S/I-MRN-170MM',measure:'170',color:'MRN',remision:'H.25124-1',stdqty:3249.00},
-  {id:9,ot_number:'26010218',product_code:'20-370901-10040-01',description:'B452530-GENERICO-S/I-CLO-12',measure:'12',color:'CLO',remision:'h.24934-1',stdqty:1000.00},
-  {id:10,ot_number:'26010232',product_code:'20-360901-07884-01',description:'FM2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BCO',remision:'',stdqty:1000.00},
-  {id:11,ot_number:'26010240',product_code:'20-310901-03761-01',description:'F2010-GEN-S/I-BCO-8.5',measure:'8.5',color:'BCO',remision:'h.24897-1',stdqty:100},
-  {id:12,ot_number:'26010380',product_code:'30-841103-11311-05',description:'CX8535-GDL135-CHU AHU NAYAR-CLO-9X11 SCS BR',measure:'9',color:'CLO',remision:'',stdqty:8},
-  {id:13,ot_number:'26010308',product_code:'20-330901-07712-01',description:'B203737-GEN-S/I-CLO-14',measure:'14',color:'CLO',remision:'H.25042',stdqty:68.4},
-  {id:14,ot_number:'26010441',product_code:'20-010901-02273-01',description:'B202828-GEN-S/I-CLO-12',measure:'12',color:'CLO',remision:'H.25040',stdqty:63.5},
-  {id:15,ot_number:'26010509',product_code:'20-330901-08090-01',description:'B203737-GEN-S/I-CLO-20',measure:'20',color:'CLO',remision:'h.25025-1',stdqty:486.00},
-  {id:16,ot_number:'26010534',product_code:'20-310901-02261-01',description:'F2010-GEN-S/I-CLO-7.5',measure:'7.5',color:'CLO',remision:'H.25175',stdqty:102},
-  {id:17,ot_number:'26010572',product_code:'20-580901-15298-01',description:'BNT81520-GEN-S/I-CLO-14',measure:'14',color:'CLO',remision:'H.25139',stdqty:220.98},
-  {id:18,ot_number:'26010613',product_code:'20-150901-14564-01',description:'B353030RT-GEN-S/I-CLO-14',measure:'14',color:'CLO',remision:'H.25055-1',stdqty:3468.40},
-  {id:19,ot_number:'26010618',product_code:'20-010901-02227-01',description:'B202828-GEN-S/I-CLO-9',measure:'9',color:'CLO',remision:'H.25041-1',stdqty:386.08},
-  {id:20,ot_number:'26020122',product_code:'20-700901-15445-01',description:'FR1710-GEN-S/I-AZK-210MM',measure:'210',color:'AZK',remision:'h.25158-1',stdqty:1085.27}
+  {id:1,ot_number:'99000001',product_code:'00-000000-00000-00',description:'PRODUCTO DE PRUEBA UNO-GEN-S/I-CLO-11',measure:'11',color:'CLO',remision:'PRUEBA-001',stdqty:100},
+  {id:2,ot_number:'99000002',product_code:'00-000000-00000-01',description:'PRODUCTO DE PRUEBA DOS-GEN-S/I-CLO-12',measure:'12',color:'CLO',remision:'',stdqty:250},
+  {id:3,ot_number:'99000003',product_code:'00-000000-00000-02',description:'PRODUCTO DE PRUEBA TRES-GEN-S/I-BCO-14',measure:'14',color:'BCO',remision:'PRUEBA-002',stdqty:75.5},
+  {id:4,ot_number:'99000004',product_code:'00-000000-00000-03',description:'PRODUCTO DE PRUEBA CUATRO-GEN-S/I-MRN-20',measure:'20',color:'MRN',remision:'PRUEBA-003',stdqty:1500},
+  {id:5,ot_number:'99000005',product_code:'00-000000-00000-04',description:'PRODUCTO DE PRUEBA CINCO-GEN-S/I-AZK-9',measure:'9',color:'AZK',remision:'',stdqty:320.75},
+  {id:6,ot_number:'99000006',product_code:'00-000000-00000-05',description:'PRODUCTO DE PRUEBA SEIS-GEN-S/I-CLO-8.5',measure:'8.5',color:'CLO',remision:'PRUEBA-004',stdqty:60}
 ];
 
 var curMach='EXT001',formActive=false,bobinas=[],lastSavedBobina=null,curWOId=null;
@@ -571,6 +501,10 @@ function populateCoord(){
     if(c.id===parseInt(prev))opt.selected=true;el.appendChild(opt);
   });
 }
+function irAAdmin(btn){
+  if(!authUser||authUser.role!=='admin'){alert('🚫 No tienes permisos para acceder a esta sección.');return;}
+  showView('admin',btn);
+}
 function showView(v,btn){
   ['operador','consulta','admin'].forEach(function(id){
     var el=document.getElementById('view-'+id);if(el)el.style.display=id===v?'block':'none';
@@ -589,9 +523,24 @@ function volverAOperador(){
 window.addEventListener('message',function(e){
   if(e.data==='ztela:print-done')volverAOperador();
 });
+var machineState={};
 function selectMach(m,btn){
-  curMach=m;document.querySelectorAll('.mach-tab').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');document.getElementById('mach-label').textContent=m;resetForm();
+  if(curMach){
+    machineState[curMach]={op:document.getElementById('sel-op').value,ot:document.getElementById('sel-ot').value};
+  }
+  curMach=m;
+  document.querySelectorAll('.mach-tab').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');document.getElementById('mach-label').textContent=m;
+  var saved=machineState[m];
+  if(saved&&(saved.op||saved.ot)){
+    document.getElementById('sel-op').value=saved.op||'';
+    document.getElementById('op-nomina').value=saved.op||'';
+    document.getElementById('sel-ot').value=saved.ot||'';
+    hideAlerts();
+    if(saved.ot){loadOT();}else{checkForm();initBobina();}
+  }else{
+    resetForm();
+  }
 }
 function resetForm(){
   ['sel-op','sel-ot','op-nomina'].forEach(function(id){document.getElementById(id).value='';});
@@ -744,7 +693,7 @@ function imprimirEtiqueta(){
     +'.label-grid .lf span:first-child{font-size:10px;color:#111}'
     +'.label-grid .lf span:last-child{font-weight:600;font-size:13px;color:#111}'
     +'.label-bar{text-align:center;margin-top:8px;padding-top:8px;border-top:1px solid #ddd;position:relative;z-index:1}.label-bar svg{overflow:visible;display:inline-block}.label-bar svg>rect{fill:#fff!important}.label-bar svg g rect{fill:#000!important}'
-    +'@page{size:4in 8in;margin:3mm}'
+    +'@page{size:4in 7in;margin:3mm}'
     +'@media print{html,body{height:auto}}'
     +'</style></head><body><div class="label-wrap">'+lc.innerHTML+'</div>'
     +'<script>'
@@ -806,7 +755,7 @@ function totalesBar(rows){
 }
 function renderConsultaMaquina(c){
   var mOpts='<option value="">— Todas —</option>'+['EXT001','EXT002','EXT003','EXT004','EXT005','EXT006'].map(function(m){return'<option>'+m+'</option>';}).join('');
-  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Máquina</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Máquina</label><select id="cq-maq">'+mOpts+'</select></div><div class="field"><label>Lote</label><input id="cq-lote" placeholder="Ej. 062426"/></div><div class="field"><label>OT</label><input id="cq-ot" placeholder="Ej. 26010005"/></div><div class="field"><label>Fecha inicio</label><input id="cq-fi" type="date"/></div><div class="field"><label>Fecha fin</label><input id="cq-ff" type="date"/></div><div class="field"><label>Hora inicio</label><input id="cq-hi" type="time" value="00:00"/></div><div class="field"><label>Hora fin</label><input id="cq-hf" type="time" value="23:59"/></div><div class="field"><label>Metros mín.</label><input id="cq-mmin" type="number" placeholder="0"/></div><div class="field"><label>Metros máx.</label><input id="cq-mmax" type="number"/></div><div class="field"><label>Peso mín.</label><input id="cq-pmin" type="number" placeholder="0"/></div><div class="field"><label>Peso máx.</label><input id="cq-pmax" type="number"/></div><div class="field"><label>Vista</label><select id="cq-vista" onchange="if(lastConsultaMaquina.length)renderConsultaMaquinaResult(lastConsultaMaquina)"><option value="detallado">Detallado</option><option value="agrupado">Agrupado por OT</option></select></div></div><div class="btn-row" style="margin-bottom:16px"><button class="btn btn-primary" onclick="ejecutarConsultaMaquina()">🔍 Consultar</button><button class="btn" onclick="renderConsultaMaquina(document.getElementById(\'consulta-content\'))">Limpiar</button><button class="btn btn-success" id="cq-xl" style="display:none" onclick="exportarConsulta(\'maquina\')">📥 Exportar Excel</button></div><div id="cq-result"></div></div>';
+  c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Máquina</div><div class="form-grid" style="margin-bottom:12px"><div class="field"><label>Máquina</label><select id="cq-maq">'+mOpts+'</select></div><div class="field"><label>Lote</label><input id="cq-lote" placeholder="Ej. 062426"/></div><div class="field"><label>OT</label><input id="cq-ot" placeholder="Ej. 12345678"/></div><div class="field"><label>Fecha inicio</label><input id="cq-fi" type="date"/></div><div class="field"><label>Fecha fin</label><input id="cq-ff" type="date"/></div><div class="field"><label>Hora inicio</label><input id="cq-hi" type="time" value="00:00"/></div><div class="field"><label>Hora fin</label><input id="cq-hf" type="time" value="23:59"/></div><div class="field"><label>Metros mín.</label><input id="cq-mmin" type="number" placeholder="0"/></div><div class="field"><label>Metros máx.</label><input id="cq-mmax" type="number"/></div><div class="field"><label>Peso mín.</label><input id="cq-pmin" type="number" placeholder="0"/></div><div class="field"><label>Peso máx.</label><input id="cq-pmax" type="number"/></div><div class="field"><label>Vista</label><select id="cq-vista" onchange="if(lastConsultaMaquina.length)renderConsultaMaquinaResult(lastConsultaMaquina)"><option value="detallado">Detallado</option><option value="agrupado">Agrupado por OT</option></select></div></div><div class="btn-row" style="margin-bottom:16px"><button class="btn btn-primary" onclick="ejecutarConsultaMaquina()">🔍 Consultar</button><button class="btn" onclick="renderConsultaMaquina(document.getElementById(\'consulta-content\'))">Limpiar</button><button class="btn btn-success" id="cq-xl" style="display:none" onclick="exportarConsulta(\'maquina\')">📥 Exportar Excel</button><button class="btn btn-primary" id="cq-print" style="display:none" onclick="imprimirConsultaMaquina()">🖨 Imprimir</button></div><div id="cq-result"></div></div>';
 }
 function ejecutarConsultaMaquina(){
   var maq=document.getElementById('cq-maq').value,lote=document.getElementById('cq-lote').value.trim(),ot=document.getElementById('cq-ot').value.trim();
@@ -824,6 +773,7 @@ function ejecutarConsultaMaquina(){
     });
     lastConsultaMaquina=rows;
     document.getElementById('cq-xl').style.display=rows.length?'inline-block':'none';
+    document.getElementById('cq-print').style.display=rows.length?'inline-block':'none';
     renderConsultaMaquinaResult(rows);
   }
   var stEl=document.getElementById('sel-ot'),woId=null;
@@ -841,24 +791,28 @@ function ejecutarConsultaMaquina(){
     filtrarYMostrar();
   }
 }
+function buildAgrupadoTableHTML(rows){
+  var byOT={};
+  rows.forEach(function(b){
+    if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,desc:b.desc,prod:b.prod,col:b.col,fechaMin:b.fecha,fechaMax:b.fecha,bobinas:0,peso:0,metros:0};
+    var g=byOT[b.ot];g.bobinas++;g.peso+=parseFloat(b.peso)||0;g.metros+=parseFloat(b.metros)||0;
+    if(parseBoDate(b)<parseBoDate({fecha:g.fechaMin,hora:'00:00:00'}))g.fechaMin=b.fecha;
+    if(parseBoDate(b)>parseBoDate({fecha:g.fechaMax,hora:'23:59:59'}))g.fechaMax=b.fecha;
+  });
+  var groups=Object.values(byOT);
+  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  return totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>OT</th><th>Máq.</th><th>Código</th><th>Bobinas</th><th>Metros</th><th>Peso</th><th>Fecha(s)</th><th>Descripción</th></tr></thead><tbody>'+groups.map(function(g){return'<tr><td style="font-weight:700;color:var(--blue)">'+g.ot+'</td><td>'+g.mach+'</td><td style="font-size:11px">'+g.prod+'</td><td><strong>'+g.bobinas+'</strong></td><td>'+g.metros.toLocaleString()+' m</td><td>'+g.peso.toFixed(2)+' Kg</td><td>'+(g.fechaMin===g.fechaMax?g.fechaMin:g.fechaMin+' → '+g.fechaMax)+'</td><td style="font-size:11px">'+g.desc+'</td></tr>';}).join('')+'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="4" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td><td colspan="2"></td></tr></tfoot></table></div>';
+}
+function buildDetalladoTableHTML(rows){
+  var totM=rows.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0),totP=rows.reduce(function(a,b){return a+(parseFloat(b.peso)||0);},0);
+  return totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>OT</th><th>Máq.</th><th>Código</th><th>Operario</th><th>Fecha</th><th>Hora</th><th>Lote</th><th>Metros</th><th>Peso</th><th>Descripción</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.ot+'</td><td>'+b.mach+'</td><td style="font-size:11px">'+b.prod+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.hora+'</td><td>'+b.lote+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td style="font-size:11px">'+b.desc+'</td></tr>';}).join('')+'</tbody><tfoot><tr style="background:#f8f9fb;font-weight:600"><td colspan="9" style="text-align:right;font-size:12px;color:var(--muted)">Total</td><td style="color:var(--blue)">'+totM.toLocaleString()+' m</td><td>'+totP.toFixed(2)+' Kg</td><td></td></tr></tfoot></table></div>';
+}
 function renderConsultaMaquinaResult(rows){
   var r=document.getElementById('cq-result');
   if(!r)return;
   if(!rows.length){r.innerHTML='<div class="not-found">Sin resultados.</div>';return;}
   var vistaEl=document.getElementById('cq-vista'),vista=vistaEl?vistaEl.value:'detallado';
-  if(vista==='agrupado'){
-    var byOT={};
-    rows.forEach(function(b){
-      if(!byOT[b.ot])byOT[b.ot]={ot:b.ot,mach:b.mach,desc:b.desc,prod:b.prod,col:b.col,fechaMin:b.fecha,fechaMax:b.fecha,bobinas:0,peso:0,metros:0};
-      var g=byOT[b.ot];g.bobinas++;g.peso+=parseFloat(b.peso)||0;g.metros+=parseFloat(b.metros)||0;
-      if(parseBoDate(b)<parseBoDate({fecha:g.fechaMin,hora:'00:00:00'}))g.fechaMin=b.fecha;
-      if(parseBoDate(b)>parseBoDate({fecha:g.fechaMax,hora:'23:59:59'}))g.fechaMax=b.fecha;
-    });
-    var groups=Object.values(byOT);
-    r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>OT</th><th>Máq.</th><th>Bobinas</th><th>Metros</th><th>Peso</th><th>Fecha(s)</th><th>Descripción</th></tr></thead><tbody>'+groups.map(function(g){return'<tr><td style="font-weight:700;color:var(--blue)">'+g.ot+'</td><td>'+g.mach+'</td><td><strong>'+g.bobinas+'</strong></td><td>'+g.metros.toLocaleString()+' m</td><td>'+g.peso.toFixed(2)+' Kg</td><td>'+(g.fechaMin===g.fechaMax?g.fechaMin:g.fechaMin+' → '+g.fechaMax)+'</td><td style="font-size:11px">'+g.desc+'</td></tr>';}).join('')+'</tbody></table></div>';
-  }else{
-    r.innerHTML=totalesBar(rows)+'<div style="overflow-x:auto"><table><thead><tr><th>ID</th><th>#</th><th>OT</th><th>Máq.</th><th>Operario</th><th>Fecha</th><th>Hora</th><th>Lote</th><th>Metros</th><th>Peso</th><th>Descripción</th></tr></thead><tbody>'+rows.map(function(b){return'<tr><td style="font-weight:700;color:var(--blue)">'+b.id+'</td><td>'+b.num+'</td><td>'+b.ot+'</td><td>'+b.mach+'</td><td style="font-size:11px">'+b.operario+'</td><td>'+b.fecha+'</td><td>'+b.hora+'</td><td>'+b.lote+'</td><td>'+b.metros+' m</td><td>'+b.peso+' Kg</td><td style="font-size:11px">'+b.desc+'</td></tr>';}).join('')+'</tbody></table></div>';
-  }
+  r.innerHTML=(vista==='agrupado')?buildAgrupadoTableHTML(rows):buildDetalladoTableHTML(rows);
 }
 function renderConsultaLote(c){
   c.innerHTML='<div class="card"><div class="card-title">🔍 Consulta por Lote</div><div class="search-box" style="margin-bottom:12px"><div class="field"><label>Número de lote</label><input id="cl-lote" placeholder="Ej. 062426" onkeydown="if(event.key===\'Enter\')ejecutarConsultaLote()"/></div><button class="btn btn-primary" onclick="ejecutarConsultaLote()" style="height:38px">Buscar</button><button class="btn" onclick="renderConsultaLote(document.getElementById(\'consulta-content\'))" style="height:38px">Limpiar</button><button class="btn btn-success" id="cl-xl" style="display:none" onclick="exportarConsulta(\'lote\')">📥 Exportar Excel</button></div><div id="cl-result"></div></div>';
@@ -928,6 +882,22 @@ function generarReporteF01(){
   }).join('');
   r.innerHTML='<div id="reporte-f01-print" style="font-family:Arial,sans-serif;font-size:11px;padding:12px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div style="font-size:22px;font-weight:900;color:#0D3B8C;letter-spacing:-1px">zubex</div><div style="text-align:right;font-size:9px;color:#555;border:1px solid #ccc;padding:6px 10px;border-radius:4px"><div>Sistema de Gestión de Inocuidad y Calidad</div><div><strong>Formato:</strong> Reporte de Producción por Turno</div><div><strong>Clave:</strong> EXT-F-01 &nbsp; <strong>Revisión:</strong> 10</div></div></div><table style="width:100%;border-collapse:collapse;margin-bottom:6px"><tr><td style="border:1px solid #222;padding:4px 8px;width:45%">Operador: <strong>'+operario+'</strong></td><td style="border:1px solid #222;padding:4px 8px;width:18%">Línea: <strong>'+linea+'</strong></td><td style="border:1px solid #222;padding:4px 8px;width:18%">Turno: <strong>'+turnoHdr+'</strong></td><td style="border:1px solid #222;padding:4px 8px;width:19%">Fecha: <strong>'+fechaHdr+'</strong></td></tr></table><table style="width:100%;border-collapse:collapse;font-size:10px"><thead><tr style="background:#e8eaf6;color:#0D3B8C;font-weight:700;text-align:center"><td rowspan="2" style="border:1px solid #222;padding:4px">Pedido</td><td rowspan="2" style="border:1px solid #222;padding:4px">No. de<br>bobina</td><td rowspan="2" style="border:1px solid #222;padding:4px">ID de bobina</td><td rowspan="2" style="border:1px solid #222;padding:4px">Código</td><td rowspan="2" style="border:1px solid #222;padding:4px">Producto</td><td rowspan="2" style="border:1px solid #222;padding:4px">Color</td><td rowspan="2" style="border:1px solid #222;padding:4px">Medida</td><td rowspan="2" style="border:1px solid #222;padding:4px">Peso kg.</td><td rowspan="2" style="border:1px solid #222;padding:4px">Metros</td><td colspan="2" style="border:1px solid #222;padding:4px">Revisión Deslamine</td><td colspan="2" style="border:1px solid #222;padding:4px">Valor Fuerza de<br>Sello (lbf)</td><td colspan="2" style="border:1px solid #222;padding:4px">Encogimiento</td></tr><tr style="background:#e8eaf6;color:#0D3B8C;font-weight:700;text-align:center"><td style="border:1px solid #222;padding:4px">MAL</td><td style="border:1px solid #222;padding:4px">OK</td><td style="border:1px solid #222;padding:4px"></td><td style="border:1px solid #222;padding:4px"></td><td style="border:1px solid #222;padding:4px">AP</td><td style="border:1px solid #222;padding:4px">SM</td></tr></thead><tbody>'+filas+'<tr style="font-weight:700;text-align:center;background:#f8f9fb"><td colspan="7" style="border:1px solid #ccc;padding:4px;text-align:right;color:#0D3B8C">Total Producción</td><td style="border:1px solid #ccc;padding:4px;color:#0D3B8C">'+totP.toFixed(2)+'</td><td style="border:1px solid #ccc;padding:4px;color:#0D3B8C">'+totM.toLocaleString()+'</td><td colspan="6" style="border:1px solid #ccc;padding:4px"></td></tr></tbody></table><div style="margin-top:12px"><strong>Observaciones:</strong><div style="border-bottom:1px solid #222;margin-top:6px;min-height:18px;padding-bottom:2px">'+obs+'</div><div style="border-bottom:1px solid #222;margin-top:8px;min-height:18px"></div></div><div style="display:flex;justify-content:space-between;margin-top:32px;gap:16px"><div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma del Operador</div></div><div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma del Coordinador</div></div><div style="text-align:center;flex:1"><div style="border-top:1px solid #222;padding-top:4px;color:#0D3B8C;font-weight:700;font-size:10px">Firma Auditor de QA</div></div></div><div style="text-align:center;margin-top:12px;font-size:8px;color:#888">NOTA: Los documentos del Sistema de Gestión de Inocuidad y Calidad de ZUBEX INDUSTRIAL, se controlan en RED INTERNA, cualquier copia impresa es SOLO REFERENCIA</div></div>';
 }
+function buildEncabezadoConsulta(maq, vistaTexto, fechaGen){
+  return '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;border-bottom:2px solid #0D3B8C;padding-bottom:8px"><div style="display:flex;align-items:center;gap:14px"><img src="data:image/png;base64,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" style="height:36px;display:block"/><div style="font-size:20px;font-weight:900;color:#0D3B8C">Consulta por Máquina</div></div><div style="text-align:right;font-size:11px;color:#555">Máquina: <strong>'+maq+'</strong> · Vista: <strong>'+vistaTexto+'</strong><br/>Generado: '+fechaGen+'</div></div>';
+}
+function imprimirConsultaMaquina(){
+  if(!lastConsultaMaquina||!lastConsultaMaquina.length){alert('Primero realiza una consulta.');return;}
+  var maq=document.getElementById('cq-maq').value||'Todas';
+  var hoy=new Date(),fechaGen=String(hoy.getDate()).padStart(2,'0')+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+hoy.getFullYear()+' '+String(hoy.getHours()).padStart(2,'0')+':'+String(hoy.getMinutes()).padStart(2,'0');
+  var seccionDetallado=buildEncabezadoConsulta(maq,'Detallado',fechaGen)+buildDetalladoTableHTML(lastConsultaMaquina);
+  var seccionAgrupado=buildEncabezadoConsulta(maq,'Agrupado (Resumen)',fechaGen)+buildAgrupadoTableHTML(lastConsultaMaquina);
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Consulta por Máquina</title><style>@page{size:landscape;margin:1cm}body{margin:0;font-family:Arial,sans-serif;color:#111}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border:1px solid #ccc;padding:4px 6px;text-align:left}th{background:#eef1fa}.totales-bar{margin-bottom:10px;font-size:12px}.pagina{page-break-after:always}.pagina:last-child{page-break-after:auto}</style></head><body><div class="pagina">'+seccionDetallado+'</div><div class="pagina">'+seccionAgrupado+'</div><script>window.onload=function(){setTimeout(function(){window.print();},150);};window.onafterprint=function(){window.close();};<\/script></body></html>';
+  var blob=new Blob([html],{type:'text/html'});
+  var url=URL.createObjectURL(blob);
+  var w=window.open(url,'_blank');
+  if(!w)alert('Permite ventanas emergentes para imprimir.');
+  setTimeout(function(){URL.revokeObjectURL(url);},15000);
+}
 function imprimirReporteF01(){
   var el=document.getElementById('reporte-f01-print');
   if(!el){alert('Primero genera el reporte.');return;}
@@ -941,9 +911,12 @@ function imprimirReporteF01(){
 
 // ADMIN
 function renderAdmin(){
-  var totM=bobinas.reduce(function(a,b){return a+(parseFloat(b.metros)||0);},0);
-  document.getElementById('stats-grid').innerHTML='<div class="stat"><div class="sv">6</div><div class="sl">Máquinas activas</div></div><div class="stat"><div class="sv">'+bobinas.length+'</div><div class="sl">Bobinas esta sesión</div></div><div class="stat"><div class="sv">'+totM.toLocaleString()+' m</div><div class="sl">Metros esta sesión</div></div>';
-  adminTab('produccion',document.querySelector('#admin-tabs .sec-tab'));
+  var todasLasTabs=['produccion','etiqueta','eliminar','usuarios','coordinadores','operadores','maquinas','ordenes'];
+  todasLasTabs.forEach(function(t){
+    var btn=document.getElementById('admtab-'+t);
+    if(btn)btn.style.display='';
+  });
+  adminTab('produccion',document.getElementById('admtab-produccion'));
 }
 function adminTab(tab,btn){
   document.querySelectorAll('#admin-tabs .sec-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');
