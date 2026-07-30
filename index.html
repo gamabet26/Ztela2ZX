@@ -401,9 +401,9 @@ function showApp(){
 
 var FB_MACHINES=[{id:'EXT001'},{id:'EXT002'},{id:'EXT003'},{id:'EXT004'},{id:'EXT005'},{id:'EXT006'}];
 var FB_OPERATORS=[
-  {id:1001,full_name:'OPERADOR PRUEBA UNO',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:1002,full_name:'OPERADOR PRUEBA DOS',area:'EXTRUSION',department:'EXTRUSIÓN'},
-  {id:1003,full_name:'OPERADOR PRUEBA TRES',area:'EXTRUSION',department:'EXTRUSIÓN'},
+  {id:1001,full_name:'OPERADOR PRUEBA UNO',area:'EXTRUDER',department:'EXTRUSIÓN'},
+  {id:1002,full_name:'OPERADOR PRUEBA DOS',area:'EXTRUDER',department:'EXTRUSIÓN'},
+  {id:1003,full_name:'OPERADOR PRUEBA TRES',area:'EXTRUDER',department:'EXTRUSIÓN'},
   {id:1004,full_name:'OPERADOR PRUEBA CUATRO',area:'CONVERSION',department:'CONVERSIÓN'},
   {id:1005,full_name:'OPERADOR PRUEBA CINCO',area:'IMPRESION',department:'IMPRESIÓN'},
   {id:1006,full_name:'OPERADOR PRUEBA SEIS',area:'MANTENIMIENTO',department:'MANTENIMIENTO'}
@@ -479,7 +479,7 @@ function normalizarTexto(s){
 }
 function fillOps(data){
   var filtrados=data.filter(function(o){
-    return normalizarTexto(o.area)==='EXTRUSION' || normalizarTexto(o.department)==='EXTRUSION';
+    return normalizarTexto(o.area)==='EXTRUDER' || normalizarTexto(o.department)==='EXTRUDER';
   });
   var so=document.getElementById('sel-op');so.innerHTML='<option value="">— Seleccione —</option>';
   filtrados.forEach(function(o){var opt=document.createElement('option');opt.value=o.id;opt.textContent=o.full_name;so.appendChild(opt);});
@@ -489,7 +489,7 @@ function fillOTs(data){
   data.forEach(function(o){
     var opt=document.createElement('option');opt.value=o.id;opt.textContent=o.ot_number;
     opt.dataset.prod=o.product_code;opt.dataset.desc=o.description;opt.dataset.med=o.measure;
-    opt.dataset.col=o.color;opt.dataset.rem=o.remision||'';opt.dataset.stdqty=o.stdqty||0;
+    opt.dataset.col=o.color;opt.dataset.rem=o.notes||o.remision||'';opt.dataset.stdqty=o.stdqty||0;
     st.appendChild(opt);
   });
 }
@@ -1038,7 +1038,7 @@ function renderAdminOrdenes(c){
   c.innerHTML='<div class="card"><div class="card-title">📋 Órdenes de trabajo</div><div id="admin-ot-list"><button class="btn btn-primary" onclick="loadAdminOTs()">🔄 Cargar desde API</button></div></div>';
 }
 function loadAdminOTs(){
-  apiFetch('/work-orders').then(function(data){document.getElementById('admin-ot-list').innerHTML='<table><thead><tr><th>OT</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>'+data.map(function(o){return'<tr><td style="font-weight:700">'+o.ot_number+'</td><td style="font-size:11px">'+o.description+'</td><td>'+o.measure+'</td><td>'+o.color+'</td><td><span class="badge '+(o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':'badge-pend')+'">'+o.status+'</span></td></tr>';}).join('')+'</tbody></table>';}).catch(function(){document.getElementById('admin-ot-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
+  apiFetch('/work-orders').then(function(data){document.getElementById('admin-ot-list').innerHTML='<table><thead><tr><th>OT</th><th>Descripción</th><th>Medida</th><th>Color</th><th>Estatus</th></tr></thead><tbody>'+data.map(function(o){return'<tr><td style="font-weight:700">'+o.ot_number+'</td><td style="font-size:11px">'+o.description+'</td><td>'+o.measure+'</td><td>'+o.color+'</td><td><span class="badge '+(o.status==='finalizado'?'badge-fin':o.status==='iniciado'?'badge-ok':o.status==='liberado'?'badge-ok':'badge-pend')+'">'+o.status+'</span></td></tr>';}).join('')+'</tbody></table>';}).catch(function(){document.getElementById('admin-ot-list').innerHTML='<p style="color:#b91c1c;font-size:13px">API no disponible</p>';});
 }
 function renderCatCoordinadores(c){
   var rows=catCoordinadores.map(function(o){return'<tr><td>'+o.id+'</td><td>'+o.nombre+'</td><td><span class="badge '+(o.activo?'badge-ok':'badge-pend')+'">'+(o.activo?'Activo':'Inactivo')+'</span></td><td><div class="tbl-action"><button class="icon-btn" onclick="openEditCoord('+o.id+')">✏️</button><button class="icon-btn del" onclick="delCoord('+o.id+')">🗑</button></div></td></tr>';}).join('');
